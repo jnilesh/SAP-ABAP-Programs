@@ -1,0 +1,583 @@
+REPORT ZTR_DTP_OOABAP_METHODS.
+
+
+
+********************************** # METHOD PROGRAM 1 # *************************************************
+*local class can understand data and *
+*types in the global area of the program.
+**TYPES : BEGIN OF ty_tab,
+**          name(15) TYPE c,
+**          age      TYPE i,
+**        END OF ty_tab.
+**
+**DATA : num1 TYPE i VALUE 5.
+**
+**CLASS c1 DEFINITION.
+**  PUBLIC SECTION.
+**    METHODS : meth1.
+**    DATA : l_num  LIKE num1,
+**           it_tab TYPE STANDARD TABLE OF ty_tab,
+**           wa_tab TYPE ty_tab.
+**ENDCLASS.
+**
+**CLASS c1 IMPLEMENTATION.
+**  METHOD : meth1.
+**    DATA : l_cnum(2) TYPE c.
+**    l_num = 0.
+**    DO 5 TIMES.
+**      l_num = l_num + 1.
+**      l_cnum = l_num.
+**      CONCATENATE 'STUDENT-'
+**                  l_cnum
+**                  INTO wa_tab-name.
+**      wa_tab-age = num1 * l_num.
+**      APPEND wa_tab TO it_tab.
+**      CLEAR wa_tab.
+**    ENDDO.
+**
+**    LOOP AT it_tab INTO wa_tab.
+**      WRITE : /5 wa_tab-name,
+**                 wa_tab-age.
+**    ENDLOOP.
+**  ENDMETHOD.
+**ENDCLASS.
+**
+**START-OF-SELECTION.
+**
+**  DATA : obj1 TYPE REF TO c1.
+**  CREATE OBJECT : obj1.
+**  CALL METHOD obj1->meth1.
+
+
+********************************* # METHOD PROGRAM 2 # *************************************************
+*deferrred definition of class.
+
+
+**CLASS C2 DEFINITION DEFERRED.
+**
+**ENDCLASS.
+**  CLASS C1 DEFINITION.
+**    PUBLIC SECTION.
+**    DATA O2 TYPE REF TO C2.
+**  ENDCLASS.
+**
+**  CLASS C2 DEFINITION.
+**    PUBLIC SECTION.
+**    DATA : NUM TYPE I VALUE 5.
+**  ENDCLASS.
+**
+**  START-OF-SELECTION.
+**
+**  DATA : OBJ1 TYPE REF TO C1.
+**
+**  CREATE OBJECT OBJ1.
+**   CREATE OBJECT OBJ1->O2.
+**   WRITE : /5 OBJ1->O2->NUM.
+
+
+********************************** # METHOD PROGRAM 3 # *************************************************
+*USE OF FIELD SYMBOLS IN CLASS.
+*FIELD-SYMBOLS : <FS>.
+*CLASS C1 DEFINITION.
+*  PUBLIC SECTION.
+*  DATA : INUM TYPE I VALUE 5.
+*  CLASS-DATA : ONUM TYPE I VALUE 10.
+*  ENDCLASS.
+*
+*  CLASS C1 IMPLEMENTATION.
+*
+*    ENDCLASS.
+**
+*    START-OF-SELECTION.
+*    DATA : OREF1 TYPE REF TO C1.
+*    CREATE OBJECT OREF1.
+*
+*    ASSIGN OREF1->INUM TO <FS>.
+*    WRITE : /5 <FS>.
+*
+*    ASSIGN OREF1->ONUM TO <FS>.
+*    WRITE : /5 <FS>.
+*
+**    ASSIGN C1=>INUM TO <FS>.
+**    WRITE : /5 <FS>.
+*
+*    ASSIGN C1=>ONUM TO <FS>.
+*    WRITE : /5 <FS>.
+
+
+********************************** # METHOD PROGRAM 4 # *************************************************
+*USE OF STATIC ATTRIBUTE
+*
+**CLASS C1 DEFINITION.
+**  PUBLIC SECTION.
+**  CLASS-DATA : NUM TYPE I .
+**  METHODS : M1.
+**  ENDCLASS.
+**
+**  CLASS C1 IMPLEMENTATION.
+**    METHOD M1.
+**      NUM = NUM + 1.
+**      WRITE : /5 NUM.
+**      ENDMETHOD.
+**      ENDCLASS.
+**
+**      START-OF-SELECTION.
+**      C1=>NUM = 3.
+**      WRITE : /5 C1=>NUM.
+**
+**      DATA : OREF1 TYPE REF TO C1,
+**             OREF2 TYPE REF TO C1.
+**      CREATE OBJECT : OREF1,
+**                      OREF2.
+**      CALL METHOD OREF1->M1.
+**      CALL METHOD OREF2->M1.
+
+
+********************************** # METHOD PROGRAM 5 # *************************************************
+*METHOD WITH ONE IMPORT PARAMETER /
+*ONLY ONE NON-OPTIONAL PARAMETER
+*PARAMETERS P_NUM TYPE I.
+*
+*CLASS C1 DEFINITION.
+*  PUBLIC SECTION.
+*  DATA : NUM TYPE I VALUE 5.
+*  METHODS : METH1 IMPORTING INPUT1 TYPE I.
+*  ENDCLASS.
+*  CLASS C1 IMPLEMENTATION.
+*    METHOD : METH1.
+*      NUM = NUM * INPUT1.
+*
+*      WRITE : /5 NUM.
+*      NUM = 5.
+*      ENDMETHOD.
+*      ENDCLASS.
+*
+*  START-OF-SELECTION.
+*  DATA : OREF1 TYPE REF TO C1.
+*  CREATE OBJECT : OREF1.
+*  CALL METHOD OREF1->METH1 EXPORTING INPUT1 = 4.
+*   CALL METHOD OREF1->METH1( INPUT1 = 5 ).
+*  CALL METHOD OREF1->METH1( 6 ).
+
+
+********************************** # METHOD PROGRAM 6 # *************************************************
+*IMPORT PARAMETERS PASSED BY REFERENCE
+* CANT BE CHANGED INSIDE THE METHOD
+
+**DATA : num TYPE i.
+**
+**CLASS c1 DEFINITION.
+**  PUBLIC SECTION.
+**    METHODS : meth1 IMPORTING input1  TYPE i
+**                        VALUE(input2) TYPE i.
+**ENDCLASS.
+**
+**CLASS c1 IMPLEMENTATION.
+**  METHOD : meth1.
+**    input1 = 4.
+**    WRITE : /5 input1,input2.
+**  ENDMETHOD.
+**ENDCLASS.
+**
+**START-OF-SELECTION.
+**
+**  DATA : oref1 TYPE REF TO c1.
+**  CREATE OBJECT : oref1.
+**  num = 3.
+**  CALL METHOD oref1->meth1
+**    EXPORTING
+**      input1 = 4
+**      input2 = num.
+
+
+
+********************************** # METHOD PROGRAM 7 # *************************************************
+*USE OF EXPORT AND CHANGING PARAMETERS OF A METHOD
+**DATA : LV_TAX TYPE P DECIMALS 2,
+**       LV_SALARY TYPE P DECIMALS 2.
+**PARAMETERS P_SAL TYPE I.
+***PARAMETERS P_GRADE(4) TYPE C.
+**CLASS CTAX DEFINITION.
+**  PUBLIC SECTION.
+**  METHODS : TAX_CALC IMPORTING GRADE TYPE C
+**                     EXPORTING ITAX TYPE P
+**                     CHANGING SALARY TYPE P.
+**  ENDCLASS.
+**
+**  CLASS CTAX IMPLEMENTATION.
+**    METHOD : TAX_CALC.
+**      CASE GRADE.
+**        WHEN 'A01'.
+***         WHEN P_GRADE.
+**          ITAX = SALARY * '0.2'.
+**        WHEN 'A02'.
+***          WHEN P_GRADE.
+**          ITAX  = SALARY * '0.1'.
+**        WHEN OTHERS.
+**          ITAX = SALARY * '0.15'.
+**ENDCASE.
+**SALARY = SALARY - ITAX.
+**ENDMETHOD.
+**ENDCLASS.
+**
+**
+**START-OF-SELECTION.
+**DATA OREF1 TYPE REF TO CTAX.
+**CREATE OBJECT : OREF1.
+**LV_SALARY = P_SAL.
+**LV_TAX = 0.
+**WRITE : /5 'BEFORE METHOD CALL, SALARY AND TAX ARE',
+**            LV_SALARY,
+**            LV_TAX.
+**CALL METHOD OREF1->TAX_CALC EXPORTING GRADE = 'A02'
+**                            IMPORTING ITAX = LV_TAX
+**                            CHANGING SALARY = LV_SALARY.
+**WRITE : /5 'AFTER METHOD CALL, SALARY AND TAX ARE',
+**             LV_SALARY,
+**             LV_TAX.
+
+
+********************************** # METHOD PROGRAM 8 # *************************************************
+*METHOD USING INTERNAL TABLES AS ONE OF THE PARAMETER
+**TABLES mara.
+**TYPES : BEGIN OF TY_TAB,
+**        MATNR TYPE MATNR,
+**        MEINS TYPE MEINS,
+**        END OF TY_TAB.
+**
+**DATA : IT_TAB TYPE STANDARD TABLE OF TY_TAB,
+**       WA_TAB TYPE TY_TAB.
+**
+**SELECT-OPTIONS S_MATNR FOR MARA-MATNR.
+**
+**CLASS GET_MATERIALS DEFINITION.
+**  PUBLIC SECTION.
+**  METHODS : GETMARA IMPORTING MATNR1 TYPE MATNR
+**                              MATNR2 TYPE MATNR
+**                    EXPORTING IT_TAB TYPE ANY TABLE.
+**ENDCLASS.
+**
+**CLASS GET_MATERIALS IMPLEMENTATION.
+**  METHOD : GETMARA.
+**    SELECT MATNR
+**           MEINS
+**    INTO TABLE IT_TAB
+**    FROM MARA
+**    WHERE MATNR IN S_MATNR.
+**  ENDMETHOD.
+**ENDCLASS.
+**
+**DATA LV_MATNR TYPE MATNR.
+**START-OF-SELECTION.
+**DATA : W_MAT TYPE REF TO GET_MATERIALS.
+**CREATE OBJECT : W_MAT.
+**
+**CALL METHOD W_MAT->GETMARA EXPORTING MATNR1 = S_MATNR-LOW
+**                                     MATNR2 = S_MATNR-HIGH
+**                           IMPORTING IT_TAB = IT_TAB.
+**LOOP AT IT_TAB INTO WA_TAB.
+**  WRITE : /5 WA_TAB-MATNR,
+**             WA_TAB-MEINS.
+**ENDLOOP.
+
+
+********************************** # METHOD PROGRAM 9 # *************************************************
+*METHOD WITH RETURNING AND RES
+*DATA : WA_NUM TYPE I.
+*
+*CLASS C1 DEFINITION.
+*  PUBLIC SECTION.
+*  METHODS : M1 IMPORTING INPUT1 TYPE I
+*                         INPUT2 TYPE I
+*                         RETURNING VALUE(RESULT) TYPE I.
+*ENDCLASS.
+*
+*CLASS C1 IMPLEMENTATION.
+*  METHOD : M1.
+*    RESULT = INPUT1 * 2 + INPUT2.
+*  ENDMETHOD.
+*ENDCLASS.
+*
+*START-OF-SELECTION.
+*
+*DATA : OBJ1 TYPE REF TO C1.
+*CREATE OBJECT OBJ1.
+*
+**SYNTAX 1
+*CALL METHOD OBJ1->M1 EXPORTING INPUT1 = 5
+*                               INPUT2 = 4
+*                     RECEIVING RESULT = WA_NUM.
+*WRITE : /5 WA_NUM.
+*
+***SYNTAX 2
+*WA_NUM = OBJ1->M1( INPUT1 = 10 INPUT2 = 20 ).
+*WRITE : /5 WA_NUM.
+**
+***SYNTAX 3
+*MOVE OBJ1->M1( INPUT1 = 2 INPUT2 = 3 ) TO WA_NUM.
+*WRITE : /5 WA_NUM.
+*
+
+********************************** # METHOD PROGRAM 10 # *************************************************
+
+*CLASS C1 DEFINITION.
+*  PUBLIC SECTION.
+*  CLASS-DATA : STNUM TYPE I VALUE 5.
+*  DATA : INSTNUM TYPE I VALUE 6.
+*  CLASS-METHODS : STMETH.
+*  METHODS : INSTMETH.
+*ENDCLASS.
+*
+*CLASS C1 IMPLEMENTATION.
+*  METHOD : STMETH.
+*    WRITE : /5 STNUM.
+**    WRITE : /5 INSTNUM.
+*  ENDMETHOD.
+*
+*  METHOD : INSTMETH.
+*    WRITE : /5 STNUM.
+*    WRITE : /5 INSTNUM.
+*  ENDMETHOD.
+*ENDCLASS.
+*
+*START-OF-SELECTION.
+*
+*DATA : OREF1 TYPE REF TO C1.
+*CALL METHOD C1=>STMETH.
+*CREATE OBJECT OREF1.
+*CALL METHOD OREF1->INSTMETH.
+
+
+*************** # METHOD RAISING EXCEPTIONS 11 # *************************************************
+*
+*CLASS C1 DEFINITION.
+*  PUBLIC SECTION.
+*  METHODS : M1 IMPORTING NUM1 TYPE I
+*               EXPORTING NUM2 TYPE I
+*               EXCEPTIONS E1.
+*ENDCLASS.
+*
+*CLASS C1 IMPLEMENTATION.
+*  METHOD : M1.
+*    IF NUM1 LT 5.
+*      MESSAGE I398(00) WITH 'SHOULD BE >= 5' RAISING E1.
+*    ELSE.
+*      NUM2 = NUM1 * 5.
+*    ENDIF.
+*  ENDMETHOD.
+*ENDCLASS.
+*
+*PARAMETERS : P_NO TYPE I.
+*
+*START-OF-SELECTION.
+*
+*DATA : OBJ1 TYPE REF TO C1.
+*CREATE OBJECT OBJ1.
+*CALL METHOD OBJ1->M1 EXPORTING NUM1 = P_NO
+*                     IMPORTING NUM2 = P_NO
+*                     EXCEPTIONS E1 = 1.
+*
+*IF SY-SUBRC <> 0.
+*  MESSAGE ID SY-MSGID TYPE SY-MSGTY NUMBER SY-MSGNO
+*          WITH SY-MSGV1 SY-MSGV2 SY-MSGV3 SY-MSGV4.
+*  ELSE.
+*    WRITE : /5 P_NO.
+*ENDIF.
+
+********************************** # METHOD CAN CALL ITSELF 12# *************************************************
+
+CLASS C1 DEFINITION.
+  PUBLIC SECTION.
+  CLASS-DATA : STATNUM TYPE I.
+  METHODS : M1.
+ENDCLASS.
+
+CLASS C1 IMPLEMENTATION.
+  METHOD : M1.
+    STATNUM = STATNUM + 10.
+    IF STATNUM GT 100.
+      EXIT.
+    ENDIF.
+    WRITE : /5 STATNUM.
+    CALL METHOD M1.
+    ENDMETHOD.
+ENDCLASS.
+
+START-OF-SELECTION.
+
+DATA : OBJ1 TYPE REF TO C1.
+CREATE OBJECT OBJ1.
+CALL METHOD OBJ1->M1.
+
+
+******** # USE OF ME-SELF REF VAR IN METHODS # *************************************************
+
+**CLASS TESTCLASS DEFINITION.
+**  PUBLIC SECTION.
+**  DATA : I_NUM TYPE I VALUE 5.
+**  METHODS : TESTMETHOD.
+**ENDCLASS.
+**
+**CLASS TESTCLASS IMPLEMENTATION.
+**  METHOD : TESTMETHOD.
+**    DATA : I_NUM TYPE I VALUE 2.
+**    WRITE : /5  I_NUM,  "
+**            /5  me->I_NUM.     "ACCESS VARIABLE OF THE METHOD
+**  ENDMETHOD.
+**ENDCLASS.
+**
+**START-OF-SELECTION.
+**
+**DATA : I_NUM TYPE I.
+**DATA : MY_OBJ TYPE REF TO TESTCLASS.
+**CREATE OBJECT : MY_OBJ.
+**CALL METHOD MY_OBJ->TESTMETHOD.
+
+
+********************************** # POINTER TABLES # *************************************************
+*
+*CLASS TESTCLASS DEFINITION.
+*  PUBLIC SECTION.
+*  METHODS : TESTMETHOD.
+*  CLASS-DATA : NUM TYPE I.
+*ENDCLASS.
+*
+*CLASS TESTCLASS IMPLEMENTATION.
+*  METHOD : TESTMETHOD.
+*    NUM = NUM + 5.
+*    WRITE : /5 NUM.
+*  ENDMETHOD.
+*ENDCLASS.
+*
+*START-OF-SELECTION.
+*
+*DATA : MYOBJ TYPE REF TO TESTCLASS,
+*       MYOBJ_TAB TYPE TABLE OF REF TO TESTCLASS.
+*
+*DO 5 TIMES.
+*  CREATE OBJECT MYOBJ.
+*  APPEND MYOBJ TO MYOBJ_TAB.
+*ENDDO.
+*
+*LOOP AT MYOBJ_TAB INTO MYOBJ.
+*  CALL METHOD : MYOBJ->TESTMETHOD.
+*ENDLOOP.
+
+
+********************************** # USE OF EXCEPTION TABLE # *************************************************
+*
+*CLASS CL_ABAP_OBJECTDESCR DEFINITION LOAD.
+*
+*  CLASS C1 DEFINITION.
+*    PUBLIC SECTION.
+*    METHODS M1 EXCEPTIONS EXC.
+*  ENDCLASS.
+*
+*  CLASS C1 IMPLEMENTATION.
+*    METHOD M1.
+*      RAISE EXC.
+*    ENDMETHOD.
+*  ENDCLASS.
+
+
+****2.1 INSTANCE CONSTRUCTORS GET FIRED
+* AT THE TIME OF CLASS INSTANTIATION*********
+***
+*CLASS C1 DEFINITION.
+*  PUBLIC SECTION.
+*  METHODS : CONSTRUCTOR.
+*ENDCLASS.
+*
+*CLASS C1 IMPLEMENTATION.
+*  METHOD CONSTRUCTOR.
+*    WRITE : /5 'I am constructor'.
+*    skip 2.
+*  ENDMETHOD.
+* ENDCLASS.
+*
+**************main program**************
+**
+* START-OF-SELECTION.
+* DATA : OBJ1 TYPE REF TO C1.
+* CREATE OBJECT : OBJ1.
+
+
+******2.2 INSTANCE CONSTRUCTORS CAN HAVE IMPORT PARAMETERS***********
+
+* CLASS C1 DEFINITION.
+* PUBLIC SECTION.
+* METHODS : CONSTRUCTOR IMPORTING TODAY TYPE D.
+* ENDCLASS.
+*
+* CLASS C1 IMPLEMENTATION.
+*   METHOD CONSTRUCTOR.
+*     WRITE : /5 'TODAY IS : ' , TODAY DD/MM/YYYY.
+*     ENDMETHOD.
+*   ENDCLASS.
+*
+****** MAIN PROGRAM*********
+*  START-OF-SELECTION.
+* DATA : OBJ1 TYPE REF TO C1.
+* CREATE OBJECT : OBJ1 EXPORTING TODAY = SY-DATUM.
+
+
+
+*******************2.3 CONSTRUCTORS CANNOT HAVE ANY EXPORT PARAMETERS***************
+
+*CLASS C1 DEFINITION.
+*  PUBLIC SECTION.
+*  METHODS : CONSTRUCTOR EXPORTING NAME TYPE C.
+* ENDCLASS.
+
+* ***********OUTPUT : COMPILATION ERROR IS REPORTED*********
+
+************* 2.4 INSTANCE CONSTRUCTORS CAN RAISE EXCEPTIONS**************
+* CLASS C1 DEFINITION.
+*   PUBLIC SECTION.
+*   METHODS : CONSTRUCTOR IMPORTING NUM TYPE I
+*                         EXCEPTIONS E1.
+*ENDCLASS.
+*
+*CLASS C1 IMPLEMENTATION.
+*  METHOD CONSTRUCTOR.
+*    IF NUM LT 7.
+*      RAISE E1.
+*    ENDIF.
+*  ENDMETHOD.
+*ENDCLASS.
+**********MAIN PROGRAM******
+*
+*START-OF-SELECTION.
+*DATA : OBJ1 TYPE REF TO C1.
+*CREATE OBJECT : OBJ1 EXPORTING NUM = 5
+*  EXCEPTIONS E1 = 4.
+*IF SY-SUBRC = 4.
+*  WRITE : /5 'EXCEPTIONS RAISED'.
+*ENDIF.
+
+
+
+******* 2.5 STATIC CONSTRUCTOR CAN BE TRIGGERED AT THE
+*BEGINNING OF A PROCESSING BLOCK*************
+
+*CLASS C1 DEFINITION.
+*  PUBLIC SECTION.
+*  CLASS-DATA : NUM TYPE I VALUE 5.
+*  CLASS-METHODS : CLASS_CONSTRUCTOR .
+*  METHODS: CONSTRUCTOR .
+* ENDCLASS.
+*
+* CLASS C1 IMPLEMENTATION.
+*   METHOD CLASS_CONSTRUCTOR.
+*     WRITE : /5 'I AM CLASS CONSTRUCTOR'.
+*   ENDMETHOD.
+*   METHOD :constructor.
+*     write: / 'CAPGEMINI'.
+*     ENDMETHOD.
+* ENDCLASS.
+*
+* START-OF-SELECTION.
+* data :obj TYPE REF TO c1.
+* CREATE OBJECT OBJ.
+* WRITE:/5 'HELLO'.
+* WRITE: /5 C1=>NUM.

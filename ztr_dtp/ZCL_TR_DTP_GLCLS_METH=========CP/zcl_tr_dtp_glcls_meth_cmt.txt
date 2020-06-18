@@ -1,0 +1,2 @@
+ZCL_TR_DTP_GLCLS_METH         I_METH1                       EM1
+ZCL_TR_DTP_GLCLS_METH         S_METH2                       EM2

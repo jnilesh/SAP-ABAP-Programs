@@ -1,0 +1,25 @@
+class-pool .
+*"* class pool for class ZTR_DTP_OOABAP_GL_CL_EVENTS
+
+*"* local type definitions
+include ZTR_DTP_OOABAP_GL_CL_EVENTS===ccdef.
+
+*"* class ZTR_DTP_OOABAP_GL_CL_EVENTS definition
+*"* public declarations
+  include ZTR_DTP_OOABAP_GL_CL_EVENTS===cu.
+*"* protected declarations
+  include ZTR_DTP_OOABAP_GL_CL_EVENTS===co.
+*"* private declarations
+  include ZTR_DTP_OOABAP_GL_CL_EVENTS===ci.
+endclass. "ZTR_DTP_OOABAP_GL_CL_EVENTS definition
+
+*"* macro definitions
+include ZTR_DTP_OOABAP_GL_CL_EVENTS===ccmac.
+*"* local class implementation
+include ZTR_DTP_OOABAP_GL_CL_EVENTS===ccimp.
+
+class ZTR_DTP_OOABAP_GL_CL_EVENTS implementation.
+*"* method's implementations
+  include methods.
+endclass. "ZTR_DTP_OOABAP_GL_CL_EVENTS implementation
+

@@ -1,0 +1,16 @@
+*&---------------------------------------------------------------------*
+*& Report ZCL_TR_BNGL_GL_CLASS1_PRG
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ZCL_TR_BNGL_GL_CLASS1_PRG.
+
+START-OF-SELECTION.
+
+DATA I_OBJ1 TYPE REF TO ZCL_TR_BNGL_GL_CLASS1.
+
+CREATE OBJECT I_OBJ1.
+
+WRITE : / I_OBJ1->I_V1,
+
+         ZCL_TR_BNGL_GL_CLASS1=>S_V2.

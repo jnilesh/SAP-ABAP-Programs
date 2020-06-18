@@ -1,0 +1,7 @@
+ZCL_IM_577_BD3                00000                                                             0
+ZCL_IM_577_BD3                00001IF_EX_BADI_MATERIAL_CHECK~CHECK_DATA                         0
+ZCL_IM_577_BD3                00002IF_EX_BADI_MATERIAL_CHECK~CHECK_CHANGE_MARA_MEINS            0
+ZCL_IM_577_BD3                00003IF_EX_BADI_MATERIAL_CHECK~CHECK_CHANGE_PMATA                 0
+ZCL_IM_577_BD3                00004IF_EX_BADI_MATERIAL_CHECK~CHECK_DATA_RETAIL                  0
+ZCL_IM_577_BD3                00005IF_EX_BADI_MATERIAL_CHECK~FRE_SUPPRESS_MARC_CHECK            0
+ZCL_IM_577_BD3                00006IF_EX_BADI_MATERIAL_CHECK~CHECK_MASS_MARC_DATA               0

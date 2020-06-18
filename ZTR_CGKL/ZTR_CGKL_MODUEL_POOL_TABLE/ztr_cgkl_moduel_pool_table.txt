@@ -1,0 +1,150 @@
+*&---------------------------------------------------------------------*
+*& Report ZTR_CGKL_MODUEL_POOL_TABLE
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+PROGRAM ZTR_CGKL_MODUEL_POOL_TABLE.
+
+CONTROLS MAT_TC1 TYPE TABLEVIEW USING SCREEN 0200.
+
+INCLUDE ZTR_CGKL_MODUEL_POOL_TOP.
+
+
+DATA: LV_MATNR_LOW TYPE MATNR,
+      LV_MATNR_HIGH TYPE MATNR.
+*&---------------------------------------------------------------------*
+*&      Module  STATUS_0100  OUTPUT
+*&---------------------------------------------------------------------*
+*       text
+*----------------------------------------------------------------------*
+MODULE STATUS_0100 OUTPUT.
+  SET PF-STATUS 'ZTR_CGKL_MPOOL9'..
+*  SET TITLEBAR 'xxx'.
+
+LV_MATNR_LOW = 'MAT00010'.
+LV_MATNR_HIGH = 'MAT00020'.
+
+
+ENDMODULE.
+*&---------------------------------------------------------------------*
+*&      Module  USER_COMMAND_0100  INPUT
+*&---------------------------------------------------------------------*
+*       text
+*----------------------------------------------------------------------*
+MODULE USER_COMMAND_0100 INPUT.
+CASE SY-UCOMM.
+  WHEN 'GETMAT'.
+    SELECT MATNR
+         MBRSH
+         MTART
+         MEINS
+         BRGEW
+         NTGEW
+    INTO TABLE IT_TAB
+    FROM MARA
+    WHERE MATNR BETWEEN LV_MATNR_LOW AND
+                        LV_MATNR_HIGH.
+  LEAVE TO SCREEN 0200.
+    WHEN 'EXIT'.
+  LEAVE TO SCREEN 0.
+ENDCASE.
+
+
+
+ENDMODULE.
+
+*&---------------------------------------------------------------------*
+*&      Module  USER_COMMAND_0200  INPUT
+*&---------------------------------------------------------------------*
+*       text
+*----------------------------------------------------------------------*
+MODULE USER_COMMAND_0200 INPUT.
+CASE  SY-UCOMM.
+  WHEN 'BACK' .
+  LEAVE TO SCREEN 100.
+  WHEN 'EXIT'.
+  LEAVE TO SCREEN 0.
+ENDCASE.
+ENDMODULE.
+*&---------------------------------------------------------------------*
+*&      Module  DISP_IMG  OUTPUT
+*&---------------------------------------------------------------------*
+*       text
+*----------------------------------------------------------------------*
+MODULE DISP_IMG OUTPUT.
+TABLES STXH.
+*TYPE-POOLS :
+ DATA: L_GRAPHIC_XSTR1 TYPE XSTRING,
+      L_GRAPHIC_CONV1 TYPE I,
+      L_GRAPHIC_OFFS1 TYPE I.
+
+ DATA :GRAPHIC_SIZE1 TYPE I ,
+*      GRAPHIC_TABLE1 TYPE STANDARD TABLE OF string,
+      H_PICTURE1 TYPE REF TO CL_GUI_PICTURE,
+      H_PIC_CONTAINER1 TYPE REF TO CL_GUI_CUSTOM_CONTAINER,
+      GRAPHICS_URLS(255),
+      graphic_refresh1(1),
+      G_RESULT1 TYPE I.
+
+ DATA : BEGIN OF GRAPHIC_TABLE1 OCCURS 0,
+        LINE1(255) TYPE X,
+        END OF GRAPHIC_TABLE1.
+
+  CALL METHOD CL_SSF_XSF_UTILITIES=>GET_BDS_GRAPHIC_AS_BMP
+    EXPORTING
+      P_OBJECT  = 'GRAPHICS'
+      P_NAME    = 'CAPABAP9' "IMAGE NAME - IMAGE NAME FROM SE78
+      P_ID      = 'BMAP'
+
+      P_BTYPE   = 'BCOL'  "(BMON = BLACK&WHITE, BCOL = COLOUR)
+    RECEIVING
+      P_BMP     = L_GRAPHIC_XSTR1
+    EXCEPTIONS
+      NOT_FOUND = 1
+      OTHERS    = 2.
+
+  GRAPHIC_SIZE1 = XSTRLEN( L_GRAPHIC_XSTR1 ).
+  CHECK GRAPHIC_SIZE1 > 0.
+
+  L_GRAPHIC_CONV1 = GRAPHIC_SIZE1.
+  L_GRAPHIC_OFFS1 = 0.
+
+  WHILE L_GRAPHIC_CONV1 > 255.
+    GRAPHIC_TABLE1-LINE1 = L_GRAPHIC_XSTR1+L_GRAPHIC_OFFS1(255).
+    APPEND GRAPHIC_TABLE1.
+    L_GRAPHIC_OFFS1 = L_GRAPHIC_OFFS1 + 255.
+    L_GRAPHIC_CONV1 = L_GRAPHIC_CONV1 - 255.
+  ENDWHILE.
+
+  GRAPHIC_TABLE1-LINE1 = L_GRAPHIC_XSTR1+L_GRAPHIC_OFFS1(L_GRAPHIC_CONV1).
+  APPEND GRAPHIC_TABLE1.
+
+  CALL FUNCTION 'DP_CREATE_URL'
+       EXPORTING
+          TYPE                 = 'IMAGE'               "#EC NOTEXT
+          SUBTYPE              = CNDP_SAP_TAB_UNKNOWN " 'X-UNKNOWN'
+          SIZE                 = GRAPHIC_SIZE1
+          LIFETIME             = CNDP_LIFETIME_TRANSACTION  "'T'
+       TABLES
+          DATA                 = GRAPHIC_TABLE1
+       CHANGING
+          URL                  = GRAPHICS_URLS
+       EXCEPTIONS
+*           DP_INVALID_PARAMETER = 1
+*           DP_ERROR_PUT_TABLE   = 2
+*           DP_ERROR_GENERAL     = 3
+          OTHERS               = 4 .
+  IF SY-SUBRC <> 0.
+    MESSAGE ID SY-MSGID TYPE SY-MSGTY NUMBER SY-MSGNO
+            WITH SY-MSGV1 SY-MSGV2 SY-MSGV3 SY-MSGV4.
+    EXIT.
+  ENDIF.
+
+   CREATE OBJECT H_PIC_CONTAINER1
+          EXPORTING CONTAINER_NAME = 'CUST_CNT'."Container name in Layout
+   CREATE OBJECT H_PICTURE1 EXPORTING PARENT = H_PIC_CONTAINER1.
+
+   CALL METHOD H_PICTURE1->LOAD_PICTURE_FROM_URL
+        EXPORTING URL    = GRAPHICS_URLS
+        IMPORTING RESULT = G_RESULT1.
+ENDMODULE.

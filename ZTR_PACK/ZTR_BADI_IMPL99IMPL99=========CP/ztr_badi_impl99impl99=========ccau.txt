@@ -1,0 +1,13 @@
+interface ZIF_EX_ZTR_BADI9
+  public .
+
+
+  interfaces IF_BADI_INTERFACE .
+
+  methods MAT_METH99
+    importing
+      !I_MATNR1 type MATNR
+      !I_MATNR2 type MATNR
+    exporting
+      !E_TAB type TABLE .
+endinterface.

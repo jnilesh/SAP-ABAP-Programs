@@ -1,0 +1,23 @@
+*&---------------------------------------------------------------------*
+*&  Include           ZTR_BNGL_ADOBE_FORM2_PROG_TOP
+*&---------------------------------------------------------------------*
+
+*TABLES EKPO.
+
+TABLES EKPO.
+DATA lv_ebeln TYPE EBELN.
+DATA GV_FM_NAME TYPE RS38L_FNAM.
+
+DATA : GV_EBELN TYPE EBELN,
+       GV_EBELP TYPE EBELP,
+       GV_MATNR TYPE MATNR,
+       GV_BUKRS TYPE BUKRS,
+       GV_WERKS TYPE EWERK.
+
+
+DATA : TY_OUTPUTPARAMS TYPE SFPOUTPUTPARAMS,
+       TY_DOCPARAMS TYPE SFPDOCPARAMS.
+
+
+DATA : WA_OUTPUTPARAMS TYPE SFPOUTPUTPARAMS,
+       WA_DOCPARAMS TYPE SFPDOCPARAMS.

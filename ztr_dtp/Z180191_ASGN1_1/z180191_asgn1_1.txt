@@ -1,0 +1,183 @@
+REPORT Z180191_ASGN1_1.
+
+INCLUDE Z180191_ASGN1_1_TOP.
+
+START-OF-SELECTION.
+
+  DATA : OBJ1 TYPE REF TO Z180191_GL3.
+
+  CREATE OBJECT OBJ1.
+
+  CALL METHOD OBJ1->LIST_MATERIAL
+    EXPORTING
+      I_MATNR1 = S_MATNR-LOW
+      I_MATNR2 = S_MATNR-HIGH
+    IMPORTING
+      MAT_LIST = IT_TAB.
+  PERFORM FIELDCAT.
+
+  CALL SCREEN 0100.
+*&---------------------------------------------------------------------*
+*&      Module  STATUS_0100  OUTPUT
+*&---------------------------------------------------------------------*
+*       text
+*----------------------------------------------------------------------*
+MODULE STATUS_0100 OUTPUT.
+  SET PF-STATUS SPACE.
+*  SET TITLEBAR 'xxx'.
+ENDMODULE.
+*&---------------------------------------------------------------------*
+*&      Module  USER_COMMAND_0100  INPUT
+*&---------------------------------------------------------------------*
+*       text
+*----------------------------------------------------------------------*
+MODULE USER_COMMAND_0100 INPUT.
+  CASE SY-UCOMM.
+    WHEN 'BACK'.
+      LEAVE TO SCREEN 0.
+  ENDCASE.
+
+ENDMODULE.
+
+
+*&---------------------------------------------------------------------*
+*&      Module  OUTDISPLAY  OUTPUT
+*&---------------------------------------------------------------------*
+*       text
+*----------------------------------------------------------------------*
+MODULE OUTDISPLAY OUTPUT.
+ CREATE OBJECT l_CONTAINER
+   EXPORTING
+*     PARENT                      =
+     CONTAINER_NAME              = 'CUSTOMTC'
+*     STYLE                       =
+*     LIFETIME                    = lifetime_default
+*     REPID                       =
+*     DYNNR                       =
+*     NO_AUTODEF_PROGID_DYNNR     =
+*   EXCEPTIONS
+*     CNTL_ERROR                  = 1
+*     CNTL_SYSTEM_ERROR           = 2
+*     CREATE_ERROR                = 3
+*     LIFETIME_ERROR              = 4
+*     LIFETIME_DYNPRO_DYNPRO_LINK = 5
+*     OTHERS                      = 6
+     .
+ IF SY-SUBRC <> 0.
+*  MESSAGE ID SY-MSGID TYPE SY-MSGTY NUMBER SY-MSGNO
+*             WITH SY-MSGV1 SY-MSGV2 SY-MSGV3 SY-MSGV4.
+ ENDIF.
+
+ CREATE OBJECT L_GRID
+   EXPORTING
+*     I_SHELLSTYLE      = 0
+*     I_LIFETIME        =
+     I_PARENT          = l_container
+*     I_APPL_EVENTS     = space
+*     I_PARENTDBG       =
+*     I_APPLOGPARENT    =
+*     I_GRAPHICSPARENT  =
+*     I_NAME            =
+*     I_FCAT_COMPLETE   = SPACE
+*   EXCEPTIONS
+*     ERROR_CNTL_CREATE = 1
+*     ERROR_CNTL_INIT   = 2
+*     ERROR_CNTL_LINK   = 3
+*     ERROR_DP_CREATE   = 4
+*     OTHERS            = 5
+     .
+ IF SY-SUBRC <> 0.
+*  MESSAGE ID SY-MSGID TYPE SY-MSGTY NUMBER SY-MSGNO
+*             WITH SY-MSGV1 SY-MSGV2 SY-MSGV3 SY-MSGV4.
+ ENDIF.
+
+CALL METHOD L_GRID->SET_TABLE_FOR_FIRST_DISPLAY
+*  EXPORTING
+*    I_BUFFER_ACTIVE               =
+*    I_BYPASSING_BUFFER            =
+*    I_CONSISTENCY_CHECK           =
+*    I_STRUCTURE_NAME              =
+*    IS_VARIANT                    =
+*    I_SAVE                        =
+*    I_DEFAULT                     = 'X'
+*    IS_LAYOUT                     =
+*    IS_PRINT                      =
+*    IT_SPECIAL_GROUPS             =
+*    IT_TOOLBAR_EXCLUDING          =
+*    IT_HYPERLINK                  =
+*    IT_ALV_GRAPHICS               =
+*    IT_EXCEPT_QINFO               =
+*    IR_SALV_ADAPTER               =
+  CHANGING
+    IT_OUTTAB                     = it_tab
+    IT_FIELDCATALOG               = l_fieldcat[]
+*    IT_SORT                       =
+*    IT_FILTER                     =
+*  EXCEPTIONS
+*    INVALID_PARAMETER_COMBINATION = 1
+*    PROGRAM_ERROR                 = 2
+*    TOO_MANY_LINES                = 3
+*    OTHERS                        = 4
+        .
+IF SY-SUBRC <> 0.
+* Implement suitable error handling here
+ENDIF.
+
+
+
+ENDMODULE.
+
+FORM fieldcat .
+
+WAFIELD-FIELDNAME = 'MATNR'.
+WAFIELD-COL_POS = 1.
+WAFIELD-REPTEXT = 'MATERIAL'.
+
+APPEND WAFIELD TO L_FIELDCAT.
+CLEAR WAFIELD.
+WAFIELD-FIELDNAME = 'MTART'.
+WAFIELD-COL_POS = 2.
+WAFIELD-REPTEXT = 'MATERIAL TYPE'.
+
+APPEND WAFIELD TO L_FIELDCAT.
+WAFIELD-FIELDNAME = 'MBRSH'.
+WAFIELD-COL_POS = 3.
+WAFIELD-REPTEXT = 'INDUSTRY SECTOR'.
+
+APPEND WAFIELD TO L_FIELDCAT.
+WAFIELD-FIELDNAME = 'MATKL'.
+WAFIELD-COL_POS = 4.
+WAFIELD-REPTEXT = 'MATERIAL GROUP'.
+
+APPEND WAFIELD TO L_FIELDCAT.
+WAFIELD-FIELDNAME = 'MEINS'.
+WAFIELD-COL_POS = 5.
+WAFIELD-REPTEXT = 'UNIT'.
+
+APPEND WAFIELD TO L_FIELDCAT.
+WAFIELD-FIELDNAME = 'BRGEW'.
+WAFIELD-COL_POS = 6.
+WAFIELD-REPTEXT = 'GROSS WEIGHT'.
+
+APPEND WAFIELD TO L_FIELDCAT.
+WAFIELD-FIELDNAME = 'NTGEW'.
+WAFIELD-COL_POS = 7.
+WAFIELD-REPTEXT = 'NET WEIGHT'.
+
+APPEND WAFIELD TO L_FIELDCAT.
+WAFIELD-FIELDNAME = 'GEWEI'.
+WAFIELD-COL_POS = 8.
+WAFIELD-REPTEXT = 'WEIGHT UNIT'.
+
+APPEND WAFIELD TO L_FIELDCAT.
+WAFIELD-FIELDNAME = 'VOLUM'.
+WAFIELD-COL_POS = 9.
+WAFIELD-REPTEXT = 'VOLUME '.
+
+APPEND WAFIELD TO L_FIELDCAT.
+WAFIELD-FIELDNAME = 'VOLEH'.
+WAFIELD-COL_POS = 10.
+WAFIELD-REPTEXT = 'VOLUME UNIT '.
+
+APPEND WAFIELD TO L_FIELDCAT.
+ENDFORM.

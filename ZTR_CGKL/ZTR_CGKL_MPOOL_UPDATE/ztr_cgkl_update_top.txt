@@ -1,0 +1,15 @@
+*&---------------------------------------------------------------------*
+*&  Include           ZTR_CGKL_UPDATE_TOP
+*&---------------------------------------------------------------------*
+TABLES ZTR_CGKL_EMP.
+
+TYPES:BEGIN OF TY_TAB,
+    MANDT TYPE ZTR_CGKL_EMP-MANDT,
+    EMPNO TYPE ZTR_CGKL_EMP-EMPNO,
+    EMPNAME TYPE ZTR_CGKL_EMP-EMPNAME,
+    EMPSAL TYPE ZTR_CGKL_EMP-EMPSAL,
+    EMPADDR TYPE ZTR_CGKL_EMP-EMPADDR,
+  END OF TY_TAB.
+
+  DATA IT_TAB TYPE STANDARD TABLE OF TY_TAB.
+  DATA WA_TAB TYPE TY_TAB.

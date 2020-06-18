@@ -1,0 +1,2 @@
+ZCL_CGKL_GL_ATTR              IST_ATTR1                     00
+ZCL_CGKL_GL_ATTR              STA_ATTR2                     00

@@ -1,0 +1,43 @@
+report ZTR_DTP_MAT_REC
+       no standard page heading line-size 255.
+
+include bdcrecx1.
+
+start-of-selection.
+
+perform open_group.
+
+perform bdc_dynpro      using 'SAPLMGMM' '0060'.
+perform bdc_field       using 'BDC_CURSOR'
+                              'RMMG1-MTART'.
+perform bdc_field       using 'BDC_OKCODE'
+                              '=ENTR'.
+perform bdc_field       using 'RMMG1-MATNR'
+                              'MAT_DTP2324'.
+perform bdc_field       using 'RMMG1-MBRSH'
+                              'W'.
+perform bdc_field       using 'RMMG1-MTART'
+                              'ZMDG'.
+perform bdc_dynpro      using 'SAPLMGMM' '0070'.
+perform bdc_field       using 'BDC_CURSOR'
+                              'MSICHTAUSW-DYTXT(01)'.
+perform bdc_field       using 'BDC_OKCODE'
+                              '=ENTR'.
+perform bdc_field       using 'MSICHTAUSW-KZSEL(01)'
+                              'X'.
+perform bdc_dynpro      using 'SAPLMGMM' '4004'.
+perform bdc_field       using 'BDC_OKCODE'
+                              '=BU'.
+perform bdc_field       using 'MAKT-MAKTX'
+                              'MATDTETETT'.
+perform bdc_field       using 'BDC_CURSOR'
+                              'MARA-MATKL'.
+perform bdc_field       using 'MARA-MEINS'
+                              'CCM'.
+perform bdc_field       using 'MARA-MATKL'
+                              '01'.
+perform bdc_field       using 'MARA-MTPOS_MARA'
+                              'NORM'.
+perform bdc_transaction using 'MM01'.
+
+perform close_group.

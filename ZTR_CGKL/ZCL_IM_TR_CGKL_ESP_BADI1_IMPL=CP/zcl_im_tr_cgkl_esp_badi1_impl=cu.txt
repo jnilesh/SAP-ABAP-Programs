@@ -1,0 +1,9 @@
+class ZCL_IM_TR_CGKL_ESP_BADI1_IMPL definition
+  public
+  final
+  create public .
+
+public section.
+
+  interfaces IF_BADI_INTERFACE .
+  interfaces ZIF_EX_TR_CGKL_ESP_BADI1 .

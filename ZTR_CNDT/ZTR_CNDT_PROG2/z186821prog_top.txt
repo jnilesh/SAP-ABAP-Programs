@@ -1,0 +1,10 @@
+*&---------------------------------------------------------------------*
+*&  Include           Z186821PROG_TOP
+*&---------------------------------------------------------------------*
+
+TABLES Z186821_EMP_TOP.
+
+DATA : LV_EMPNO TYPE Z186121_DEEMPNO,
+       LV_ENAME TYPE Z186121_DEEMPNAME,
+       LV_JOB TYPE Z186821_DEJOB,
+       LV_MGR TYPE Z186821_DEMGR.

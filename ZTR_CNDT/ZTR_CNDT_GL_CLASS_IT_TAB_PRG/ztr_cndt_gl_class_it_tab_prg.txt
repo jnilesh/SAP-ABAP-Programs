@@ -1,0 +1,34 @@
+*&---------------------------------------------------------------------*
+*& Report ZTR_CNDT_GL_CLASS_IT_TAB_PRG
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ZTR_CNDT_GL_CLASS_IT_TAB_PRG.
+
+INCLUDE ZTR_CNDT_GL_IT_TAB_TOP.
+
+SELECT-OPTIONS S_MATNR FOR LV_MATNR.
+
+START-OF-SELECTION.
+
+DATA OBJ1 TYPE REF TO ZTR_CNDT_GL_CLASS_IT_TAB.
+
+CREATE OBJECT obj1.
+
+
+CALL METHOD obj1->get_mat
+  EXPORTING
+    i_matnr1      = S_MATNR-LOW   " 1
+    i_matnr2      = S_MATNR-HIGH  " 100
+  IMPORTING
+    e_tab         = IT_TAB   " GET RSLT
+  EXCEPTIONS
+    mat_not_found = 1
+    others        = 2
+        .
+IF sy-subrc <> 0.
+* Implement suitable error handling here
+ENDIF.
+
+
+CL_DEMO_OUTPUT=>DISPLAY( IT_TAB ).

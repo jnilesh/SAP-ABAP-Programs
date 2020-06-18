@@ -1,0 +1,43 @@
+*&---------------------------------------------------------------------*
+*&  Include           ZTR_CNDT_FORALL_ENTRIES_2_TOP
+*&---------------------------------------------------------------------*
+
+DATA: lv_vbeln TYPE vbeln_va.
+
+
+TYPES: BEGIN OF ty_vbak ,
+         vbeln TYPE vbeln_va,
+         erdat TYPE erdat,
+         erzet TYPE erzet,
+         ernam TYPE ernam,
+         audat TYPE audat,
+         vbtyp TYPE vbtyp,
+
+       END OF ty_vbak.
+data :it_vbak TYPE STANDARD TABLE OF ty_vbak,
+      wa_vbak TYPE ty_vbak.
+
+TYPES: BEGIN OF ty_vbap ,
+         vbeln TYPE vbeln_va,
+         posnr TYPE posnr_Va,
+         matnr TYPE matnr,
+       END OF ty_vbap.
+data :it_vbap TYPE STANDARD TABLE OF ty_vbap,
+      wa_vbap TYPE ty_vbap.
+
+
+TYPES: BEGIN OF ty_final ,
+         vbeln TYPE vbeln_va, " zvbak
+         erdat TYPE erdat,
+         erzet TYPE erzet,
+         ernam TYPE ernam,
+         audat TYPE audat,
+         vbtyp TYPE vbtyp,
+
+         posnr TYPE posnr_Va, " zvbap
+         matnr TYPE matnr,
+
+
+       END OF ty_final.
+data :it_final TYPE STANDARD TABLE OF ty_final,
+      wa_final TYPE ty_final.

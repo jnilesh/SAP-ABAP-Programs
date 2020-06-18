@@ -1,0 +1,16 @@
+*&---------------------------------------------------------------------*
+*&  Include           ZTR_CNDT_PROG2_TOP3
+*&---------------------------------------------------------------------*
+
+TABLES MARA.
+
+DATA LV_MATNR TYPE MATNR.
+
+DATA : BEGIN OF IT_TAB OCCURS 0,
+      MATNR TYPE MATNR, " Material Number1
+      MBRSH TYPE MBRSH, " Industry sector
+      MTART TYPE MTART, " Material type
+      MEINS TYPE MEINS, " Base Unit of Measure
+      MATKL TYPE MATKL, " Material Group
+
+  END OF IT_TAB.

@@ -1,0 +1,158 @@
+*&---------------------------------------------------------------------*
+*& Report ZTR_BNGL_BDC_SESSION_MATMASTER
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ZTR_BNGL_BDC_SESSION_MATMASTER.
+
+
+INCLUDE ZTR_BNGL_BDC_SESSION_MATTOP.
+
+
+PARAMETERS P_file TYPE rlgrap-filename.
+
+AT SELECTION-SCREEN ON VALUE-REQUEST FOR P_FILE.
+
+  CALL FUNCTION 'F4_FILENAME'
+   EXPORTING
+     PROGRAM_NAME        = SYST-CPROG
+     DYNPRO_NUMBER       = SYST-DYNNR
+*     FIELD_NAME          = ' '
+   IMPORTING
+     FILE_NAME           = P_FILE
+            .
+
+  START-OF-SELECTION.
+  DATA P_FILE1 TYPE STRING.
+  P_FILE1 = P_FILE.
+
+
+  CALL FUNCTION 'GUI_UPLOAD'
+    EXPORTING
+      FILENAME                      = p_FILE1
+     FILETYPE                      = 'ASC'
+     HAS_FIELD_SEPARATOR           = 'X'
+    TABLES
+      DATA_TAB                      = IT_TAB
+            .
+  IF SY-SUBRC <> 0.
+* Implement suitable error handling here
+  ENDIF.
+
+CALL FUNCTION 'BDC_OPEN_GROUP'
+ EXPORTING
+   CLIENT                    = SY-MANDT
+*   DEST                      = FILLER8
+   GROUP                     = 'ZTR_BNGL_ATP'
+*   HOLDDATE                  = FILLER8
+   KEEP                      = 'X'
+   USER                      = SY-UNAME
+          .
+IF sy-subrc <> 0.
+* Implement suitable error handling here
+ENDIF.
+
+
+
+LOOP AT IT_TAB INTO WA_TAB.
+
+
+perform bdc_dynpro      using 'SAPLMGMM' '0060'.
+perform bdc_field       using 'BDC_CURSOR'
+                              'RMMG1-MTART'.
+perform bdc_field       using 'BDC_OKCODE'
+                              '=ENTR'.
+perform bdc_field       using 'RMMG1-MATNR'
+*                              'MAT_BNGL12'.
+                               WA_TAB-MATNR.
+perform bdc_field       using 'RMMG1-MBRSH'
+*                              'P'.
+                               WA_TAB-MBRSH.
+perform bdc_field       using 'RMMG1-MTART'
+*                              'FOOD'.
+                               WA_TAB-MTART.
+perform bdc_dynpro      using 'SAPLMGMM' '0070'.
+perform bdc_field       using 'BDC_CURSOR'
+                              'MSICHTAUSW-DYTXT(01)'.
+perform bdc_field       using 'BDC_OKCODE'
+                              '=ENTR'.
+perform bdc_field       using 'MSICHTAUSW-KZSEL(01)'
+                              'X'.
+perform bdc_dynpro      using 'SAPLMGMM' '4004'.
+perform bdc_field       using 'BDC_OKCODE'
+                              '=BU'.
+perform bdc_field       using 'MAKT-MAKTX'
+                              WA_TAB-MAKTX.
+perform bdc_field       using 'BDC_CURSOR'
+                              'MARA-MATKL'.
+perform bdc_field       using 'MARA-MEINS'
+                              WA_TAB-MEINS.
+perform bdc_field       using 'MARA-MATKL'
+                              WA_TAB-MATKL.
+*IF WA_MATKL EQ 'BU'.
+*
+**  PERFORM MAT_GRP.
+*
+*  ENDIF.
+
+*perform bdc_field       using 'MARA-BRGEW'
+*                              WA_TAB-BRGEW.
+*
+*perform bdc_field       using 'MARA-NTGEW'
+*                              WA_TAB-NTGEW.
+
+
+CALL FUNCTION 'BDC_INSERT'
+ EXPORTING
+   TCODE                  = 'MM01'
+  TABLES
+    dynprotab              = IT_BDCDATA.
+
+IF sy-subrc <> 0.
+* Implement suitable error handling here
+ENDIF.
+
+
+REFRESH IT_BDCDATA.
+
+ENDLOOP.
+
+
+CALL FUNCTION 'BDC_CLOSE_GROUP'
+          .
+IF sy-subrc <> 0.
+* Implement suitable error handling here
+ENDIF.
+
+WRITE 'PROCESS THE MAT DATA USING SM35 T-CODE'.
+
+*&---------------------------------------------------------------------*
+*&      Form  BDC_DYNPRO
+*&---------------------------------------------------------------------*
+*       text
+*----------------------------------------------------------------------*
+*      -->P_0088   text
+*      -->P_0089   text
+*----------------------------------------------------------------------*
+FORM bdc_dynpro  USING  P_PROGRAM  P_DYNPRO .
+CLEAR IT_BDCDATA.
+IT_BDCDATA-PROGRAM = P_PROGRAM.
+IT_BDCDATA-DYNPRO = P_DYNPRO.
+IT_BDCDATA-DYNBEGIN = 'X'.
+
+APPEND IT_BDCDATA.
+
+ENDFORM.
+*&---------------------------------------------------------------------*
+*&      Form  BDC_FIELD
+*&---------------------------------------------------------------------*
+FORM bdc_field  USING P_FNAM  P_FVAL.
+
+CLEAR IT_BDCDATA.
+IT_BDCDATA-FNAM = P_FNAM.
+IT_BDCDATA-FVAL = P_FVAL.
+
+APPEND IT_BDCDATA.
+
+
+ENDFORM.

@@ -1,0 +1,2 @@
+ZCL_IM_TRCNDT_CUST_IMPL       IF_BADI_INTERFACE             11TRAINEE01   20190807            000000001                              2  0
+ZCL_IM_TRCNDT_CUST_IMPL       ZIF_EX_CUST1                  11TRAINEE01   20190807            000000001                              2  0

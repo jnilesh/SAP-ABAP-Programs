@@ -1,0 +1,4 @@
+ZTR_CNDT_OOABAP_CONST         00000                                                             0
+ZTR_CNDT_OOABAP_CONST         00001METH1                                                        0
+ZTR_CNDT_OOABAP_CONST         00002CONSTRUCTOR                                                  0
+ZTR_CNDT_OOABAP_CONST         00003CLASS_CONSTRUCTOR                                            0

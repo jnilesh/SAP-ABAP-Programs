@@ -1,0 +1,25 @@
+class-pool .
+*"* class pool for class ZTR_DTP_GL_MAT
+
+*"* local type definitions
+include ZTR_DTP_GL_MAT================ccdef.
+
+*"* class ZTR_DTP_GL_MAT definition
+*"* public declarations
+  include ZTR_DTP_GL_MAT================cu.
+*"* protected declarations
+  include ZTR_DTP_GL_MAT================co.
+*"* private declarations
+  include ZTR_DTP_GL_MAT================ci.
+endclass. "ZTR_DTP_GL_MAT definition
+
+*"* macro definitions
+include ZTR_DTP_GL_MAT================ccmac.
+*"* local class implementation
+include ZTR_DTP_GL_MAT================ccimp.
+
+class ZTR_DTP_GL_MAT implementation.
+*"* method's implementations
+  include methods.
+endclass. "ZTR_DTP_GL_MAT implementation
+

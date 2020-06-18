@@ -1,0 +1,15 @@
+class ZCL_TR_BNGL_MATMASTER definition
+  public
+  final
+  create public .
+
+public section.
+
+  methods METH_MAT
+    importing
+      !I_MATNR1 type MATNR
+      !I_MATNR2 type MATNR
+    exporting
+      !E_TAB type TABLE
+    exceptions
+      MAT_NOT_FOUND .

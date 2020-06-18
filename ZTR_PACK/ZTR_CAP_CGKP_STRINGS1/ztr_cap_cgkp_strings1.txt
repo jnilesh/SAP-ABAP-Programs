@@ -1,0 +1,64 @@
+*&---------------------------------------------------------------------*
+*& Report ZTR_CAP_CGKP_STRINGS
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ZTR_CAP_CGKP_STRINGS1.
+
+* 1# TRANSLATE
+*
+*PARAMETERS a(20).
+**TRANSLATE a to UPPER CASE .
+*TRANSLATE a to LOWER CASE .
+*WRITE a.
+
+*--------------------------------
+* 2#CONCATENATE
+*PARAMETERS : A(10),
+*             B(10).
+*DATA C(20).
+*
+*CONCATENATE A B INTO C SEPARATED BY SPACE.
+*
+*WRITE  : / C.
+
+*---------------------------
+*3#SPLIT
+
+*PARAMETERS : A(20).
+* DATA  : B(10),
+*         C(10).
+*
+* SPLIT A AT ',' INTO B C.
+*
+* WRITE : / 'B:' ,  B ,
+*           'C:' ,  C.
+
+*--------------------------------------,
+*4#STRLEN
+
+*PARAMETERS : A(10).
+*
+*DATA LEN TYPE I.
+*
+*LEN = STRLEN( A ).
+*
+*WRITE LEN.
+*----------------------------
+* 5#OFFSETTING
+*PARAMETERS : A(10).
+*DATA B(10).
+*B = A+2(4).
+*WRITE B.
+
+*----------------------
+*6#REPLACE
+PARAMETERS : A(10).
+DO.
+  IF A CA ','.
+  REPLACE ',' WITH '*' INTO A.
+  ELSE.
+    EXIT.
+    ENDIF.
+  ENDDO.
+  WRITE A.

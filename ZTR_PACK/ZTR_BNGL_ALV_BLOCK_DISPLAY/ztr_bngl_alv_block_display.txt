@@ -1,0 +1,195 @@
+*&---------------------------------------------------------------------*
+*& Report ZTR_BNGL_ALV_GRID_DISPLAY
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ZTR_BNGL_ALV_BLOCK_DISPLAY.
+
+INCLUDE ZTR_BNGLS_ALV_BLOCK_TOP.
+
+
+SELECT-OPTIONS S_MATNR FOR LV_MATNR.
+
+START-OF-SELECTION.
+
+PERFORM GET_DATA.
+
+PERFORM GET_FCAT.
+
+PERFORM GET_DISPLAY.
+
+*&---------------------------------------------------------------------*
+*&      Form  GET_DATA
+*&---------------------------------------------------------------------*
+FORM GET_DATA .
+SELECT MATNR
+       MBRSH
+       MTART
+       MEINS
+       BRGEW
+       NTGEW
+   INTO TABLE IT_TAB
+   FROM MARA
+   WHERE MATNR IN S_MATNR.
+
+SELECT MATNR werks
+   INTO TABLE IT_TAB2
+   FROM MARC
+   WHERE MATNR IN S_MATNR.
+
+
+
+ENDFORM.
+*&---------------------------------------------------------------------*
+*&      Form  GET_DISPLAY
+*&---------------------------------------------------------------------*
+FORM GET_DISPLAY .
+
+
+CALL FUNCTION 'REUSE_ALV_BLOCK_LIST_INIT'
+  EXPORTING
+    I_CALLBACK_PROGRAM             = SY-REPID
+*   I_CALLBACK_PF_STATUS_SET       = ' '
+*   I_CALLBACK_USER_COMMAND        = ' '
+*   IT_EXCLUDING                   =
+          .
+
+CALL FUNCTION 'REUSE_ALV_BLOCK_LIST_APPEND'
+  EXPORTING
+    IS_LAYOUT                        = IT_LAYOUT
+    IT_FIELDCAT                      = IT_FIELDCAT[]
+    I_TABNAME                        = 'IT_TAB'
+    IT_EVENTS                        = IT_EVENT[]
+*   IT_SORT                          =
+*   I_TEXT                           = ' '
+  TABLES
+    T_OUTTAB                         = IT_TAB
+* EXCEPTIONS
+*   PROGRAM_ERROR                    = 1
+*   MAXIMUM_OF_APPENDS_REACHED       = 2
+*   OTHERS                           = 3
+          .
+IF SY-SUBRC <> 0.
+* Implement suitable error handling here
+ENDIF.
+
+CALL FUNCTION 'REUSE_ALV_BLOCK_LIST_APPEND'
+  EXPORTING
+    IS_LAYOUT                        = IT_LAYOUT
+    IT_FIELDCAT                      = IT_FIELDCAT2[]
+    I_TABNAME                        = 'IT_TAB2'
+    IT_EVENTS                        = IT_EVENT[]
+*   IT_SORT                          =
+*   I_TEXT                           = ' '
+  TABLES
+    T_OUTTAB                         = IT_TAB2
+* EXCEPTIONS
+*   PROGRAM_ERROR                    = 1
+*   MAXIMUM_OF_APPENDS_REACHED       = 2
+*   OTHERS                           = 3
+          .
+IF SY-SUBRC <> 0.
+* Implement suitable error handling here
+ENDIF.
+
+
+CALL FUNCTION 'REUSE_ALV_BLOCK_LIST_DISPLAY'
+** EXPORTING
+**   I_INTERFACE_CHECK             = ' '
+**   IS_PRINT                      =
+**   I_SCREEN_START_COLUMN         = 0
+**   I_SCREEN_START_LINE           = 0
+**   I_SCREEN_END_COLUMN           = 0
+**   I_SCREEN_END_LINE             = 0
+** IMPORTING
+**   E_EXIT_CAUSED_BY_CALLER       =
+**   ES_EXIT_CAUSED_BY_USER        =
+** EXCEPTIONS
+**   PROGRAM_ERROR                 = 1
+**   OTHERS                        = 2
+*          .
+*IF SY-SUBRC <> 0.
+** Implement suitable error handling here
+*ENDIF.
+
+.
+
+ENDFORM.
+*&---------------------------------------------------------------------*
+*&      Form  GET_FCAT
+*&---------------------------------------------------------------------*
+FORM GET_FCAT .
+*  MATNR
+IT_FIELDCAT-COL_POS = '1'.
+IT_FIELDCAT-FIELDNAME = 'MATNR'.
+IT_FIELDCAT-TABNAME = 'IT_TAB'.
+IT_FIELDCAT-SELTEXT_L = 'MATERIAL NO'.
+IT_FIELDCAT-emphasize =  'C111'.
+
+APPEND IT_FIELDCAT.
+
+* MBRSH
+IT_FIELDCAT-COL_POS = '2'.
+IT_FIELDCAT-FIELDNAME = 'MBRSH'.
+IT_FIELDCAT-TABNAME = 'IT_TAB'.
+IT_FIELDCAT-SELTEXT_L = 'MAT IND SECTOR'.
+IT_FIELDCAT-emphasize =  'C201'.
+APPEND IT_FIELDCAT.
+
+
+* MTART
+IT_FIELDCAT-COL_POS = '3'.
+IT_FIELDCAT-FIELDNAME = 'MTART'.
+IT_FIELDCAT-TABNAME = 'IT_TAB'.
+IT_FIELDCAT-SELTEXT_L = 'MATERIAL TYPE'.
+IT_FIELDCAT-emphasize =  'C111'.
+APPEND IT_FIELDCAT.
+
+
+* MEINS
+IT_FIELDCAT-COL_POS = '4'.
+IT_FIELDCAT-FIELDNAME = 'MEINS'.
+IT_FIELDCAT-TABNAME = 'IT_TAB'.
+IT_FIELDCAT-SELTEXT_L = 'MAT BASE UOM'.
+IT_FIELDCAT-emphasize =  'C400'.
+APPEND IT_FIELDCAT.
+
+*  BRGEW
+IT_FIELDCAT-COL_POS = '5'.
+IT_FIELDCAT-FIELDNAME = 'BRGEW'.
+IT_FIELDCAT-TABNAME = 'IT_TAB'.
+IT_FIELDCAT-SELTEXT_L = 'MAT GROSS WEIGHT'.
+IT_FIELDCAT-emphasize =  'C600'.
+APPEND IT_FIELDCAT.
+
+*  NTGEW
+IT_FIELDCAT-COL_POS = '6'.
+IT_FIELDCAT-FIELDNAME = 'NTGEW'.
+IT_FIELDCAT-TABNAME = 'IT_TAB'.
+IT_FIELDCAT-SELTEXT_L = 'MAT NET WEIGHT'.
+IT_FIELDCAT-DO_SUM = 'X'.
+IT_FIELDCAT-emphasize =  'C700'.
+APPEND IT_FIELDCAT.
+*------------------------ MARC-------------
+
+IT_FIELDCAT2-COL_POS = '1'.
+IT_FIELDCAT2-FIELDNAME = 'MATNR'.
+IT_FIELDCAT2-TABNAME = 'IT_TAB2'.
+IT_FIELDCAT2-SELTEXT_L = 'MATERIAL NO'.
+
+APPEND IT_FIELDCAT2.
+
+
+
+IT_FIELDCAT2-COL_POS = '2'.
+IT_FIELDCAT2-FIELDNAME = 'WERKS'.
+IT_FIELDCAT2-TABNAME = 'IT_TAB2'.
+IT_FIELDCAT2-SELTEXT_L = 'MATERIAL PLANT'.
+
+APPEND IT_FIELDCAT2.
+
+
+
+
+
+ENDFORM.

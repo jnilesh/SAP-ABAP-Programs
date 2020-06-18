@@ -1,0 +1,193 @@
+REPORT ZTR_DTP_ALV_BLOCK_DISPLAY.
+
+INCLUDE ZTR_DTP_ALV_BLOCK_DIS_TOP.
+
+
+SELECT-OPTIONS: S_MATNR FOR LV_MATNR.
+
+START-OF-SELECTION.
+
+PERFORM GET_DATA.
+
+PERFORM GET_ALV.
+
+PERFORM ALV_DISP.
+
+
+*&---------------------------------------------------------------------*
+FORM GET_DATA .
+
+  SELECT MATNR
+       MBRSH
+       MTART
+       MEINS
+       BRGEW
+       NTGEW
+   INTO TABLE IT_TAB
+     FROM MARA
+     WHERE MATNR IN S_MATNR.
+
+SELECT MATNR
+       WERKS
+   INTO TABLE IT_TAB2
+     FROM MARC
+     WHERE MATNR IN S_MATNR.
+
+
+
+ENDFORM.
+*&---------------------------------------------------------------------*
+*&      Form  GET_ALV
+*&---------------------------------------------------------------------*
+FORM GET_ALV .
+
+* MATNR
+  IT_FCAT-COL_POS = '1' .
+  IT_FCAT-SELTEXT_L = 'MAT NUMBER'.
+  IT_FCAT-FIELDNAME = 'MATNR'.
+  IT_FCAT-TABNAME = 'IT_TAB'.
+  IT_FCAT-no_zero = 'X'.
+*  IT_FCAT-EMPHASIZE  = 'C111'.
+    APPEND IT_FCAT.
+
+* MBRSH
+
+  IT_FCAT-COL_POS = '2' .
+  IT_FCAT-SELTEXT_L = 'IND SECTOR'.
+  IT_FCAT-FIELDNAME = 'MBRSH'.
+  IT_FCAT-TABNAME = 'IT_TAB'.
+*  IT_FCAT-EMPHASIZE  = 'C211'.
+    APPEND IT_FCAT.
+
+* MTART
+
+    IT_FCAT-COL_POS = '3' .
+  IT_FCAT-SELTEXT_L = 'MAT TYPE'.
+  IT_FCAT-FIELDNAME = 'MTART'.
+  IT_FCAT-TABNAME = 'IT_TAB'.
+*  IT_FCAT-EMPHASIZE  = 'C601'.
+    APPEND IT_FCAT.
+
+
+*    MEINS
+
+    IT_FCAT-COL_POS = '4' .
+  IT_FCAT-SELTEXT_L = 'MAT BASE UOM'.
+  IT_FCAT-FIELDNAME = 'MEINS'.
+  IT_FCAT-TABNAME = 'IT_TAB'.
+    APPEND IT_FCAT.
+*    BRGEW
+    IT_FCAT-COL_POS = '5' .
+  IT_FCAT-SELTEXT_L = 'MAT GROSS WEIGHT'.
+  IT_FCAT-FIELDNAME = 'BRGEW'.
+  IT_FCAT-TABNAME = 'IT_TAB'.
+*  IT_FCAT-EMPHASIZE  = 'C501'.
+    APPEND IT_FCAT.
+
+*   NTGEW
+    IT_FCAT-COL_POS = '6' .
+  IT_FCAT-SELTEXT_L = 'MAT NET WEIGHT'.
+  IT_FCAT-FIELDNAME = 'NTGEW'.
+  IT_FCAT-TABNAME = 'IT_TAB'.
+  IT_FCAT-DO_SUM = 'X'.
+  IT_FCAT-EMPHASIZE  = 'C601'.
+
+    APPEND IT_FCAT.
+
+*------------------------------------- MARC-----------------
+
+
+* MATNR
+  IT_FCAT2-COL_POS = '1' .
+  IT_FCAT2-SELTEXT_L = 'MAT NUMBER'.
+  IT_FCAT2-FIELDNAME = 'MATNR'.
+  IT_FCAT2-TABNAME = 'IT_TAB2'.
+
+    APPEND IT_FCAT2.
+*WERKS
+  IT_FCAT2-COL_POS = '2' .
+  IT_FCAT2-SELTEXT_L = 'MAT PLANT'.
+  IT_FCAT2-FIELDNAME = 'WERKS'.
+  IT_FCAT2-TABNAME = 'IT_TAB2'.
+
+    APPEND IT_FCAT2.
+
+
+ENDFORM.
+*&---------------------------------------------------------------------*
+*&      Form  ALV_DISP
+*&---------------------------------------------------------------------*
+FORM ALV_DISP .
+*
+ IT_LAYOUT-ZEBRA = 'X'.
+* IT_LAYOUT-NO_COLHEAD = 'X'.
+CALL FUNCTION 'REUSE_ALV_BLOCK_LIST_INIT'
+  EXPORTING
+    I_CALLBACK_PROGRAM             = SY-REPID
+*   I_CALLBACK_PF_STATUS_SET       = ' '
+*   I_CALLBACK_USER_COMMAND        = ' '
+*   IT_EXCLUDING                   =
+          .
+
+
+CALL FUNCTION 'REUSE_ALV_BLOCK_LIST_APPEND'
+  EXPORTING
+    IS_LAYOUT                        = IT_LAYOUT
+    IT_FIELDCAT                      = IT_FCAT[]
+    I_TABNAME                        = 'IT_TAB'
+    IT_EVENTS                        = IT_EVENT[]
+*   IT_SORT                          =
+*   I_TEXT                           = ' '
+  TABLES
+    T_OUTTAB                         = IT_TAB
+* EXCEPTIONS
+*   PROGRAM_ERROR                    = 1
+*   MAXIMUM_OF_APPENDS_REACHED       = 2
+*   OTHERS                           = 3
+          .
+IF SY-SUBRC <> 0.
+* Implement suitable error handling here
+ENDIF.
+
+CALL FUNCTION 'REUSE_ALV_BLOCK_LIST_APPEND'  " MARC
+  EXPORTING
+    IS_LAYOUT                        = IT_LAYOUT
+    IT_FIELDCAT                      = IT_FCAT2[]
+    I_TABNAME                        = 'IT_TAB2'
+    IT_EVENTS                        =  IT_EVENT[]
+*   IT_SORT                          =
+*   I_TEXT                           = ' '
+  TABLES
+    T_OUTTAB                         = IT_TAB2
+* EXCEPTIONS
+*   PROGRAM_ERROR                    = 1
+*   MAXIMUM_OF_APPENDS_REACHED       = 2
+*   OTHERS                           = 3
+          .
+IF SY-SUBRC <> 0.
+* Implement suitable error handling here
+ENDIF.
+
+
+CALL FUNCTION 'REUSE_ALV_BLOCK_LIST_DISPLAY'
+* EXPORTING
+*   I_INTERFACE_CHECK             = ' '
+*   IS_PRINT                      =
+*   I_SCREEN_START_COLUMN         = 0
+*   I_SCREEN_START_LINE           = 0
+*   I_SCREEN_END_COLUMN           = 0
+*   I_SCREEN_END_LINE             = 0
+* IMPORTING
+*   E_EXIT_CAUSED_BY_CALLER       =
+*   ES_EXIT_CAUSED_BY_USER        =
+* EXCEPTIONS
+*   PROGRAM_ERROR                 = 1
+*   OTHERS                        = 2
+          .
+IF SY-SUBRC <> 0.
+* Implement suitable error handling here
+ENDIF.
+
+
+
+ENDFORM.

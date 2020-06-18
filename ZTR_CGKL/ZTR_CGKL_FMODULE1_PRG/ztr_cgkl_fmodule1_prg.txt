@@ -1,0 +1,25 @@
+*&---------------------------------------------------------------------*
+*& Report ZTR_CGKL_FMODULE1_PRG
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ZTR_CGKL_FMODULE1_PRG.
+
+
+PARAMETERS: P_VAR1 TYPE I,
+            P_VAR2 TYPE I.
+
+DATA LV_SUM TYPE I.
+
+
+CALL FUNCTION 'ZTR_CGKL_FMODULE1'
+ EXPORTING
+   I_NUM1        = P_VAR1
+   I_NUM2        = P_VAR2
+ IMPORTING
+   E_SUM         = LV_SUM
+          .
+
+
+
+WRITE LV_SUM.

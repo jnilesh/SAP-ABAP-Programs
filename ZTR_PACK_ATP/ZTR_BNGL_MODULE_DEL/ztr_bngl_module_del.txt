@@ -1,0 +1,21 @@
+*----------------------------------------------------------------------*
+***INCLUDE ZTR_BNGL_MODULE_DEL.
+*----------------------------------------------------------------------*
+
+MODULE DEL INPUT.
+
+if sy-ucomm eq 'DELETE'.
+
+ IF SELEC = 'X'.
+
+DELETE FROM ZTR_BNGL_DEPT WHERE    DEPTNO = ZTR_BNGL_DEPT-DEPTNO.
+
+  " MESSAGE I003(ZTR_BNGL_MSG) WITH 'SY-SUBRC'  SY-SUBRC.
+
+   ENDIF.
+
+   ENDIF.
+
+
+
+ENDMODULE.

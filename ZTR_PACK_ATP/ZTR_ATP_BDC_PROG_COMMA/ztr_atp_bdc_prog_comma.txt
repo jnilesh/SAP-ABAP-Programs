@@ -1,0 +1,67 @@
+*&---------------------------------------------------------------------*
+*& Report ZTR_ATP_BDC_PROG_COMMA
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ZTR_ATP_BDC_PROG_COMMA.
+
+INCLUDE ZTR_ATP_BDC_PROG_COMMA_TOP.
+
+PARAMETERS P_file TYPE rlgrap-filename.
+*PARAMETERS P_DEL TYPE C.
+
+AT SELECTION-SCREEN ON VALUE-REQUEST FOR P_FILE.
+
+  CALL FUNCTION 'F4_FILENAME'
+   EXPORTING
+     PROGRAM_NAME        = SYST-CPROG
+     DYNPRO_NUMBER       = SYST-DYNNR
+*     FIELD_NAME          = ' '
+   IMPORTING
+     FILE_NAME           = P_FILE
+            .
+
+  START-OF-SELECTION.
+  DATA P_FILE1 TYPE STRING.
+  P_FILE1 = P_FILE.
+
+
+  CALL FUNCTION 'GUI_UPLOAD'
+    EXPORTING
+      FILENAME                      = P_FILE1
+     FILETYPE                      = 'ASC'
+     HAS_FIELD_SEPARATOR           = 'X'
+
+    TABLES
+      DATA_TAB                      = IT_TAB2
+
+            .
+  IF SY-SUBRC <> 0.
+* Implement suitable error handling here
+  ENDIF.
+
+
+LOOP AT IT_TAB2 INTO WA_TAB2.
+
+  SPLIT WA_TAB2 AT ','
+  INTO WA_TAB-MATNR
+       WA_TAB-MBRSH
+       WA_TAB-MTART
+       WA_TAB-MAKTX
+       WA_TAB-MEINS
+       WA_TAB-MATKL.
+  APPEND WA_TAB TO IT_TAB.
+
+*  CLEAR WA_TAB.
+
+ENDLOOP.
+LOOP AT IT_TAB INTO WA_TAB.
+
+  WRITE :/ WA_TAB-MATNR,
+           WA_TAB-MBRSH,
+           WA_TAB-MTART,
+           WA_TAB-MAKTX,
+           WA_TAB-MEINS,
+           WA_TAB-MATKL.
+
+  ENDLOOP.

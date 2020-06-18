@@ -1,0 +1,70 @@
+*&---------------------------------------------------------------------*
+*& Report ZTR_BNGL_ITAB_INNER_JOINS
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ZTR_BNGL_ITAB_INNER_JOINS.
+
+INCLUDE ZTR_BNGL_ITAB_INNER_JOINS_TOP.
+
+SELECTION-SCREEN BEGIN OF BLOCK B1 WITH FRAME TITLE TEXT-001.
+
+SELECT-OPTIONS S_MATNR FOR LV_MATNR.
+
+
+SELECTION-SCREEN END OF BLOCK B1.
+
+
+SELECTION-SCREEN BEGIN OF BLOCK B2 WITH FRAME TITLE TEXT-002.
+
+SELECT-OPTIONS S_MTART FOR LV_MTART.
+
+SELECTION-SCREEN END OF BLOCK B2.
+
+
+START-OF-SELECTION.
+
+PERFORM GET_DATA.
+
+PERFORM GET_DISP.
+*&---------------------------------------------------------------------*
+*&      Form  GET_DATA
+*&---------------------------------------------------------------------*
+FORM GET_DATA .
+
+
+SELECT M~MATNR
+       M~MBRSH
+       M~MTART
+       M~MEINS
+       M~BRGEW
+       M~NTGEW
+      P~WERKS
+      P~PSTAT
+      P~PLIFZ
+      P~BSTMA
+      k~maktx
+      k~spras
+      k~maktg
+
+   INTO TABLE IT_TAB
+
+   FROM MARA AS M
+   INNER JOIN MARC AS P
+   ON M~MATNR EQ P~MATNR
+
+   INNER JOIN MAkt AS k
+   on M~MATNR EQ k~MATNR
+
+  WHERE M~MATNR IN S_MATNR AND
+        M~MTART IN S_MTART AND
+        K~spras eq 'E'.
+
+ENDFORM.
+*&---------------------------------------------------------------------*
+*&      Form  GET_DISP
+*&---------------------------------------------------------------------*
+FORM GET_DISP .
+CL_DEMO_OUTPUT=>DISPLAY_DATA( IT_TAB ).
+
+ENDFORM.

@@ -1,0 +1,4 @@
+ZCL_TR_BNGL_GL_CLASS1         I_V1                          00
+ZCL_TR_BNGL_GL_CLASS1         LION                          10
+ZCL_TR_BNGL_GL_CLASS1         TIGER                         10
+ZCL_TR_BNGL_GL_CLASS1         S_V2                          00

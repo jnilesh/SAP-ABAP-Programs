@@ -1,0 +1,62 @@
+*----------------------------------------------------------------------*
+***INCLUDE ZMMN_ALV_ALV_HEAD_F006
+*----------------------------------------------------------------------*
+
+FORM f006_alv_head .
+*creating header logs for interactive alv
+
+  IF NOT it_mara IS INITIAL.
+
+    wa_listheader-typ  = 'H'.
+    wa_listheader-info = TEXT-020 .
+    APPEND wa_listheader TO it_listheader.
+    CLEAR wa_listheader.
+
+    wa_listheader-typ = 'S'.
+    wa_listheader-key = TEXT-007 .
+    CONCATENATE  sy-datum+6(2)
+                 sy-datum+4(2)
+                 sy-datum(4)
+                 INTO wa_listheader-info
+                 SEPARATED BY '/'.
+
+    APPEND wa_listheader TO it_listheader.
+    CLEAR wa_listheader.
+
+    IF NOT it_mara IS INITIAL.
+
+      DESCRIBE TABLE it_mara LINES g_count.
+      wa_listheader-typ = 'S'.
+      wa_listheader-key = text-021.
+      wa_listheader-info = g_count .
+
+      APPEND wa_listheader TO it_listheader.
+      CLEAR wa_listheader.
+    ENDIF.
+
+    IF NOT it_marc IS INITIAL.
+
+      DESCRIBE TABLE it_marc LINES g_count.
+      wa_listheader-typ = 'S'.
+      wa_listheader-key = text-022.
+      wa_listheader-info = g_count .
+
+      APPEND wa_listheader TO it_listheader.
+      CLEAR wa_listheader.
+    ENDIF.
+
+    IF NOT it_makt IS INITIAL.
+
+      DESCRIBE TABLE it_makt LINES g_count.
+      wa_listheader-typ = 'S'.
+      wa_listheader-key = text-023.
+      wa_listheader-info = g_count .
+
+      APPEND wa_listheader TO it_listheader.
+      CLEAR wa_listheader.
+    ENDIF.
+
+  ENDIF.
+
+
+ENDFORM.

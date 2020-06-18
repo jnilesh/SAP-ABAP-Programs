@@ -1,0 +1,20 @@
+*&---------------------------------------------------------------------*
+*&  Include           ZTR_DTP_BDC_MAT_CALL_TOP
+*&---------------------------------------------------------------------*
+
+TYPES: BEGIN OF TY_TAB,
+       MATNR TYPE MATNR,
+       MBRSH TYPE MBRSH,
+       MTART TYPE MTART,
+       MAKTX TYPE MAKTX,
+       MEINS TYPE MEINS,
+       MATKL TYPE MATKL,
+         END OF TY_TAB.
+
+DATA :IT_TAB TYPE STANDARD TABLE OF TY_TAB,
+      WA_TAB TYPE TY_TAB,
+     IT_BDCDATA TYPE BDCDATA OCCURS 0 WITH HEADER LINE,
+     IT_BDCMSGCOLL TYPE BDCMSGCOLL OCCURS 0 WITH HEADER LINE.
+
+DATA :LV_INDEX(4) TYPE C,
+      LV_TEXT(100) TYPE C.

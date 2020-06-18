@@ -1,0 +1,15 @@
+*&---------------------------------------------------------------------*
+*& Module Pool       ZTR_BNGL_MPOOL_PROG1
+*&
+*&---------------------------------------------------------------------*
+*&
+*&
+*&---------------------------------------------------------------------*
+
+
+INCLUDE ZTR_BNGL_MPOOL_TOP                      .    " global Data
+
+* INCLUDE ZTR_BNGL_MPOOL_O01                      .  " PBO-Modules
+* INCLUDE ZTR_BNGL_MPOOL_I01                      .  " PAI-Modules
+* INCLUDE ZTR_BNGL_MPOOL_F01                      .  " FORM-Routines
+

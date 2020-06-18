@@ -1,0 +1,4 @@
+ZCL_TR_BNGL_MATMASTER         METH_MAT                      E_TAB                         100
+ZCL_TR_BNGL_MATMASTER         METH_MAT                      I_MATNR1                      100
+ZCL_TR_BNGL_MATMASTER         METH_MAT                      I_MATNR2                      100
+ZCL_TR_BNGL_MATMASTER         METH_MAT                      MAT_NOT_FOUND                 101

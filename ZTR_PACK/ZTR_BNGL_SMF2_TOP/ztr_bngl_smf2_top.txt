@@ -1,0 +1,8 @@
+*  *&---------------------------------------------------------------------*
+*&  Include           ZTR_BNGL_SMF2_TOP
+*&---------------------------------------------------------------------*
+
+DATA: LV_FMNAM  TYPE RS38L_FNAM,
+      LV_MATNR TYPE MATNR.
+
+DATA IT_TAB2 TYPE STANDARD TABLE OF ZTR_BNGL_SM_STR.

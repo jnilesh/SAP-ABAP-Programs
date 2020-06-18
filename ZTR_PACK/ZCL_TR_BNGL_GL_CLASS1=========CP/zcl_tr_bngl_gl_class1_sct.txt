@@ -1,0 +1,3 @@
+ZCL_TR_BNGL_GL_CLASS1         TIGER                         ITTABLE                       E
+ZCL_TR_BNGL_GL_CLASS1         TIGER                         NUM1                          E
+ZCL_TR_BNGL_GL_CLASS1         TIGER                         NUM2                          E

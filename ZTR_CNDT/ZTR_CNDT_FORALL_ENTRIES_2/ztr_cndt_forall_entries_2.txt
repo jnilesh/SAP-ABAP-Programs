@@ -1,0 +1,86 @@
+*&---------------------------------------------------------------------*
+*& Report ZTR_CNDT_FORALL_ENTRIES_2
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ZTR_CNDT_FORALL_ENTRIES_2.
+
+
+INCLUDE ZTR_CNDT_FORALL_ENTRIES_2_top.
+
+
+SELECT-OPTIONS s_vbeln for lv_vbeln.
+
+START-OF-SELECTION.
+
+SELECT vbeln
+       erdat
+       erzet
+       ernam
+       audat
+       vbtyp
+  into TABLE it_vbak
+    FROM zvbak
+   WHERE vbeln in s_vbeln.
+
+if not it_vbak[] is INITIAL.
+
+  SELECT vbeln
+         posnr
+         matnr
+  into TABLE it_vbap
+    FROM zvbap
+    FOR ALL ENTRIES IN IT_VBAK
+   WHERE vbeln EQ IT_VBAK-VBELN.
+
+ SORT IT_VBAP.
+
+LOOP AT IT_VBAK INTO WA_VBAK.
+
+READ TABLE IT_VBAP INTO WA_VBAP WITH KEY VBELN = WA_VBAK-VBELN BINARY SEARCH.
+
+IF SY-SUBRC NE 0.
+
+ MOVE: WA_VBAK-VBELN TO WA_FINAL-VBELN,
+       WA_VBAK-ERDAT TO WA_FINAL-ERDAT,
+       WA_VBAK-ERZET TO WA_FINAL-ERZET,
+       WA_VBAK-ERNAM TO WA_FINAL-ERNAM,
+       WA_VBAK-AUDAT TO WA_FINAL-AUDAT,
+       WA_VBAK-VBTYP TO WA_FINAL-VBTYP,
+
+       WA_VBAP-POSNR TO WA_FINAL-POSNR,
+       WA_VBAP-MATNR TO WA_FINAL-MATNR.
+
+ APPEND WA_FINAL TO IT_FINAL.
+
+ELSE.
+
+
+
+
+  CONTINUE.
+
+ENDIF.
+
+ ENDLOOP.
+
+
+LOOP AT IT_FINAL INTO WA_FINAL.
+  WRITE : / WA_FINAL-VBELN,
+            WA_FINAL-ERDAT,
+            WA_FINAL-ERZET,
+            WA_FINAL-ERNAM,
+            WA_FINAL-AUDAT,
+            WA_FINAL-VBTYP,
+            WA_FINAL-POSNR,
+            WA_FINAL-MATNR.
+
+
+  ENDLOOP.
+
+
+ else.
+
+   write 'sales order header data was not presented '.
+
+   endif.

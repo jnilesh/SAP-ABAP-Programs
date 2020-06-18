@@ -1,0 +1,44 @@
+*&---------------------------------------------------------------------*
+*& Report ZTR_CNDT_EZTR_CNDT_MARA
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ZTR_CNDT_EZTR_CNDT_MARA.
+TABLES MARA.
+
+PARAMETERS P_MATNR TYPE MARA-MATNR.
+
+CALL FUNCTION 'ENQUEUE_EZTR_CNDT_MARA'
+ EXPORTING
+   MODE_MARA            = 'E'
+   MANDT                = SY-MANDT
+   MATNR                = P_MATNR
+*   X_MATNR              = ' '
+*   _SCOPE               = '2'
+*   _WAIT                = ' '
+*   _COLLECT             = ' '
+* EXCEPTIONS
+*   FOREIGN_LOCK         = 1
+*   SYSTEM_FAILURE       = 2
+*   OTHERS               = 3
+          .
+IF sy-subrc <> 0.
+* Implement suitable error handling here
+ENDIF.
+
+*INSERT/UPDATE/MODIFY/DELETE
+
+
+BREAK-POINT.
+
+
+CALL FUNCTION 'DEQUEUE_EZTR_CNDT_MARA'
+ EXPORTING
+   MODE_MARA       = 'E'
+   MANDT           = SY-MANDT
+   MATNR           = P_MATNR
+*   X_MATNR         = ' '
+*   _SCOPE          = '3'
+*   _SYNCHRON       = ' '
+*   _COLLECT        = ' '
+          .

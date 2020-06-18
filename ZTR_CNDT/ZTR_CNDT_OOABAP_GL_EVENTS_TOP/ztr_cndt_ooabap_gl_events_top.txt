@@ -1,0 +1,8 @@
+*&---------------------------------------------------------------------*
+*&  Include          ZTR_CNDT_OOABAP_GL_EVENTS_TOP
+*&---------------------------------------------------------------------*
+
+DATA : LV_MATNR TYPE MATNR.
+
+DATA: IT_TAB TYPE ZTR_CNDT_TT,
+      WA_TAB LIKE LINE OF IT_TAB.

@@ -1,0 +1,39 @@
+report ZCL_TR_DTP_GLCLS_METH_PRG2.
+
+class LCL_METH definition.
+  public section.
+
+    methods I_METH1.
+    class-methods S_METH2.
+
+endclass.
+
+
+class LCL_METH implementation.
+
+  method I_METH1.
+
+    write 'Calling LOCAL class i_meth1'.
+
+  endmethod.
+
+  method S_METH2.
+
+    write 'Calling local class i_meth2'.
+
+  endmethod.
+
+
+endclass.
+
+
+start-of-selection.
+  data I_OBJ1 type ref to LCL_METH.
+
+  create object I_OBJ1.
+
+  call method I_OBJ1->I_METH1.
+
+  skip.
+
+  call method LCL_METH=>S_METH2.

@@ -1,0 +1,4 @@
+  method S_METH2.
+
+    WRITE 'CALLING GLOBAL CLASS METHODS FOR S_METH2'  .
+  endmethod.

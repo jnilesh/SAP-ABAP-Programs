@@ -1,0 +1,6 @@
+CL_DEMO_OUTPUT================CU
+IF_BADI_INTERFACE=============IU
+IF_DEMO_OUTPUT================IU
+IF_DEMO_OUTPUT_FORMATS========IU
+ZCL_IM_TRCNDT_CUST_IMPL=======CU
+ZIF_EX_CUST1==================IU

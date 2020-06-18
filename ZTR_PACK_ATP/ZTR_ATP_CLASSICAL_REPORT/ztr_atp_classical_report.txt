@@ -1,0 +1,143 @@
+*&---------------------------------------------------------------------*
+*& Report ZTR_ATP_CLASSICAL_REPORT
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ZTR_ATP_CLASSICAL_REPORT NO STANDARD PAGE HEADING LINE-COUNT 20 LINE-SIZE 500
+MESSAGE-ID ZTR_ATP_MSG.
+
+INCLUDE ZTR_ATP_CLASSICAL_TOP.
+
+
+SELECTION-SCREEN: BEGIN OF BLOCK B1 WITH FRAME TITLE TEXT-001.
+
+SELECT-OPTIONS S_MATNR FOR LV_MATNR OBLIGATORY NO-EXTENSION.
+
+SELECTION-SCREEN: END OF BLOCK B1.
+
+*LOAD-of-PROGRAM.
+
+
+INITIALIZATION.
+S_MATNR-low = '1'.
+S_MATNR-high = '100'.
+append S_MATNR.  " special itab.
+
+
+at SELECTION-SCREEN on s_matnr.
+  PERFORM GET_VALIDATE.
+
+
+*data lv_date1 type sy-datum.
+*lv_date1 = sy-datum - 5.
+*S_MATNR-low = lv_date1.
+*S_MATNR-high = sy-datum.
+*append S_MATNR.  " special itab.
+
+
+START-OF-SELECTION.
+PERFORM GET_DATA.
+
+TOP-OF-PAGE.
+PERFORM HEADER_DISP.
+
+END-OF-SELECTION.
+PERFORM GET_DISPLAY.
+
+LV_COUNT = SY-LINCT - SY-LINNO.
+SKIP  LV_COUNT.
+
+END-OF-PAGE.
+PERFORM PAGE_END.
+
+
+
+
+*&---------------------------------------------------------------------*
+*&      Form  GET_DATA
+*&---------------------------------------------------------------------*
+FORM GET_DATA .
+
+SELECT MATNR
+       MBRSH
+       MTART
+       MEINS
+       BRGEW
+       NTGEW
+  INTO TABLE IT_TAB " IT_TAB BODY
+    FROM MARA
+  WHERE MATNR IN S_MATNR.
+
+IF SY-SUBRC EQ 0.
+  WRITE: text-002 ,sy-dbcnt,
+         / 'sy-subrc:', sy-subrc.
+SKIP .
+*ULINE.
+ else.
+   WRITE:'Records are not found in mara table', 'Total no of Recrds: ' ,sy-dbcnt,
+        / 'sy-subrc:', sy-subrc.
+     ENDIF.
+ENDFORM.
+*&---------------------------------------------------------------------*
+*&      Form  GET_DISPLAY
+*&---------------------------------------------------------------------*
+
+FORM GET_DISPLAY .
+  LOOP AT IT_TAB INTO WA_TAB. " B TO WA
+*    LOOP AT IT_TAB. " B TO H
+    WRITE :/ SY-TABIX,  " SY-TFILL
+            20 WA_TAB-MATNR ,  " FROM WORK AREA
+            30 WA_TAB-MBRSH ,
+            45 WA_TAB-MTART ,
+            60 WA_TAB-MEINS,
+            84 WA_TAB-BRGEW,
+            100 WA_TAB-NTGEW.
+
+    ENDLOOP.
+ENDFORM.
+*&---------------------------------------------------------------------*
+*&      Form  HEADER_DISP
+*&---------------------------------------------------------------------*
+*       text
+*----------------------------------------------------------------------*
+FORM HEADER_DISP .
+  WRITE 'MAT MASTER INFO FROM MARA TABLE'.
+  ULINE.
+WRITE : 'TAB INDEX',
+        10 'MATERIAL NO',
+        20 'IND SECTOR',
+        25 'MAT TYPE',
+        30 'BASE UOM',
+        44 'MAT GROSS WEIGHT',
+        56 'MAT NET WEIGHT'.
+ULINE.
+ENDFORM.
+*&---------------------------------------------------------------------*
+*&      Form  PAGE_END
+*&---------------------------------------------------------------------*
+
+FORM PAGE_END .
+WRITE : 'PAGE NO:', SY-PAGNO, 'DATE:', SY-DATUM, 'TIME:', SY-UZEIT.
+ENDFORM.
+*&---------------------------------------------------------------------*
+*&      Form  GET_VALIDATE
+*&---------------------------------------------------------------------*
+
+FORM GET_VALIDATE .
+
+DATA LV_MATNR TYPE MATNR.
+
+SELECT SINGLE MATNR
+        INTO LV_MATNR
+  FROM MARA
+   WHERE MATNR IN S_MATNR.
+  IF SY-SUBRC EQ 0.
+
+    MESSAGE I000.
+
+    ELSE.
+      MESSAGE X005.
+
+      ENDIF.
+
+ENDFORM.

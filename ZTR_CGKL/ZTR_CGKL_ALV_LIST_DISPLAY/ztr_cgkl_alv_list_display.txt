@@ -1,0 +1,118 @@
+*&---------------------------------------------------------------------*
+*& Report ZTR_CGKL_ALV_LIST_DISPLAY
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ZTR_CGKL_ALV_LIST_DISPLAY.
+
+
+INCLUDE ZTR_CGKL_ALV_LIST_TOP.
+
+SELECT-OPTIONS S_MATNR FOR LV_MATNR.
+
+PERFORM GET_MAT_DATA.
+
+PERFORM GET_ALV_FCAT.
+
+PERFORM GET_ALV_OUTPUT.
+
+*&---------------------------------------------------------------------*
+*&      Form  GET_MAT_DATA
+*&---------------------------------------------------------------------*
+FORM GET_MAT_DATA .
+
+SELECT MATNR
+       MBRSH
+       MTART
+       MEINS
+       BRGEW
+       NTGEW
+      INTO TABLE IT_TAB
+    FROM MARA
+    WHERE MATNR IN S_MATNR.
+
+IF SY-SUBRC EQ 0.
+  WRITE:'RECORDS ARE FOUND FROM MARA TABLE:' , SY-DBCNT.
+  ELSE.
+  WRITE:'RECORDS ARE NOT FOUND FROM MARA TABLE:' , SY-DBCNT.
+  ENDIF.
+
+ENDFORM.
+*&---------------------------------------------------------------------*
+*&      Form  GET_ALV_FCAT
+*&---------------------------------------------------------------------*
+FORM GET_ALV_FCAT .
+* MAT NO
+
+IT_FIELDCAT-COL_POS = '1'.
+IT_FIELDCAT-FIELDNAME = 'MATNR'.
+IT_FIELDCAT-TABNAME = 'IT_TAB'.
+IT_FIELDCAT-SELTEXT_L = 'MAT NUMBER'.
+
+APPEND IT_FIELDCAT.
+
+* IND SECTOR
+IT_FIELDCAT-COL_POS = '2'.
+IT_FIELDCAT-FIELDNAME = 'MBRSH'.
+IT_FIELDCAT-TABNAME = 'IT_TAB'.
+IT_FIELDCAT-SELTEXT_L = 'MAT IND SECTOR'.
+
+APPEND IT_FIELDCAT.
+
+* MAT TYPE
+IT_FIELDCAT-COL_POS = '3'.
+IT_FIELDCAT-FIELDNAME = 'MTART'.
+IT_FIELDCAT-TABNAME = 'IT_TAB'.
+IT_FIELDCAT-SELTEXT_L = 'MAT TYPE'.
+
+APPEND IT_FIELDCAT.
+
+*  BASE UOM
+
+
+IT_FIELDCAT-COL_POS = '4'.
+IT_FIELDCAT-FIELDNAME = 'MEINS'.
+IT_FIELDCAT-TABNAME = 'IT_TAB'.
+IT_FIELDCAT-SELTEXT_L = 'MAT BASE UOM'.
+
+APPEND IT_FIELDCAT.
+
+* GROSS WEIGHT
+
+IT_FIELDCAT-COL_POS = '5'.
+IT_FIELDCAT-FIELDNAME = 'BRGEW'.
+IT_FIELDCAT-TABNAME = 'IT_TAB'.
+IT_FIELDCAT-SELTEXT_L = 'MAT GROSS WEIGHT'.
+
+APPEND IT_FIELDCAT.
+
+* GNET WEIGHT
+
+IT_FIELDCAT-COL_POS = '6'.
+IT_FIELDCAT-FIELDNAME = 'NTGEW'.
+IT_FIELDCAT-TABNAME = 'IT_TAB'.
+IT_FIELDCAT-SELTEXT_L = 'MAT NET WEIGHT'.
+
+APPEND IT_FIELDCAT.
+
+
+ENDFORM.
+*&---------------------------------------------------------------------*
+*&      Form  GET_ALV_OUTPUT
+*&---------------------------------------------------------------------*
+FORM GET_ALV_OUTPUT .
+
+CALL FUNCTION 'REUSE_ALV_LIST_DISPLAY'
+ EXPORTING
+   I_CALLBACK_PROGRAM             = 'ZTR_CGKL_ALV_LIST_DISPLAY'
+   IT_FIELDCAT                    = IT_FIELDCAT[]
+  TABLES
+    T_OUTTAB                       = IT_TAB
+          .
+IF SY-SUBRC <> 0.
+* Implement suitable error handling here
+ENDIF.
+
+
+
+ENDFORM.

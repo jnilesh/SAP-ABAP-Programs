@@ -1,0 +1,15 @@
+*----------------------------------------------------------------------*
+***INCLUDE ZMMN_PLP_DESIGN_F003.
+*----------------------------------------------------------------------*
+
+FORM f003_design.
+  CLEAR wa_sort.
+  wa_sort-fieldname = 'MATNR'.
+  wa_sort-up = c_chk.
+  APPEND wa_sort TO it_sort.
+  CLEAR wa_sort.
+
+  it_layout-zebra = c_chk.
+  it_layout-colwidth_optimize = c_chk .
+
+ENDFORM.

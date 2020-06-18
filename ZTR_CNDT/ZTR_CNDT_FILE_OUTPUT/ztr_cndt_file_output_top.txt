@@ -1,0 +1,22 @@
+*&---------------------------------------------------------------------*
+*&  Include           ZTR_CNDT_FILE_OUTPUT_TOP
+*&---------------------------------------------------------------------*
+TYPES: BEGIN OF TY_TAB,
+     KUNNR TYPE KUNNR,
+         ktokd TYPE ktokd,
+         anred TYPE anred,
+         name1 TYPE name1,
+         sortl TYPE sortl,
+         stras TYPE stras,
+         pfach TYPE pfach,
+         ort01 TYPE ort01,
+         pstlz TYPE pstlz,
+         ort02 TYPE ort02,
+         land1 TYPE land1,
+         spras TYPE spras,
+
+
+  END OF TY_TAB.
+
+DATA :IT_TAB TYPE STANDARD TABLE OF TY_TAB,
+      WA_TAB TYPE TY_TAB.

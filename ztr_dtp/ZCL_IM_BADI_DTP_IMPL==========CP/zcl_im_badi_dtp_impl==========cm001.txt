@@ -1,0 +1,10 @@
+  method IF_EX_BADI_MATERIAL_CHECK~CHECK_DATA.
+*
+*   IF WMARA-MEINS = 'CCM'.
+*
+*     MESSAGE 'BADIS ARE IMPL FOR THIS MEINS CCM' TYPE 'E'.
+*
+*     ENDIF.
+
+
+  endmethod.

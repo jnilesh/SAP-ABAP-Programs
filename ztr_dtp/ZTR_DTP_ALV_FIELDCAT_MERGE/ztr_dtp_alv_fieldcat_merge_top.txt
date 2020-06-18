@@ -1,0 +1,12 @@
+*&---------------------------------------------------------------------*
+*&  Include           ZTR_DTP_ALV_FIELDCAT_MERGE_TOP
+
+*&---------------------------------------------------------------------*
+TYPE-POOLS SLIS.
+
+DATA: LV_MATNR TYPE MATNR.
+
+DATA :IT_TAB TYPE MARA OCCURS 0 WITH HEADER LINE.
+
+
+DATA IT_FIELDCAT TYPE SLIS_T_FIELDCAT_ALV WITH HEADER LINE.

@@ -1,0 +1,14 @@
+class ZTR_CGKL_OOABAP_GL_CLS_EVENTS definition
+  public
+  create public .
+
+public section.
+
+  events MAT_EVENT .
+
+  methods GET_MATERIAL
+    importing
+      !I_MATNR1 type MATNR
+      !I_MATNR2 type MATNR
+    exporting
+      !IT_TAB type ZTR_CGKL_MAT_TT .

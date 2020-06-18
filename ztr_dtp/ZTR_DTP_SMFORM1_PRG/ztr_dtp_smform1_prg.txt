@@ -1,0 +1,26 @@
+REPORT ZTR_DTP_SMFORM1_PRG.
+
+INCLUDE ZTR_DTP_SMFORM1_TOP.
+
+SELECT-OPTIONS S_VBELN FOR LV_VBELN.
+
+START-OF-SELECTION.
+
+CALL FUNCTION 'SSF_FUNCTION_MODULE_NAME'
+  EXPORTING
+    FORMNAME                 = 'ZTR_DTP_SMFORM1'
+ IMPORTING
+   FM_NAME                  = FM_NAME
+          .
+IF SY-SUBRC <> 0.
+* Implement suitable error handling here
+ENDIF.
+
+CALL FUNCTION FM_NAME
+ EXPORTING
+   I_VBELN1                   = S_VBELN-LOW
+   I_VBELN2                   = S_VBELN-HIGH
+          .
+IF SY-SUBRC <> 0.
+* Implement suitable error handling here
+ENDIF.

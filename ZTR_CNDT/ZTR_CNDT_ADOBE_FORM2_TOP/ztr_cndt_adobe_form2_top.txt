@@ -1,0 +1,22 @@
+*&---------------------------------------------------------------------*
+*&  Include           ZTR_CNDT_ADOBE_FORM2_TOP
+*&---------------------------------------------------------------------*
+
+
+DATA: LV_KUNNR TYPE KUNNR,
+      LV_NAME1 TYPE NAME1,
+      LV_ORT01 TYPE ORT01,
+      LV_LAND1 TYPE LAND1,
+      LV_PSTLZ TYPE PSTLZ.
+
+
+DATA :LV_KUNNR2 TYPE KUNNR,
+      LV_FM TYPE RS38L_FNAM.
+
+
+TYPES: ty_outputparams type sfpoutputparams,
+       ty_docparams type sfpdocparams.
+
+data wa_outputparams type sfpoutputparams.
+
+data wa_docparams type sfpdocparams.

@@ -1,0 +1,7 @@
+class ZCL_TR_ATP_GL_CLS_METH1_SUB1 definition
+  public
+  create public .
+
+public section.
+
+  methods METH2 .

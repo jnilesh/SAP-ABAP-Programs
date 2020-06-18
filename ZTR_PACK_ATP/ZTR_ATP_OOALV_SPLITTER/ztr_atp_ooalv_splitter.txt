@@ -1,0 +1,369 @@
+*&---------------------------------------------------------------------*
+*& Report ZTR_ATP_OOALV_SPLITTER
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ZTR_ATP_OOALV_SPLITTER.
+
+INCLUDE ZTR_ATP_OOALV_SPLITTER_TOP.
+
+SELECT-OPTIONS S_MATNR FOR LV_MATNR.
+ START-OF-SELECTION.
+ PERFORM GET_MARA.
+ PERFORM GET_MARC.
+ PERFORM GET_MARD.
+
+CALL SCREEN 0100.
+*&---------------------------------------------------------------------*
+*&      Module  STATUS_0100  OUTPUT
+*&---------------------------------------------------------------------*
+*       text
+*----------------------------------------------------------------------*
+MODULE STATUS_0100 OUTPUT.
+  SET PF-STATUS SPACE.
+*  SET TITLEBAR 'xxx'.
+
+  CREATE OBJECT CUSTOM
+    EXPORTING
+      CONTAINER_NAME              = 'CNT1'
+      .
+  IF SY-SUBRC <> 0.
+*   MESSAGE ID SY-MSGID TYPE SY-MSGTY NUMBER SY-MSGNO
+*              WITH SY-MSGV1 SY-MSGV2 SY-MSGV3 SY-MSGV4.
+  ENDIF.
+
+  CREATE OBJECT SPLIT1
+    EXPORTING
+*      LINK_DYNNR        =
+*      LINK_REPID        =
+*      METRIC            = cntl_metric_dynpro
+      PARENT            = CUSTOM
+      ORIENTATION       = CL_GUI_EASY_SPLITTER_CONTAINER=>ORIENTATION_VERTICAL
+*      SASH_POSITION     = 50
+*      WITH_BORDER       = 1
+*      NAME              =
+*    EXCEPTIONS
+*      CNTL_ERROR        = 1
+*      CNTL_SYSTEM_ERROR = 2
+*      others            = 3
+      .
+  IF SY-SUBRC <> 0.
+*   MESSAGE ID SY-MSGID TYPE SY-MSGTY NUMBER SY-MSGNO
+*              WITH SY-MSGV1 SY-MSGV2 SY-MSGV3 SY-MSGV4.
+  ENDIF.
+
+  CREATE OBJECT SPLIT2
+    EXPORTING
+*      LINK_DYNNR        =
+*      LINK_REPID        =
+*      METRIC            = cntl_metric_dynpro
+      PARENT            = SPLIT1->BOTTOM_RIGHT_CONTAINER
+      ORIENTATION       = CL_GUI_EASY_SPLITTER_CONTAINER=>ORIENTATION_HORIZONTAL
+*      SASH_POSITION     = 50
+*      WITH_BORDER       = 1
+*      NAME              =
+*    EXCEPTIONS
+*      CNTL_ERROR        = 1
+*      CNTL_SYSTEM_ERROR = 2
+*      others            = 3
+      .
+  IF SY-SUBRC <> 0.
+*   MESSAGE ID SY-MSGID TYPE SY-MSGTY NUMBER SY-MSGNO
+*              WITH SY-MSGV1 SY-MSGV2 SY-MSGV3 SY-MSGV4.
+  ENDIF.
+
+
+*NOW WE HAVE TOTAL 3 CONTAINER AVAILABLE WITH US
+*OB_SPLIT1->TOP_LEFT_CONTAINER
+*OB_SPLIT2->TOP_LEFT_CONTAINER
+*OB_SPLIT2->BOTTOM_RIGHT_CONTAINER
+*NOTE THAT SPLIT1->BOTTOM_RIGHT_CONTAINER IS NOT AVAILABLE BECAUSE WE DIVIDE THAT INTO TWO. NOW PUT A GRID IN EACH CONTAINER.
+
+CREATE OBJECT GRID1
+  EXPORTING
+*    I_SHELLSTYLE      = 0
+*    I_LIFETIME        =
+    I_PARENT          = SPLIT1->TOP_LEFT_CONTAINER
+    I_APPL_EVENTS     = space
+*    I_PARENTDBG       =
+*    I_APPLOGPARENT    =
+*    I_GRAPHICSPARENT  =
+*    I_NAME            =
+*    I_FCAT_COMPLETE   = SPACE
+*  EXCEPTIONS
+*    ERROR_CNTL_CREATE = 1
+*    ERROR_CNTL_INIT   = 2
+*    ERROR_CNTL_LINK   = 3
+*    ERROR_DP_CREATE   = 4
+*    others            = 5
+*
+  .
+IF SY-SUBRC <> 0.
+* MESSAGE ID SY-MSGID TYPE SY-MSGTY NUMBER SY-MSGNO
+*            WITH SY-MSGV1 SY-MSGV2 SY-MSGV3 SY-MSGV4.
+ENDIF.
+
+CREATE OBJECT GRID2
+  EXPORTING
+*    I_SHELLSTYLE      = 0
+*    I_LIFETIME        =
+    I_PARENT          = SPLIT2->TOP_LEFT_CONTAINER
+*    I_APPL_EVENTS     = space
+*    I_PARENTDBG       =
+*    I_APPLOGPARENT    =
+*    I_GRAPHICSPARENT  =
+*    I_NAME            =
+*    I_FCAT_COMPLETE   = SPACE
+*  EXCEPTIONS
+*    ERROR_CNTL_CREATE = 1
+*    ERROR_CNTL_INIT   = 2
+*    ERROR_CNTL_LINK   = 3
+*    ERROR_DP_CREATE   = 4
+*    others            = 5
+    .
+IF SY-SUBRC <> 0.
+* MESSAGE ID SY-MSGID TYPE SY-MSGTY NUMBER SY-MSGNO
+*            WITH SY-MSGV1 SY-MSGV2 SY-MSGV3 SY-MSGV4.
+ENDIF.
+
+CREATE OBJECT GRID3
+  EXPORTING
+*    I_SHELLSTYLE      = 0
+*    I_LIFETIME        =
+    I_PARENT          = SPLIT2->BOTTOM_RIGHT_CONTAINER
+*    I_APPL_EVENTS     = space
+*    I_PARENTDBG       =
+*    I_APPLOGPARENT    =
+*    I_GRAPHICSPARENT  =
+*    I_NAME            =
+*    I_FCAT_COMPLETE   = SPACE
+*  EXCEPTIONS
+*    ERROR_CNTL_CREATE = 1
+*    ERROR_CNTL_INIT   = 2
+*    ERROR_CNTL_LINK   = 3
+*    ERROR_DP_CREATE   = 4
+*    others            = 5
+    .
+IF SY-SUBRC <> 0.
+* MESSAGE ID SY-MSGID TYPE SY-MSGTY NUMBER SY-MSGNO
+*            WITH SY-MSGV1 SY-MSGV2 SY-MSGV3 SY-MSGV4.
+ENDIF.
+
+CALL METHOD GRID1->SET_TABLE_FOR_FIRST_DISPLAY
+  EXPORTING
+    I_STRUCTURE_NAME              = 'TY_TAB1'
+  CHANGING
+    IT_FIELDCATALOG               = IT_FCAT1
+    IT_OUTTAB                     = IT_TAB1
+        .
+IF SY-SUBRC <> 0.
+* Implement suitable error handling here
+ENDIF.
+
+
+CALL METHOD GRID2->SET_TABLE_FOR_FIRST_DISPLAY
+  EXPORTING
+    I_STRUCTURE_NAME              = 'TY_TAB2'
+  CHANGING
+    IT_FIELDCATALOG               = IT_FCAT2
+    IT_OUTTAB                     = IT_TAB2
+        .
+IF SY-SUBRC <> 0.
+* Implement suitable error handling here
+ENDIF.
+
+CALL METHOD GRID3->SET_TABLE_FOR_FIRST_DISPLAY
+  EXPORTING
+    I_STRUCTURE_NAME              = 'TY_TAB3'
+  CHANGING
+    IT_FIELDCATALOG               = IT_FCAT3
+    IT_OUTTAB                     = IT_TAB3
+        .
+IF SY-SUBRC <> 0.
+* Implement suitable error handling here
+ENDIF.
+
+ENDMODULE.
+*&---------------------------------------------------------------------*
+*&      Module  USER_COMMAND_0100  INPUT
+*&---------------------------------------------------------------------*
+MODULE USER_COMMAND_0100 INPUT.
+CASE SY-UCOMM.
+  WHEN 'EXIT'.
+    LEAVE TO SCREEN 0.
+ENDCASE.
+ENDMODULE.
+*&---------------------------------------------------------------------*
+*&      Form  GET_MARA
+*&---------------------------------------------------------------------*
+FORM GET_MARA .
+ SELECT MATNR
+         MBRSH
+         MTART
+         MEINS
+         BRGEW
+         NTGEW
+     INTO TABLE IT_TAB1
+       FROM MARA
+       WHERE MATNR IN S_MATNR.
+
+PERFORM FCAT_MARA.
+
+ENDFORM.
+*&---------------------------------------------------------------------*
+*&      Form  GET_MARC
+*&---------------------------------------------------------------------*
+FORM GET_MARC .
+ SELECT MATNR
+         WERKS
+         PSTAT
+         EKGRP
+     INTO TABLE IT_TAB2
+     FROM MARC
+       WHERE MATNR IN S_MATNR.
+
+PERFORM FCAT_MARC.
+
+ENDFORM.
+*&---------------------------------------------------------------------*
+*&      Form  GET_MARD
+*&---------------------------------------------------------------------*
+
+FORM GET_MARD .
+SELECT MATNR
+         WERKS
+         LGORT
+     INTO TABLE IT_TAB3
+     FROM MARD
+       WHERE MATNR IN S_MATNR.
+
+ PERFORM FCAT_MARD.
+ENDFORM.
+*&---------------------------------------------------------------------*
+*&      Form  FCAT_MARA
+*&---------------------------------------------------------------------*
+
+FORM FCAT_MARA .
+
+* MATNR
+  WA_FCAT1-COL_POS = '1' .
+  WA_FCAT1-FIELDNAME = 'MATNR' .
+  WA_FCAT1-REF_TABLE = 'MARA' .
+  WA_FCAT1-SELTEXT = 'MAT NUMBER' .
+  APPEND WA_FCAT1 TO IT_FCAT1 .
+  CLEAR WA_FCAT1 .
+
+* MBRSH
+  WA_FCAT1-COL_POS = '2' .
+  WA_FCAT1-FIELDNAME = 'MBRSH' .
+  WA_FCAT1-REF_TABLE = 'MARA' .
+  WA_FCAT1-SELTEXT = 'MAT IND SECTOR' .
+  APPEND WA_FCAT1 TO IT_FCAT1 .
+  CLEAR WA_FCAT1 .
+
+*MTART
+  WA_FCAT1-COL_POS = '3' .
+  WA_FCAT1-FIELDNAME = 'MTART' .
+  WA_FCAT1-REF_TABLE = 'MARA' .
+  WA_FCAT1-SELTEXT = 'MAT TYPE' .
+  APPEND WA_FCAT1 TO IT_FCAT1 .
+  CLEAR WA_FCAT1 .
+
+*MEINS
+  WA_FCAT1-COL_POS = '4' .
+  WA_FCAT1-FIELDNAME = 'MEINS' .
+  WA_FCAT1-REF_TABLE = 'MARA' .
+  WA_FCAT1-SELTEXT = 'MAT BASE UOM' .
+  APPEND WA_FCAT1 TO IT_FCAT1 .
+  CLEAR WA_FCAT1 .
+
+*BRGEW
+  WA_FCAT1-COL_POS = '5' .
+  WA_FCAT1-FIELDNAME = 'BRGEW' .
+  WA_FCAT1-REF_TABLE = 'MARA' .
+  WA_FCAT1-SELTEXT = 'MAT GROSS WEIGHT' .
+  APPEND WA_FCAT1 TO IT_FCAT1 .
+  CLEAR WA_FCAT1 .
+
+*NTGEW
+  WA_FCAT1-COL_POS = '6' .
+  WA_FCAT1-FIELDNAME = 'NTGEW' .
+  WA_FCAT1-REF_TABLE = 'MARA' .
+  WA_FCAT1-SELTEXT = 'MAT NET WEIGHT' .
+  APPEND WA_FCAT1 TO IT_FCAT1 .
+  CLEAR WA_FCAT1 .
+ENDFORM.
+*&---------------------------------------------------------------------*
+*&      Form  FCAT_MARC
+*&---------------------------------------------------------------------*
+FORM FCAT_MARC .
+*MATNR
+  WA_FCAT2-COL_POS = '1' .
+  WA_FCAT2-SELTEXT = 'MAT NUMBER' .
+  WA_FCAT2-FIELDNAME = 'MATNR' .
+  WA_FCAT2-REF_TABLE = 'MARC' .
+
+  APPEND WA_FCAT2 TO IT_FCAT2.
+  CLEAR WA_FCAT2 .
+
+*WERKS
+  WA_FCAT2-COL_POS = '2' .
+  WA_FCAT2-SELTEXT = 'MAT PLANT' .
+  WA_FCAT2-FIELDNAME = 'WERKS' .
+  WA_FCAT2-REF_TABLE = 'MARC' .
+
+  APPEND WA_FCAT2 TO IT_FCAT2.
+  CLEAR WA_FCAT2 .
+
+*PSTAT
+  WA_FCAT2-COL_POS = '3' .
+  WA_FCAT2-SELTEXT = 'MAT PLANT STATUS' .
+  WA_FCAT2-FIELDNAME = 'PSTAT' .
+  WA_FCAT2-REF_TABLE = 'MARC' .
+
+  APPEND WA_FCAT2 TO IT_FCAT2.
+  CLEAR WA_FCAT2 .
+
+* ERGRP
+  WA_FCAT2-COL_POS = '4' .
+  WA_FCAT2-SELTEXT = 'MAT PLANT GROUP' .
+  WA_FCAT2-FIELDNAME = 'EKGRP' .
+  WA_FCAT2-REF_TABLE = 'MARC' .
+
+  APPEND WA_FCAT2 TO IT_FCAT2.
+  CLEAR WA_FCAT2 .
+
+ENDFORM.
+*&---------------------------------------------------------------------*
+*&      Form  FCAT_MARD
+*&---------------------------------------------------------------------*
+FORM FCAT_MARD .
+*MATNR
+  WA_FCAT3-COL_POS = '1' .
+  WA_FCAT3-SELTEXT = 'MAT NUMBER' .
+  WA_FCAT3-FIELDNAME = 'MATNR' .
+  WA_FCAT3-REF_TABLE = 'MARD' .
+
+  APPEND WA_FCAT3 TO IT_FCAT3.
+  CLEAR WA_FCAT3 .
+
+*WERKS
+  WA_FCAT3-COL_POS = '2' .
+  WA_FCAT3-SELTEXT = 'MAT PLANT' .
+  WA_FCAT3-FIELDNAME = 'WERKS' .
+  WA_FCAT3-REF_TABLE = 'MARD' .
+
+  APPEND WA_FCAT3 TO IT_FCAT3.
+  CLEAR WA_FCAT3 .
+
+*PSTAT
+  WA_FCAT3-COL_POS = '3' .
+  WA_FCAT3-SELTEXT = 'MAT STORAGE LOC' .
+  WA_FCAT3-FIELDNAME = 'LGORT' .
+  WA_FCAT3-REF_TABLE = 'MARD' .
+
+  APPEND WA_FCAT3 TO IT_FCAT3.
+  CLEAR WA_FCAT3 .
+
+
+ENDFORM.

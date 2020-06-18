@@ -1,0 +1,36 @@
+REPORT ZTR_DTP_ENQUEUE_LOCK.
+
+*TABLES mara.
+*PARAMETERS p_matnr TYPE mara-matnr.
+
+CALL FUNCTION 'ENQUEUE_EZ_TRDTP'
+ EXPORTING
+   MODE_MARA            = 'E'
+   MANDT                = SY-MANDT
+*   MATNR                = p_matnr
+*   X_MATNR              = ' '
+*   _SCOPE               = '2'
+*   _WAIT                = ' '
+*   _COLLECT             = ' '
+* EXCEPTIONS
+*   FOREIGN_LOCK         = 1
+*   SYSTEM_FAILURE       = 2
+*   OTHERS               = 3
+          .
+IF SY-SUBRC <> 0.
+* Implement suitable error handling here
+ENDIF.
+
+
+BREAK-POINT.
+
+CALL FUNCTION 'DEQUEUE_EZ_TRDTP'
+ EXPORTING
+   MODE_MARA       = 'E'
+   MANDT           = SY-MANDT
+*   MATNR           = p_matnr
+*   X_MATNR         = ' '
+*   _SCOPE          = '3'
+*   _SYNCHRON       = ' '
+*   _COLLECT        = ' '
+          .

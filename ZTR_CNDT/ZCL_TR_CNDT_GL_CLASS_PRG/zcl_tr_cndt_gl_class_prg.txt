@@ -1,0 +1,17 @@
+*&---------------------------------------------------------------------*
+*& Report ZCL_TR_CNDT_GL_CLASS_PRG
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ZCL_TR_CNDT_GL_CLASS_PRG.
+
+
+START-OF-SELECTION.
+
+DATA OBJ1 TYPE REF TO ZCL_TR_CNDT_GL_CLASS.
+
+CREATE OBJECT OBJ1.
+
+
+WRITE: OBJ1->I_ATT1,  " INST
+       ZCL_TR_CNDT_GL_CLASS=>S_ATT2. " CLASS

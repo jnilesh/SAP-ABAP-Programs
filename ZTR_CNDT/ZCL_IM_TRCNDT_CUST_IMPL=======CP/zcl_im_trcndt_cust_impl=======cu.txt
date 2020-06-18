@@ -1,0 +1,9 @@
+class ZCL_IM_TRCNDT_CUST_IMPL definition
+  public
+  final
+  create public .
+
+public section.
+
+  interfaces IF_BADI_INTERFACE .
+  interfaces ZIF_EX_CUST1 .

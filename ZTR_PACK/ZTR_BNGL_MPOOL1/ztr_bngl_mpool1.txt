@@ -1,0 +1,62 @@
+*&---------------------------------------------------------------------*
+*& Modulpool  ZTR_BNGL_MPOOL1
+*&
+*&---------------------------------------------------------------------*
+*&
+*&
+*&---------------------------------------------------------------------*
+PROGRAM ZTR_BNGL_MPOOL1.
+
+DATA: LV_MATNR TYPE MATNR,
+      LV_MBRSH TYPE MBRSH,
+      LV_MTART TYPE MTART,
+      LV_MEINS TYPE MEINS.
+*&---------------------------------------------------------------------*
+*&      Module  STATUS_0100  OUTPUT
+*&---------------------------------------------------------------------*
+*       text
+*----------------------------------------------------------------------*
+MODULE STATUS_0100 OUTPUT.
+  SET PF-STATUS 'ZTR_BNGL_PFS'.
+*  SET TITLEBAR 'xxx'.
+
+  LV_MATNR = 'TR_H14'.
+ENDMODULE.
+*&---------------------------------------------------------------------*
+*&      Module  USER_COMMAND_0100  INPUT
+*&---------------------------------------------------------------------*
+*       text
+*----------------------------------------------------------------------*
+MODULE USER_COMMAND_0100 INPUT.
+
+CASE SY-UCOMM.
+  WHEN 'NEXT'.
+    SELECT SINGLE MATNR
+           MBRSH
+           MTART
+           MEINS
+       FROM MARA
+      INTO (LV_MATNR, LV_MBRSH, LV_MTART, LV_MEINS)
+     WHERE MATNR EQ LV_MATNR.
+leave TO SCREEN 200.
+  WHEN 'EXIT'.
+      LEAVE TO SCREEN 0.
+ENDCASE.
+
+
+ENDMODULE.
+*&---------------------------------------------------------------------*
+*&      Module  USER_COMMAND_0200  INPUT
+*&---------------------------------------------------------------------*
+*       text
+*----------------------------------------------------------------------*
+MODULE USER_COMMAND_0200 INPUT.
+CASE SY-UCOMM.
+  WHEN 'BACK'.
+  LEAVE TO SCREEN 0100.
+  WHEN 'EXIT'.
+  LEAVE TO SCREEN 0.
+ENDCASE.
+
+
+ENDMODULE.

@@ -1,0 +1,76 @@
+*&---------------------------------------------------------------------*
+*& Report ZTR_CNDT_ITAB_FINAL
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ZTR_CNDT_ITAB_FINAL.
+
+INCLUDE ZTR_CNDT_ITAB_FINAL_TOP.
+
+SELECT-OPTIONS S_MATNR FOR LV_MATNR DEFAULT '1' TO '100'.
+
+START-OF-SELECTION.
+
+
+PERFORM get_mat_data.
+
+PERFORM get_mat_disp.
+
+WRITE 'cap'.
+
+*&---------------------------------------------------------------------*
+*&      Form  GET_MAT_DATA
+*&---------------------------------------------------------------------*
+FORM GET_MAT_DATA .
+
+SELECT MATNR
+       MBRSH
+       MTART
+       MEINS
+       MATKL
+       BRGEW
+       NTGEW
+    FROM MARA
+     INTO TABLE IT_TAB
+    WHERE MATNR IN S_MATNR.
+
+IF SY-SUBRC EQ 0.
+WRITE: 'GETTING RECORDS FROM MARA TABLE', SY-DBCNT.
+  ELSE.
+    WRITE: 'NOT FOUND NAY RECORDS', SY-DBCNT.
+    ENDIF.
+
+*SORT IT_TAB BY MATNR ASCENDING
+*               MTART DESCENDING.
+*CLEAR IT_TAB[].
+
+ENDFORM.
+*&---------------------------------------------------------------------*
+*&      Form  GET_MAT_DISP
+*&---------------------------------------------------------------------*
+FORM GET_MAT_DISP .
+
+LOOP AT IT_TAB INTO WA_TAB.
+  AT FIRST.
+    WRITE:/5 'MATERIAL NO' ,
+           20 'IND SECTOR'  ,
+           25 'MAT TYPE',
+           40 'BASE UOM',
+           55 'MAT GROUP',
+           68 'GROSS WEIGHT',
+           80  'NET WEIGHT'.
+    ENDAT.
+
+
+WRITE : / SY-TABIX,
+        5 WA_TAB-MATNR,
+        20 WA_TAB-MBRSH,
+        25 WA_TAB-MTART,
+        40 WA_TAB-MEINS,
+        55 WA_TAB-MATKL,
+        68 WA_TAB-BRGEW,
+        80 WA_TAB-NTGEW.
+
+ENDLOOP.
+
+ENDFORM.

@@ -1,0 +1,15 @@
+*&---------------------------------------------------------------------*
+*& Module Pool       ZTR_CGKL_MODUEL_POOL2
+*&
+*&---------------------------------------------------------------------*
+*&
+*&
+*&---------------------------------------------------------------------*
+
+
+INCLUDE ZMPOOL_TOP                              .    " global Data
+
+* INCLUDE ZMPOOL_O01                              .  " PBO-Modules
+* INCLUDE ZMPOOL_I01                              .  " PAI-Modules
+* INCLUDE ZMPOOL_F01                              .  " FORM-Routines
+

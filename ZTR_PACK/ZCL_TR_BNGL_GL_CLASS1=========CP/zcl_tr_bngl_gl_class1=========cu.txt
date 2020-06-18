@@ -1,0 +1,8 @@
+class ZCL_TR_BNGL_GL_CLASS1 definition
+  public
+  create public .
+
+public section.
+
+  data I_V1 type I value 100 ##NO_TEXT.
+  class-data S_V2 type I value 200 ##NO_TEXT.

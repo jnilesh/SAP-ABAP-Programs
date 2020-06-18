@@ -1,0 +1,21 @@
+*&---------------------------------------------------------------------*
+*& Include ZTR_BNGL_MODULE_TOP                      *&
+*&---------------------------------------------------*
+
+PROGRAM ZTR_BNGL_MODULE_TABLE_UPDATE.
+
+CONTROLS TC1 TYPE TABLEVIEW USING SCREEN 0100.
+
+TABLES ZTR_BNGL_DEPT.
+DATA ITDEPT TYPE TABLE OF ZTR_BNGL_DEPT.
+
+TYPES: BEGIN OF TY_DEPT,
+      DEPTNO TYPE ZTR_BNGL_DEPTNO,
+      DNAME TYPE ZTR_BNGL_DNAME,
+      LOC   TYPE ZTR_BNGL_DELOC,
+  END OF TY_DEPT.
+
+DATA :IT_TAB TYPE STANDARD TABLE OF TY_DEPT, "  ITAB
+      WA_TAB TYPE TY_DEPT.  " WORKAREA
+
+DATA SELEC TYPE C.

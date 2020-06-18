@@ -1,0 +1,14 @@
+*&---------------------------------------------------------------------*
+*&  Include           ZTR_CNDT_OOALV_INT_COMMND_TOP
+*&---------------------------------------------------------------------*
+
+DATA : i_container  TYPE REF TO cl_gui_custom_container,
+       i_grid       TYPE REF TO cl_gui_alv_grid,
+       i_container2 TYPE REF TO cl_gui_custom_container,
+       i_grid2      TYPE REF TO cl_gui_alv_grid,
+       it_tab1     TYPE TABLE OF mara,
+       wa_tab1     TYPE mara,
+       it_tab2     TYPE TABLE OF marc,
+       wa_tab2     TYPE marc.
+
+DATA LV_MATNR TYPE MATNR.

@@ -1,0 +1,24 @@
+*&---------------------------------------------------------------------*
+*&  Include           ZTR_CNDT_BDC_CUST_TOP
+*&---------------------------------------------------------------------*
+
+TYPES: BEGIN OF ty_tab,
+         KUNNR TYPE KUNNR,
+         ktokd TYPE ktokd,
+         anred TYPE anred,
+         name1 TYPE name1,
+         sortl TYPE sortl,
+         stras TYPE stras,
+         pfach TYPE pfach,
+         ort01 TYPE ort01,
+         pstlz TYPE pstlz,
+         ort02 TYPE ort02,
+         land1 TYPE land1,
+         spras TYPE spras,
+
+END OF ty_tab.
+
+DATA :IT_TAB TYPE STANDARD TABLE OF TY_TAB,
+      WA_TAB TYPE TY_tAB.
+
+DATA IT_BDCDATA TYPE BDCDATA OCCURS 0 WITH HEADER LINE.

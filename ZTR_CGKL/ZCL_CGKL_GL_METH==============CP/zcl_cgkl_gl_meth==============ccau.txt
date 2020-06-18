@@ -1,0 +1,25 @@
+class-pool .
+*"* class pool for class ZCL_CGKL_GL_METH
+
+*"* local type definitions
+include ZCL_CGKL_GL_METH==============ccdef.
+
+*"* class ZCL_CGKL_GL_METH definition
+*"* public declarations
+  include ZCL_CGKL_GL_METH==============cu.
+*"* protected declarations
+  include ZCL_CGKL_GL_METH==============co.
+*"* private declarations
+  include ZCL_CGKL_GL_METH==============ci.
+endclass. "ZCL_CGKL_GL_METH definition
+
+*"* macro definitions
+include ZCL_CGKL_GL_METH==============ccmac.
+*"* local class implementation
+include ZCL_CGKL_GL_METH==============ccimp.
+
+class ZCL_CGKL_GL_METH implementation.
+*"* method's implementations
+  include methods.
+endclass. "ZCL_CGKL_GL_METH implementation
+

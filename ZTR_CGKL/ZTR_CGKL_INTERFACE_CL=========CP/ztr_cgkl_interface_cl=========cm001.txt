@@ -1,0 +1,7 @@
+  method CL_METH1.
+
+
+
+
+
+  endmethod.

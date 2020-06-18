@@ -1,0 +1,17 @@
+*&---------------------------------------------------------------------*
+*&  Include           ZTR_CNDT_ABAP_MEMORY_P2_TOP
+*&---------------------------------------------------------------------*
+
+TYPES : BEGIN OF TY_TAB, " LOCL STRS
+       MATNR TYPE MATNR,  " Material Number
+       MBRSH TYPE MBRSH,  " Industry sector
+       MTART TYPE MTART,  " Material type
+       MEINS TYPE MEINS,  " Base Unit of Measure
+       BRGEW TYPE BRGEW,  " Gross weight
+       NTGEW TYPE NTGEW,  " Net weight
+       END OF TY_TAB.
+
+DATA: IT_TAB TYPE STANDARD TABLE OF TY_TAB,  " ITAB
+      WA_TAB TYPE TY_TAB. " WORK AREA
+
+DATA P_MATNR TYPE MATNR.

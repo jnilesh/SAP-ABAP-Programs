@@ -1,0 +1,22 @@
+*&---------------------------------------------------------------------*
+*&  INCLUDE           ZMMN_PLP9_START_01
+*&---------------------------------------------------------------------*
+
+START-OF-SELECTION.
+
+  IF RBT_BLK = c_chk .         " Check if block alv is selected
+
+    PERFORM F001_GET_DATA.     " Get data from mara table
+    PERFORM F002_ALV_FCAT.     " set field catalog
+    PERFORM F003_DESIGN.       " creating layout options
+    PERFORM F004_BLOCK_DISP .  " display the data in block alv
+
+  ELSEIF RBT_INTR = c_chk.     " Check if interactive alv is selected
+
+    PERFORM F005_DATA_INTER.   " Get data from mara table
+    PERFORM F003_DESIGN.       " creating layout options
+    PERFORM F007_DISP_INTER.   " displaying first table: mara
+
+  ELSE.
+    MESSAGE E002 .             " message if no option is selected
+  ENDIF.

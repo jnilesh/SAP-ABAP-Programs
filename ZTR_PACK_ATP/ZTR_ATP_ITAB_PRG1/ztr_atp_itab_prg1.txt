@@ -1,0 +1,20 @@
+*&---------------------------------------------------------------------*
+*& Report ZTR_ATP_ITAB_PRG1
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ZTR_ATP_ITAB_PRG1.
+
+
+INCLUDE ZTR_ATP_ITAB_PRG1_TOP.
+
+SELECT-OPTIONS S_MATNR FOR MARA-MATNR.
+
+SELECT * FROM MARA
+  INTO MARA  " TABLES WORK AREA
+  WHERE MATNR IN S_MATNR.
+
+  WRITE /: MARA-MATNR,  " TAB WOR ARE
+           MARA-MBRSH,
+           MARA-MTART.
+ ENDSELECT.

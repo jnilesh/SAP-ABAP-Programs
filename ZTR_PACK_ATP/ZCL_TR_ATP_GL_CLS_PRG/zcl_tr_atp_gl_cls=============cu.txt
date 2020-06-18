@@ -1,0 +1,9 @@
+class ZCL_TR_ATP_GL_CLS definition
+  public
+  final
+  create public .
+
+public section.
+
+  data I_ATTR type I value 100 ##NO_TEXT.
+  class-data S_ATTR type I value 200 ##NO_TEXT.

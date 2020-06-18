@@ -1,0 +1,3 @@
+ZCL_TR_ATP_GL_CLS_METH        I_METH1                       EMETH1
+ZCL_TR_ATP_GL_CLS_METH        S_METH2                       EMETH2
+ZCL_TR_ATP_GL_CLS_METH        S_METH3                       EMETH3

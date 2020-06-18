@@ -1,0 +1,25 @@
+class-pool .
+*"* class pool for class ZTR_CNDT_OOABAP_CONST
+
+*"* local type definitions
+include ZTR_CNDT_OOABAP_CONST=========ccdef.
+
+*"* class ZTR_CNDT_OOABAP_CONST definition
+*"* public declarations
+  include ZTR_CNDT_OOABAP_CONST=========cu.
+*"* protected declarations
+  include ZTR_CNDT_OOABAP_CONST=========co.
+*"* private declarations
+  include ZTR_CNDT_OOABAP_CONST=========ci.
+endclass. "ZTR_CNDT_OOABAP_CONST definition
+
+*"* macro definitions
+include ZTR_CNDT_OOABAP_CONST=========ccmac.
+*"* local class implementation
+include ZTR_CNDT_OOABAP_CONST=========ccimp.
+
+class ZTR_CNDT_OOABAP_CONST implementation.
+*"* method's implementations
+  include methods.
+endclass. "ZTR_CNDT_OOABAP_CONST implementation
+

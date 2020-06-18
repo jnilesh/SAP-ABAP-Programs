@@ -1,0 +1,68 @@
+*&---------------------------------------------------------------------*
+*& Report ZTR_CGKL_IT_TAB_FINAL
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ZTR_CGKL_IT_TAB_FINAL.
+
+INCLUDE ZTR_CGKL_HEADER_INCL.
+
+INCLUDE ZTR_CGKL_IT_TAB1_STR_TOP.
+
+SELECT-OPTIONS S_MATNR FOR LV_MATNR.
+
+PERFORM GET_MAT_DATA.
+
+PERFORM GET_MAT_DISPL.
+
+WRITE 'CAP'.
+
+*&---------------------------------------------------------------------*
+*&      Form  GET_MAT_DATA
+*&---------------------------------------------------------------------*
+FORM GET_MAT_DATA .
+
+SELECT MATNR
+       MBRSH
+       MTART
+       MEINS
+*  INTO WA_TAB   " B
+  INTO TABLE IT_TAB   " B
+    FROM MARA
+    WHERE MATNR IN S_MATNR.
+
+*APPEND WA_TAB TO IT_TAB.  " W TO B
+*CLEAR WA_TAB.
+*ENDSELECT.
+
+IF SY-SUBRC EQ 0.
+  WRITE:'RECORDS ARE FOUND FROM MARA TABLE:' , SY-DBCNT.
+  ELSE.
+  WRITE:'RECORDS ARE NOT FOUND FROM MARA TABLE:' , SY-DBCNT.
+  ENDIF.
+
+*REFRESH IT_TAB.
+*FREE IT_TAB.
+
+
+ENDFORM.
+
+*&---------------------------------------------------------------------*
+*&      Form  GET_MAT_DISPL
+*&---------------------------------------------------------------------*
+FORM GET_MAT_DISPL .
+
+
+  LOOP AT IT_TAB INTO WA_TAB. " B TO W
+
+    WRITE :/ SY-TABIX,
+             WA_TAB-MATNR,
+             WA_TAB-MBRSH,
+             WA_TAB-MTART,
+             WA_TAB-MEINS.
+
+    ENDLOOP.
+
+
+
+ENDFORM.

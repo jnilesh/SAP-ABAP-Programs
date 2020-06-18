@@ -1,0 +1,20 @@
+*&---------------------------------------------------------------------*
+*& Report ZTR_CGKL_ITAB_INSERT_TABLE_WA
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ZTR_CGKL_ITAB_INSERT_TABLE_WA.
+
+
+TABLES ZTR_CGKL_EMP.  " one default tables work are
+
+SELECT-OPTIONS s_empno FOR ZTR_CGKL_EMP-empno.
+
+select * FROM ZTR_CGKL_EMP
+  INTO ZTR_CGKL_EMP  "one default tables work are
+  WHERE empno in s_empno.
+
+    WRITE: ZTR_CGKL_EMP-empno,
+           ZTR_CGKL_EMP-empname.
+
+   ENDSELECT.

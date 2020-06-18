@@ -1,0 +1,171 @@
+*&---------------------------------------------------------------------*
+*& Report ZTR_BNGL_ALV_HIERSEQ_DISPLAY
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ZTR_BNGL_ALV_HIERSEQ_DISPLAY.
+
+INCLUDE ZTR_BNGL_ALV_HIERSEQ_DISP_TOP.
+
+SELECT-OPTIONS S_VBELN FOR LV_VBELN.
+
+START-OF-SELECTION.
+
+
+PERFORM GET_SALES_DATA.
+
+PERFORM GET_FCAT.
+
+PERFORM GET_SALES_DISP.
+
+*&---------------------------------------------------------------------*
+*&      Form  GET_SALES_DATA
+*&---------------------------------------------------------------------*
+FORM GET_SALES_DATA .
+SELECT VBELN
+       ERDAT
+       ERZET
+  INTO CORRESPONDING FIELDS OF TABLE IT_tAB1
+  FROM VBAK
+  WHERE VBELN IN S_VBELN.
+
+SELECT VBELN
+       POSNR
+       MATNR
+  INTO TABLE IT_tAB2
+  FROM VBAp
+  WHERE VBELN IN S_VBELN.
+
+
+
+ENDFORM.
+*&---------------------------------------------------------------------*
+*&      Form  GET_FCAT
+*&---------------------------------------------------------------------*
+FORM GET_FCAT .
+
+* VBELN.
+IT_FIELDCAT-REF_TABNAME =  'VBAK'.
+IT_FIELDCAT-COL_POS =  '1'.
+IT_FIELDCAT-TABNAME = 'IT_TAB1'.
+IT_FIELDCAT-FIELDNAME = 'VBELN'.
+IT_FIELDCAT-SELTEXT_L = 'SALES ORDER NO'.
+
+APPEND IT_FIELDCAT.
+
+* erdat.
+IT_FIELDCAT-REF_TABNAME =  'VBAK'.
+IT_FIELDCAT-COL_POS =  '2'.
+IT_FIELDCAT-TABNAME = 'IT_TAB1'.
+IT_FIELDCAT-FIELDNAME = 'ERDAT'.
+IT_FIELDCAT-SELTEXT_L = 'SALES ORDER  DATE'.
+
+APPEND IT_FIELDCAT.
+
+
+
+* ERZET
+IT_FIELDCAT-REF_TABNAME =  'VBAK'.
+IT_FIELDCAT-COL_POS =  '3'.
+IT_FIELDCAT-TABNAME = 'IT_TAB1'.
+IT_FIELDCAT-FIELDNAME = 'ERZET'.
+IT_FIELDCAT-SELTEXT_L = 'SALES ORDER TIME'.
+
+APPEND IT_FIELDCAT.
+
+
+
+*---------------------
+
+* VBELN.
+IT_FIELDCAT-REF_TABNAME =  'VBAP'.
+IT_FIELDCAT-COL_POS =  '1'.
+IT_FIELDCAT-TABNAME = 'IT_TAB2'.
+IT_FIELDCAT-FIELDNAME = 'VBELN'.
+IT_FIELDCAT-SELTEXT_L = 'SALES ORDER NO'.
+
+APPEND IT_FIELDCAT.
+
+
+
+* POSNR
+IT_FIELDCAT-REF_TABNAME =  'VBAP'.
+IT_FIELDCAT-COL_POS =  '2'.
+IT_FIELDCAT-TABNAME = 'IT_TAB2'.
+IT_FIELDCAT-FIELDNAME = 'POSNR'.
+IT_FIELDCAT-SELTEXT_L = 'SALES ORD LINE ITEMS'.
+
+APPEND IT_FIELDCAT.
+
+
+* MATNR
+IT_FIELDCAT-REF_TABNAME =  'VBAP'.
+IT_FIELDCAT-COL_POS =  '3'.
+IT_FIELDCAT-TABNAME = 'IT_TAB2'.
+IT_FIELDCAT-FIELDNAME = 'MATNR'.
+IT_FIELDCAT-SELTEXT_L = 'SALES ORD MAT NO'.
+
+APPEND IT_FIELDCAT.
+
+ENDFORM.
+*&---------------------------------------------------------------------*
+*&      Form  GET_SALES_DISP
+*&---------------------------------------------------------------------*
+FORM GET_SALES_DISP .
+
+IT_KEYINFO-header01 = 'VBELN'.
+IT_LAYOUT-EXPAND_FIELDNAME = 'EXP'.
+
+
+
+
+CALL FUNCTION 'REUSE_ALV_HIERSEQ_LIST_DISPLAY'
+  EXPORTING
+*   I_INTERFACE_CHECK              = ' '
+   I_CALLBACK_PROGRAM             = SY-REPID
+*   I_CALLBACK_PF_STATUS_SET       = ' '
+*   I_CALLBACK_USER_COMMAND        = ' '
+   IS_LAYOUT                      = IT_LAYOUT
+   IT_FIELDCAT                    = IT_FIELDCAT[]
+*   IT_EXCLUDING                   =
+*   IT_SPECIAL_GROUPS              =
+*   IT_SORT                        =
+*   IT_FILTER                      =
+*   IS_SEL_HIDE                    =
+*   I_SCREEN_START_COLUMN          = 0
+*   I_SCREEN_START_LINE            = 0
+*   I_SCREEN_END_COLUMN            = 0
+*   I_SCREEN_END_LINE              = 0
+*   I_DEFAULT                      = 'X'
+*   I_SAVE                         = ' '
+*   IS_VARIANT                     =
+*   IT_EVENTS                      =
+*   IT_EVENT_EXIT                  =
+    I_TABNAME_HEADER               = 'IT_TAB1'
+    I_TABNAME_ITEM                 = 'IT_TAB2'
+*   I_STRUCTURE_NAME_HEADER        =
+*   I_STRUCTURE_NAME_ITEM          =
+    IS_KEYINFO                     = IT_KEYINFO
+*   IS_PRINT                       =
+*   IS_REPREP_ID                   =
+*   I_BYPASSING_BUFFER             =
+*   I_BUFFER_ACTIVE                =
+*   IR_SALV_HIERSEQ_ADAPTER        =
+*   IT_EXCEPT_QINFO                =
+*   I_SUPPRESS_EMPTY_DATA          = ABAP_FALSE
+* IMPORTING
+*   E_EXIT_CAUSED_BY_CALLER        =
+*   ES_EXIT_CAUSED_BY_USER         =
+  TABLES
+    T_OUTTAB_HEADER                = IT_TAB1
+    T_OUTTAB_ITEM                  = IT_TAB2
+* EXCEPTIONS
+*   PROGRAM_ERROR                  = 1
+*   OTHERS                         = 2
+          .
+IF SY-SUBRC <> 0.
+* Implement suitable error handling here
+ENDIF.
+
+
+ENDFORM.

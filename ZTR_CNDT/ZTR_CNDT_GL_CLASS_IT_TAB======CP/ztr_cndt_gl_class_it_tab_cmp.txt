@@ -1,0 +1,1 @@
+ZTR_CNDT_GL_CLASS_IT_TAB      GET_MAT                       10

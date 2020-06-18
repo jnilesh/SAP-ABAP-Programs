@@ -1,0 +1,15 @@
+*&---------------------------------------------------------------------*
+*& Module Pool       ZTR_CNDT_MP1
+*&
+*&---------------------------------------------------------------------*
+*&
+*&
+*&---------------------------------------------------------------------*
+
+
+INCLUDE ZTR_CNDT_MP_TOP                         .    " global Data
+
+* INCLUDE ZTR_CNDT_MP_O01                         .  " PBO-Modules
+* INCLUDE ZTR_CNDT_MP_I01                         .  " PAI-Modules
+* INCLUDE ZTR_CNDT_MP_F01                         .  " FORM-Routines
+

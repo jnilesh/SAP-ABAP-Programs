@@ -1,0 +1,6 @@
+ZCL_TR_DTP_GLCLS==============CCDEF
+ZCL_TR_DTP_GLCLS==============CCIMP
+ZCL_TR_DTP_GLCLS==============CCMAC
+ZCL_TR_DTP_GLCLS==============CI
+ZCL_TR_DTP_GLCLS==============CO
+ZCL_TR_DTP_GLCLS==============CU

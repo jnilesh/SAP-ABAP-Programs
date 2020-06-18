@@ -1,0 +1,3 @@
+ZCL_TR_DTP_GLCLS_METH         00000                                                             0
+ZCL_TR_DTP_GLCLS_METH         00001I_METH1                                                      0
+ZCL_TR_DTP_GLCLS_METH         00002S_METH2                                                      0

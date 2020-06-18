@@ -1,0 +1,175 @@
+*&---------------------------------------------------------------------*
+*& Report ZTR_CNDT_ALV_LOGO_DISPLAY
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ZTR_CNDT_ALV_LOGO_DISPLAY.
+
+
+INCLUDE ZTR_CNDT_ALV_LOGO_DISPLAY_TOP.
+
+
+
+SELECT-OPTIONS S_MATNR FOR LV_MATNR.
+
+PERFORM GET_MAT_DATA.
+
+
+PERFORM GET_ALV_FCAT.
+
+IT_EVENT-NAME = 'TOP_OF_PAGE'.
+IT_EVENT-FORM = 'ALV_HEADER_OUT'.
+APPEND IT_EVENT.
+
+
+PERFORM GET_ALV_OUTPUT.
+
+PERFORM ALV_HEADER_OUT.
+
+*&---------------------------------------------------------------------*
+*&      Form  GET_MAT_DATA
+*&---------------------------------------------------------------------*
+FORM GET_MAT_DATA .
+
+SELECT MATNR
+       MBRSH
+       MTART
+       MEINS
+       BRGEW
+       NTGEW
+      INTO TABLE IT_TAB
+    FROM MARA
+    WHERE MATNR IN S_MATNR.
+
+*IF SY-SUBRC EQ 0.
+*  WRITE:'RECORDS ARE FOUND FROM MARA TABLE:' , SY-DBCNT.
+*  ELSE.
+*  WRITE:'RECORDS ARE NOT FOUND FROM MARA TABLE:' , SY-DBCNT.
+*  ENDIF.
+
+ENDFORM.
+*&---------------------------------------------------------------------*
+*&      Form  GET_ALV_FCAT
+*&---------------------------------------------------------------------*
+FORM GET_ALV_FCAT .
+* MAT NO
+
+IT_FIELDCAT-COL_POS = '1'.
+IT_FIELDCAT-FIELDNAME = 'MATNR'.
+IT_FIELDCAT-TABNAME = 'IT_TAB'.
+IT_FIELDCAT-SELTEXT_L = 'MAT NUMBER'.
+IT_FIELDCAT-EMPHASIZE = 'C111'.
+
+APPEND IT_FIELDCAT.
+
+* IND SECTOR
+IT_FIELDCAT-COL_POS = '2'.
+IT_FIELDCAT-FIELDNAME = 'MBRSH'.
+IT_FIELDCAT-TABNAME = 'IT_TAB'.
+IT_FIELDCAT-SELTEXT_L = 'MAT IND SECTOR'.
+IT_FIELDCAT-EMPHASIZE = 'C200'.
+
+APPEND IT_FIELDCAT.
+
+* MAT TYPE
+IT_FIELDCAT-COL_POS = '3'.
+IT_FIELDCAT-FIELDNAME = 'MTART'.
+IT_FIELDCAT-TABNAME = 'IT_TAB'.
+IT_FIELDCAT-SELTEXT_L = 'MAT TYPE'.
+IT_FIELDCAT-EMPHASIZE = 'C511'.
+APPEND IT_FIELDCAT.
+
+*  BASE UOM
+
+
+IT_FIELDCAT-COL_POS = '4'.
+IT_FIELDCAT-FIELDNAME = 'MEINS'.
+IT_FIELDCAT-TABNAME = 'IT_TAB'.
+IT_FIELDCAT-SELTEXT_L = 'MAT BASE UOM'.
+IT_FIELDCAT-EMPHASIZE = 'C711'.
+APPEND IT_FIELDCAT.
+
+* GROSS WEIGHT
+
+IT_FIELDCAT-COL_POS = '5'.
+IT_FIELDCAT-FIELDNAME = 'BRGEW'.
+IT_FIELDCAT-TABNAME = 'IT_TAB'.
+IT_FIELDCAT-SELTEXT_L = 'MAT GROSS WEIGHT'.
+IT_FIELDCAT-EMPHASIZE = 'C401'.
+APPEND IT_FIELDCAT.
+
+* GNET WEIGHT
+
+IT_FIELDCAT-COL_POS = '6'.
+IT_FIELDCAT-FIELDNAME = 'NTGEW'.
+IT_FIELDCAT-TABNAME = 'IT_TAB'.
+IT_FIELDCAT-SELTEXT_L = 'MAT NET WEIGHT'.
+IT_FIELDCAT-DO_SUM = 'X'.
+IT_FIELDCAT-EMPHASIZE = 'C910'.
+
+APPEND IT_FIELDCAT.
+
+
+ENDFORM.
+*&---------------------------------------------------------------------*
+*&      Form  GET_ALV_OUTPUT
+*&---------------------------------------------------------------------*
+FORM GET_ALV_OUTPUT .
+
+*IT_LAYOUT-no_colhead = 'X'.
+*IT_LAYOUT-no_VLINE = 'X'.
+*IT_LAYOUT-no_HLINE = 'X'.
+
+CALL FUNCTION 'REUSE_ALV_GRID_DISPLAY'
+ EXPORTING
+   I_CALLBACK_PROGRAM                = SY-REPID
+   I_CALLBACK_TOP_OF_PAGE            = 'ALV_HEADER_OUT'
+   IS_LAYOUT                         = IT_LAYOUT
+   IT_FIELDCAT                       = IT_FIELDCAT[]
+   IT_EVENTS                         = IT_EVENT[]
+  TABLES
+    T_OUTTAB                          = IT_TAB
+* EXCEPTIONS
+*   PROGRAM_ERROR                     = 1
+*   OTHERS                            = 2
+          .
+IF SY-SUBRC <> 0.
+* Implement suitable error handling here
+ENDIF.
+
+
+
+ENDFORM.
+*&---------------------------------------------------------------------*
+*&      Form  ALV_HEADER_OUT
+*&---------------------------------------------------------------------*
+FORM ALV_HEADER_OUT .
+DATA IT_HEADER TYPE SLIS_T_LISTHEADER WITH HEADER LINE.
+*IT_HEADER-TYP = 'H'.
+*IT_HEADER-TYP = 'S'.
+IT_HEADER-TYP = 'S'.
+IT_HEADER-INFO = 'CAPGEMINI KOLKATA'.
+IT_HEADER-KEY = 'CANDOR TECH PARK'.
+APPEND IT_HEADER.
+*
+IT_HEADER-TYP = 'S'.
+IT_HEADER-INFO = SY-DATUM.
+IT_HEADER-KEY = SY-UZEIT.
+APPEND IT_HEADER.
+
+DATA LV_IMAGE(20) TYPE C.
+SELECT SINGLE ENAME INTO LV_IMAGE FROM Z186531_EMP WHERE EMPNO = 1010.
+
+
+
+*data xyz(9) type c.
+*xyz = 'CAPGEMINI'.
+CALL FUNCTION 'REUSE_ALV_COMMENTARY_WRITE'
+  EXPORTING
+    IT_LIST_COMMENTARY       = IT_HEADER[]
+   I_LOGO                   = LV_IMAGE " OAER KEY
+*   I_END_OF_LIST_GRID       =
+*   I_ALV_FORM               =
+          .
+
+ENDFORM.

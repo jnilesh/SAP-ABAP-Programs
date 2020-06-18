@@ -1,0 +1,156 @@
+*----------------------------------------------------------------------*
+***INCLUDE ZMMN_ALV_ALV_FCAT_F002
+*----------------------------------------------------------------------*
+
+FORM f002_alv_fcat .
+* Creating field catalog for block ALV
+
+  CLEAR wa_fcat.
+  DATA l_pos TYPE i VALUE 1.
+
+  wa_fcat-ref_tabname = c_mara.
+  wa_fcat-col_pos = l_pos .
+  wa_fcat-emphasize = 'C310'.
+  wa_fcat-tabname = c_itjoin.
+  wa_fcat-seltext_m = TEXT-008 .
+  wa_fcat-ref_fieldname  =  TEXT-008.
+  wa_fcat-fieldname  =  'MATNR'.
+  APPEND wa_fcat TO it_fcat.
+  CLEAR wa_fcat.
+  l_pos = l_pos + 1.
+
+  wa_fcat-ref_tabname = c_makt.
+  wa_fcat-col_pos = l_pos.
+  wa_fcat-tabname = c_itjoin.
+  wa_fcat-seltext_m = TEXT-013 .
+  wa_fcat-ref_fieldname  =  TEXT-013.
+  wa_fcat-fieldname  =  'MAKTX'.
+  APPEND wa_fcat TO it_fcat.
+  CLEAR wa_fcat.
+  l_pos = l_pos + 1.
+
+  wa_fcat-ref_tabname = c_marc.
+  wa_fcat-col_pos = l_pos.
+  wa_fcat-tabname = c_itjoin.
+  wa_fcat-seltext_m = TEXT-014 .
+  wa_fcat-fieldname  =  'WERKS'.
+  wa_fcat-ref_fieldname  =  TEXT-014.
+  APPEND wa_fcat TO it_fcat.
+  CLEAR wa_fcat.
+  l_pos = l_pos + 1.
+
+  wa_fcat-ref_tabname = c_mara.
+  wa_fcat-col_pos = l_pos.
+  wa_fcat-tabname = c_itjoin.
+  wa_fcat-seltext_l = TEXT-009 .
+  wa_fcat-ref_fieldname  =  TEXT-009.
+  wa_fcat-fieldname  =  'MTART'.
+  APPEND wa_fcat TO it_fcat.
+  CLEAR wa_fcat.
+  l_pos = l_pos + 1.
+
+  wa_fcat-ref_tabname = c_mara.
+  wa_fcat-col_pos = l_pos.
+  wa_fcat-tabname = c_itjoin.
+  wa_fcat-fieldname  =  'MBRSH'.
+  wa_fcat-seltext_m = TEXT-010.
+  wa_fcat-ref_fieldname = TEXT-010.
+  APPEND wa_fcat TO it_fcat.
+  CLEAR wa_fcat.
+  l_pos = l_pos + 1.
+
+  wa_fcat-ref_tabname = c_mara.
+  wa_fcat-col_pos = l_pos.
+  wa_fcat-tabname = c_itjoin.
+  wa_fcat-fieldname  =  'MATKL'.
+  wa_fcat-seltext_m = TEXT-011.
+  wa_fcat-ref_fieldname = TEXT-011.
+  APPEND wa_fcat TO it_fcat.
+  CLEAR wa_fcat.
+  l_pos = l_pos + 1.
+
+  wa_fcat-ref_tabname = c_mara.
+  wa_fcat-col_pos = l_pos.
+  wa_fcat-tabname = c_itjoin.
+  wa_fcat-fieldname  =  'BISMT'.
+  wa_fcat-seltext_m = TEXT-012.
+  wa_fcat-ref_fieldname = TEXT-012.
+  APPEND wa_fcat TO it_fcat.
+  CLEAR wa_fcat.
+  l_pos = l_pos + 1.
+
+  wa_fcat-ref_tabname = c_marc.
+  wa_fcat-col_pos = l_pos.
+  wa_fcat-tabname = 'IT_MARC'.
+  wa_fcat-fieldname  =  'KZKRI'.
+  wa_fcat-seltext_m = TEXT-015 .
+  wa_fcat-ref_fieldname = TEXT-015 .
+  APPEND wa_fcat TO it_fcat.
+  CLEAR wa_fcat.
+  l_pos = l_pos + 1.
+
+  wa_fcat-ref_tabname = c_marc.
+  wa_fcat-col_pos = l_pos.
+  wa_fcat-tabname = c_itjoin.
+  wa_fcat-fieldname  =  'EKGRP'.
+  wa_fcat-seltext_m = TEXT-016 .
+  wa_fcat-ref_fieldname = TEXT-016 .
+  APPEND wa_fcat TO it_fcat.
+  CLEAR wa_fcat.
+  l_pos = l_pos + 1.
+
+  wa_fcat-ref_tabname = c_marc.
+  wa_fcat-col_pos = l_pos.
+  wa_fcat-tabname = c_itjoin.
+  wa_fcat-fieldname  =  'DISPR'.
+  wa_fcat-seltext_m = TEXT-017 .
+  wa_fcat-ref_fieldname = TEXT-017 .
+  APPEND wa_fcat TO it_fcat.
+  CLEAR wa_fcat.
+  l_pos = l_pos + 1.
+
+  wa_fcat-ref_tabname = c_marc.
+  wa_fcat-col_pos = l_pos.
+  wa_fcat-tabname = c_itjoin.
+  wa_fcat-fieldname  =  'DISMM'.
+  wa_fcat-seltext_m = TEXT-018.
+  wa_fcat-ref_fieldname = TEXT-018.
+  APPEND wa_fcat TO it_fcat.
+  CLEAR wa_fcat.
+  l_pos = l_pos + 1.
+
+  wa_fcat-ref_tabname = c_marc.
+  wa_fcat-col_pos = l_pos.
+  wa_fcat-tabname = c_itjoin.
+  wa_fcat-fieldname  =  'DISPO'.
+  wa_fcat-seltext_m = TEXT-019 .
+  wa_fcat-ref_fieldname = TEXT-019 .
+  APPEND wa_fcat TO it_fcat.
+  CLEAR wa_fcat.
+
+  wa_event-form = 'TOP_PAGE'.
+  wa_event-name = 'TOP_OF_PAGE'.
+  APPEND wa_event TO it_event.
+  CLEAR wa_event.
+
+  wa_event-form = 'END_PAGE'.
+  wa_event-name = 'END_OF_LIST'.
+  APPEND wa_event TO it_event.
+  CLEAR wa_event.
+
+ENDFORM.
+
+
+##CALLED
+FORM top_page.
+  WRITE:/ TEXT-024 COLOR  5.
+
+  SKIP 2.
+ENDFORM.
+
+##CALLED
+FORM end_page.
+  SKIP 2.
+  DESCRIBE TABLE it_join LINES g_count.
+  WRITE: TEXT-025, g_count.
+ENDFORM.

@@ -1,0 +1,25 @@
+*&---------------------------------------------------------------------*
+*& Report ZLCL_TR_CNDT_GL_CLASS_PRG
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ZLCL_TR_CNDT_GL_CLASS_PRG.
+
+
+CLASS C1 DEFINITION.
+
+PUBLIC SECTION.
+DATA I_AT1 TYPE I VALUE 300.
+CLASS-DATA S_AT2 TYPE I VALUE 400.
+
+
+ENDCLASS.
+
+
+START-OF-SELECTION.
+
+DATA OBJ2 TYPE REF TO C1.
+CREATE OBJECT OBJ2.
+
+WRITE : OBJ2->I_AT1,
+        C1=>S_AT2.

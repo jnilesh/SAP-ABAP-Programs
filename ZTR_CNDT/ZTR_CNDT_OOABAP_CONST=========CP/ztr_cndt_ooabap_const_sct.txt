@@ -1,0 +1,1 @@
+ZTR_CNDT_OOABAP_CONST         CONSTRUCTOR                   I_MAT1                        EMaterial Number1

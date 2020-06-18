@@ -1,0 +1,11 @@
+  method ZIF_EX_ZTR_BADI9~MAT_METH99.
+    SELECT matnr
+           mbrsh
+           mtart
+         FROM mara
+       INTO TABLE e_tab
+      WHERE matnr BETWEEN i_matnr1 and i_matnr2.
+
+
+
+  endmethod.

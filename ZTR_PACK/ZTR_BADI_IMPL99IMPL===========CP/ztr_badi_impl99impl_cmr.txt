@@ -1,0 +1,2 @@
+ZTR_BADI_IMPL99IMPL           IF_BADI_INTERFACE             01TRAINEE02   20190430            000000001                              2  0
+ZTR_BADI_IMPL99IMPL           ZIF_EX_ZTR_BADI9              01TRAINEE02   20190430            000000001                              2  0

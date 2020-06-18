@@ -1,0 +1,31 @@
+*----------------------------------------------------------------------*
+***INCLUDE ZMMN_PLP_ALV_HEAD_F006.
+*----------------------------------------------------------------------*
+
+FORM f006_alv_head .
+
+  IF NOT it_mara IS INITIAL.
+
+    CLEAR wa_listheader.
+    wa_listheader-typ  = 'H'.
+    wa_listheader-info = TEXT-020 .
+    APPEND wa_listheader TO it_listheader.
+    CLEAR wa_listheader.
+
+    wa_listheader-typ = 'S'.
+    wa_listheader-key = TEXT-007 .
+    CONCATENATE  sy-datum+6(2)
+                 sy-datum+4(2)
+                 sy-datum(4)
+                 INTO wa_listheader-info
+                 SEPARATED BY '/'.
+
+    APPEND wa_listheader TO it_listheader.
+    CLEAR wa_listheader.
+
+  ELSE.
+    EXIT.
+  ENDIF.
+
+
+ENDFORM.

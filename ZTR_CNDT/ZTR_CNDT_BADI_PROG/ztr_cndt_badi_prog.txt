@@ -1,0 +1,34 @@
+*&---------------------------------------------------------------------*
+*& Report ZTR_CNDT_BADI_PROG
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ZTR_CNDT_BADI_PROG.
+
+
+
+
+ TABLES KNA1.
+ DATA IT_TAB TYPE STANDARD TABLE OF KNA1.
+SELECT-OPTIONS S_KUNNR FOR KNA1-KUNNR.
+
+START-OF-SELECTION.
+
+DATA OBJ1 TYPE REF TO ZCL_IM_TRCNDT_CUST_IMPL.
+
+CREATE OBJECT OBJ1.
+CALL METHOD obj1->zif_ex_cust1~meth_cust
+  EXPORTING
+    i_kunnr1 = S_KUNNR-LOW
+    i_kunnr2 = S_KUNNR-LOW
+  IMPORTING
+    e_tab    = IT_TAB
+    .
+
+
+CL_DEMO_OUTPUT=>DISPLAY( IT_TAB ).
+
+*LOOP AT IT_TAB INTO WA_TAB.
+*  WRITE : /WA_TAB-KUNNR.
+*
+*  ENDLOOP.

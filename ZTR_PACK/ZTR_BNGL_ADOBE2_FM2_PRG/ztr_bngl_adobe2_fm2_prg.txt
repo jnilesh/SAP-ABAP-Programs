@@ -1,0 +1,95 @@
+*&---------------------------------------------------------------------*
+*& Report ZTR_BNGL_ADOBE2_FM2_PRG
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ztr_bngl_adobe2_fm2_prg.
+
+
+INCLUDE ztr_bngl_adobe2_fm2_top.
+
+PARAMETERS p_vbeln LIKE lv_vbeln.
+
+
+START-OF-SELECTION.
+
+
+WA_OUTPUTPARA-DEVICE = 'PRINTER'.
+WA_OUTPUTPARA-NODIALOG = 'X'.
+WA_OUTPUTPARA-PREVIEW = 'X'.
+WA_OUTPUTPARA-DEST = 'LP01'.
+
+*APPEND WA_OUTPUTPARA.
+
+CALL FUNCTION 'FP_JOB_OPEN'
+  CHANGING
+    ie_outputparams       = WA_OUTPUTPARA
+* EXCEPTIONS
+*   CANCEL                = 1
+*   USAGE_ERROR           = 2
+*   SYSTEM_ERROR          = 3
+*   INTERNAL_ERROR        = 4
+*   OTHERS                = 5
+          .
+IF sy-subrc <> 0.
+* Implement suitable error handling here
+ENDIF.
+
+
+WA_DOCPARAMS-LANGU = 'DE'.
+WA_DOCPARAMS-COUNTRY = 'DE'.
+*APPEND WA_DOCPARAMS.
+
+
+CALL FUNCTION 'FP_FUNCTION_MODULE_NAME'
+  EXPORTING
+    i_name                     = 'ZTR_BNGL_ADOBE2_FM2'
+ IMPORTING
+   E_FUNCNAME                 = FM_NAME
+*   E_INTERFACE_TYPE           =
+*   EV_FUNCNAME_INBOUND        =
+          .
+
+SELECT SINGLE VBELN
+              POSNR
+              MATNR
+              MATKL
+              ARKTX
+   FROM ZVBAP
+    INTO (LV_VBELN, LV_POSNR, LV_MATNR, LV_MATKL, LV_ARKTX)
+  WHERE VBELN EQ P_VBELN.
+
+
+CALL FUNCTION FM_NAME
+  EXPORTING
+   /1BCDWB/DOCPARAMS        =  WA_DOCPARAMS
+    vbeln                    = LV_VBELN
+    posnr                    = LV_POSNR
+    matnr                    = LV_MATNR
+    matkl                    = LV_MATKL
+    arktx                    = LV_ARKTX
+* IMPORTING
+*   /1BCDWB/FORMOUTPUT       =
+* EXCEPTIONS
+*   USAGE_ERROR              = 1
+*   SYSTEM_ERROR             = 2
+*   INTERNAL_ERROR           = 3
+*   OTHERS                   = 4
+          .
+IF sy-subrc <> 0.
+* Implement suitable error handling here
+ENDIF.
+
+
+CALL FUNCTION 'FP_JOB_CLOSE'
+* IMPORTING
+*   E_RESULT             =
+* EXCEPTIONS
+*   USAGE_ERROR          = 1
+*   SYSTEM_ERROR         = 2
+*   INTERNAL_ERROR       = 3
+*   OTHERS               = 4
+          .
+IF sy-subrc <> 0.
+* Implement suitable error handling here
+ENDIF.

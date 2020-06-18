@@ -1,0 +1,20 @@
+*&---------------------------------------------------------------------*
+*& Report ZCL_TR_BNGL_GL_METHODS_PRG
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+
+REPORT ZCL_TR_BNGL_GL_METHODS_PRG.
+
+START-OF-SELECTION.
+
+DATA OBJ1 TYPE REF TO ZCL_TR_BNGL_GL_METHODS.
+
+CREATE OBJECT OBJ1.
+
+CALL METHOD OBJ1->I_METH1.
+
+
+SKIP .
+
+CALL METHOD ZCL_TR_BNGL_GL_METHODS=>S_METH2.

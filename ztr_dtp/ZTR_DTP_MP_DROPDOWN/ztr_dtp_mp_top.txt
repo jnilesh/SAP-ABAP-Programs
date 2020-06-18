@@ -1,0 +1,27 @@
+*&---------------------------------------------------------------------*
+*& Include ZTR_DTP_MP_TOP                                    Module Pool      ZTR_DTP_MP_DROPDOWN
+*&
+*&---------------------------------------------------------------------*
+PROGRAM ZTR_DTP_MP_DROPDOWN.
+
+TABLES : ZTR_DTP_STATE, ZTR_DTP_DISTRICT.
+DATA: LD_FIELD   TYPE VRM_ID,
+      IT_LISTBOX TYPE VRM_VALUES,
+      WA_LISTBOX LIKE LINE OF IT_LISTBOX.
+
+TYPES : BEGIN OF TY_TAB,
+          STATE_NAME TYPE ZSTATE_NAME,
+        END OF TY_TAB.
+
+TYPES : BEGIN OF TY_TAB1,
+          DIST_NAME TYPE ZDIST_NAME,
+        END OF TY_TAB1.
+
+DATA: IT_STATE TYPE STANDARD TABLE OF TY_TAB,
+      WA_STATE TYPE TY_TAB.
+
+DATA: IT_DISTRICT TYPE STANDARD TABLE OF TY_TAB1,
+      WA_DISTRICT TYPE TY_TAB1.
+
+DATA: STATEID TYPE ZSTATE_ID,
+      OK_CODE TYPE SY-UCOMM.

@@ -1,0 +1,46 @@
+*&-------------------------------------------------------------------------------------*
+*& REPORT ZMMR_G6_PLP_ALV_02
+*&-------------------------------------------------------------------------------------*
+
+*--------------------------------------------------------------------------------------*
+* Author          : Nilesh Jain
+* Creation Date   : 08-09-2019
+* Transaction     : ZMM_ALV_02
+* OBJECT ID       : FS_PLP_CASE10
+* DEVELOPER ID    : TRAINEE03
+* REQUEST NUMBER  : LNDK959700
+* Description     : THIS PROGRAM IS MADE TO PRINT BLOCK AVL AND INTERACTIVE ALV
+*                   AS REQUESTED BY USER.MATNR RANGE AND WERKS RANGE,
+*                   BOTH ARE COMPALSARY PARAMETERS. That is used to fetch data
+*                   according to need of user.
+*--------------------------------------------------------------------------------------*
+
+
+
+REPORT ZMMR_G6_PLP_ALV_02 MESSAGE-ID ZMM_MSG_CLS_187511 NO STANDARD PAGE HEADING LINE-SIZE 500.
+
+INCLUDE ZMMN_PLP9_TOP_01.            " DECLARATION OF VARIABLES
+
+INCLUDE ZMMN_ALV_SELECTION_01.       " FOR SELECTION PARAMETERS
+
+INCLUDE ZMMN_PLP9_START_01.          " START OF SELECTION
+
+INCLUDE ZMMN_ALV_GET_DATA_F001.      " GET_DATA FUNCTION FOR BLOCK ALV
+
+INCLUDE ZMMN_ALV_ALV_FCAT_F002.      " ALV_FCAT FUNCTION FOR BLOCK ALV
+
+INCLUDE ZMMN_ALV_DESIGN_F003.        " DESIGN FUNCTION BOR BOTH ALV
+
+INCLUDE ZMMN_ALV_BLOCK_DISP_F004.    " DISPLAY FUNCTION FOR BLOCK ALV
+
+INCLUDE ZMMN_ALV_DATA_INTER_F005.    " GET_DATA FUNCTION FOR INTERACTIVE ALV
+
+INCLUDE ZMMN_ALV_DISP_MARA_F008.     " DISP MARA FUNCTION
+
+INCLUDE ZMMN_ALV_MARC_F009.          " GET MARC TABLE FUNCTION
+
+INCLUDE ZMMN_ALV_MAKT_F010.          " GET MAKT TABLE FUNCTION
+
+INCLUDE ZMMN_ALV_TOPPAGE_F011.       " TOPPAGE FUNCTION FOR HEADING
+
+INCLUDE ZMMN_ALV_ALV_HEAD_F006.      " BUILD_ALV_HEADER HEADER FUNCTION FOR INTERACTIVE ALV

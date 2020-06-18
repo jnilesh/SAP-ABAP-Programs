@@ -1,0 +1,4 @@
+ZCL_TR_BNGL_MATMASTER         METH_MAT                      E_TAB                         E
+ZCL_TR_BNGL_MATMASTER         METH_MAT                      I_MATNR1                      EMaterial Number
+ZCL_TR_BNGL_MATMASTER         METH_MAT                      I_MATNR2                      EMaterial Number
+ZCL_TR_BNGL_MATMASTER         METH_MAT                      MAT_NOT_FOUND                 ETO BE RAISED WHEN NO MAT

@@ -1,0 +1,10 @@
+*&---------------------------------------------------------------------*
+*&  Include           ZMMN_PLP_TOPPAGE_F011
+*&---------------------------------------------------------------------*
+
+FORM TOPPAGE.
+  CALL FUNCTION 'REUSE_ALV_COMMENTARY_WRITE'
+    EXPORTING
+      IT_LIST_COMMENTARY = IT_LISTHEADER
+      I_LOGO             = 'CAPG_LOGO' .
+ENDFORM.

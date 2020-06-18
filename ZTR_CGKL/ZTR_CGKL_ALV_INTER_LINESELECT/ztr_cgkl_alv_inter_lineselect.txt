@@ -1,0 +1,100 @@
+*&---------------------------------------------------------------------*
+*& Report ZTR_CGKL_ALV_INTER_LINESELECT
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ztr_cgkl_alv_inter_lineselect.
+
+INCLUDE ZTR_CGKL_ALV_INTER_LINE_TOP.
+
+SELECTION-SCREEN : BEGIN OF BLOCK b1 WITH FRAME TITLE TEXT-001.
+
+SELECT-OPTIONS :  s_matnr FOR mara-matnr.
+
+SELECTION-SCREEN END OF BLOCK b1.
+
+START-OF-SELECTION.
+
+  SELECT * FROM mara
+           INTO TABLE it_mara
+           WHERE matnr IN s_matnr.
+
+  CALL FUNCTION 'REUSE_ALV_GRID_DISPLAY'
+    EXPORTING
+      i_callback_program      = sy-repid
+      i_callback_user_command = 'PICK'
+      i_structure_name        = 'MARA'
+      i_default               = 'X'
+    TABLES
+      t_outtab                = it_mara
+*   EXCEPTIONS
+*     PROGRAM_ERROR           = 1
+*     OTHERS                  = 2
+    .
+  IF sy-subrc <> 0.
+* Implement suitable error handling here
+  ENDIF.
+
+FORM pick USING p_command LIKE sy-ucomm
+                p_selfield TYPE slis_selfield.
+
+  READ TABLE it_mara INTO wa_mara INDEX  p_selfield-tabindex.
+
+  CASE p_command.
+    WHEN '&IC1'.
+      SELECT  * FROM marc
+        INTO TABLE it_marc
+        WHERE matnr EQ wa_mara-matnr.
+
+      CALL FUNCTION 'REUSE_ALV_FIELDCATALOG_MERGE'
+        EXPORTING
+          i_structure_name       = 'MARC'
+        CHANGING
+          ct_fieldcat            = t_fieldcat
+        EXCEPTIONS
+          inconsistent_interface = 1
+          program_error          = 2
+          OTHERS                 = 3.
+      IF sy-subrc <> 0.
+* Implement suitable error handling here
+      ENDIF.
+
+      CALL FUNCTION 'REUSE_ALV_GRID_DISPLAY'
+        EXPORTING
+          i_callback_program      = sy-repid
+          i_callback_user_command = 'PICK'
+          i_callback_top_of_page  = 'TOP'
+          it_fieldcat             = t_fieldcat
+          it_events               = t_eventcat
+        TABLES
+          t_outtab                = it_marc
+* EXCEPTIONS
+*         PROGRAM_ERROR           = 1
+*         OTHERS                  = 2
+        .
+      IF sy-subrc <> 0.
+* Implement suitable error handling here
+      ENDIF.
+  ENDCASE.
+ENDFORM.
+
+
+FORM t_eventcat.
+  w_eventcat-name = 'TOP_OF_PAGE'.
+  w_eventcat-form = 'TOP'.
+  APPEND w_eventcat TO t_eventcat.
+ENDFORM.
+
+FORM top.
+
+  it_header-typ = 'H'.
+  it_header-info = 'DATA FROM MARC TABLE'.
+  it_header-key = 'ALV REPORT'.
+  APPEND it_header.
+
+  CALL FUNCTION 'REUSE_ALV_COMMENTARY_WRITE'
+    EXPORTING
+      it_list_commentary = it_header[]
+      i_logo             = 'ZCAP_LOGO9'.
+
+ENDFORM.

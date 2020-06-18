@@ -1,0 +1,25 @@
+class-pool .
+*"* class pool for class ZTR_CGKL_INTERFACE_CL
+
+*"* local type definitions
+include ZTR_CGKL_INTERFACE_CL=========ccdef.
+
+*"* class ZTR_CGKL_INTERFACE_CL definition
+*"* public declarations
+  include ZTR_CGKL_INTERFACE_CL=========cu.
+*"* protected declarations
+  include ZTR_CGKL_INTERFACE_CL=========co.
+*"* private declarations
+  include ZTR_CGKL_INTERFACE_CL=========ci.
+endclass. "ZTR_CGKL_INTERFACE_CL definition
+
+*"* macro definitions
+include ZTR_CGKL_INTERFACE_CL=========ccmac.
+*"* local class implementation
+include ZTR_CGKL_INTERFACE_CL=========ccimp.
+
+class ZTR_CGKL_INTERFACE_CL implementation.
+*"* method's implementations
+  include methods.
+endclass. "ZTR_CGKL_INTERFACE_CL implementation
+

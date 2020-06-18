@@ -1,0 +1,54 @@
+*&---------------------------------------------------------------------*
+*& Report ZTR_CGKL_ITAB_INSERT_DATA
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ztr_cgkl_itab_insert_data.
+
+DATA :it_tab TYPE TABLE OF ztr_cgkl_emp, " itab
+      wa_tab TYPE ztr_cgkl_emp. " work area
+
+* # 1 .
+wa_tab-empno = '9923499'.
+wa_tab-empname = 'JOHN'.
+wa_tab-empsal = '50000'.
+wa_tab-empaddr = 'DELHI'.
+APPEND wa_tab TO it_tab.
+
+* # 2.
+wa_tab-empno = '9934599'.
+wa_tab-empname = 'SMITH'.
+wa_tab-empsal = '30000'.
+wa_tab-empaddr = 'MUMBAI'.
+APPEND wa_tab TO it_tab.
+
+* # 3.
+wa_tab-empno = '9945699'.
+wa_tab-empname = 'PETER'.
+wa_tab-empsal = '60000'.
+wa_tab-empaddr = 'CHENNAI'.
+APPEND wa_tab TO it_tab.
+
+* # 4.
+wa_tab-empno = '9943699'.
+wa_tab-empname = 'RAM'.
+wa_tab-empsal = '80000'.
+wa_tab-empaddr = 'HYDERABAD'.
+APPEND wa_tab TO it_tab.
+
+
+* # 5.
+wa_tab-empno = '9956499'.
+wa_tab-empname = 'JOES'.
+wa_tab-empsal = '80000'.
+wa_tab-empaddr = 'BENGALORE'.
+APPEND wa_tab TO it_tab.
+
+
+INSERT ztr_cgkl_emp FROM TABLE it_tab.
+IF sy-subrc EQ 0.
+
+  WRITE ' Rcords are inserted ZTR_CGKL_EMP '.
+ELSE.
+  WRITE ' Rcords are not inserted ZTR_CGKL_EMP '.
+ENDIF.

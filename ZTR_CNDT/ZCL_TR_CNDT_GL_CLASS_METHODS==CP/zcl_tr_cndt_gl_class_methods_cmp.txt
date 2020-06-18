@@ -1,0 +1,2 @@
+ZCL_TR_CNDT_GL_CLASS_METHODS  I_METH1                       10
+ZCL_TR_CNDT_GL_CLASS_METHODS  S_METH2                       10

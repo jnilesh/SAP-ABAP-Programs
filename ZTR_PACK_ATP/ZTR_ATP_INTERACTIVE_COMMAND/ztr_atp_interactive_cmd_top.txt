@@ -1,0 +1,17 @@
+*&---------------------------------------------------------------------*
+*&  Include   ZTR_ATP_INTERACTIVE_CMD_TOP
+*&---------------------------------------------------------------------*
+DATA LV_MATNR TYPE MATNR.
+DATA LV_COUNT TYPE I.
+
+TYPES: BEGIN OF TY_TAB1,  " LOCAL STRS MARA
+      MATNR TYPE MATNR, " Material Number
+      MBRSH TYPE MBRSH, " Industry sector
+      MTART TYPE MTART, " Material type
+      MEINS TYPE MEINS, " Base Unit of Measure
+      BRGEW TYPE BRGEW, " Gross weight
+      NTGEW TYPE NTGEW, " Net weight
+     END OF TY_TAB1.
+
+DATA :IT_TAB1 TYPE STANDARD TABLE OF TY_TAB1,  " ITAB
+      WA_TAB1 TYPE TY_TAB1. " WORK AREA

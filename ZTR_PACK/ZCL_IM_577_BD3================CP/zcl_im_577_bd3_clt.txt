@@ -1,0 +1,1 @@
+ZCL_IM_577_BD3                EImp. class for BAdI imp. Z577_BD3

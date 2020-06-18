@@ -1,0 +1,25 @@
+class-pool .
+*"* class pool for class ZCL_IM_TRCNDT_BADIMPL
+
+*"* local type definitions
+include ZCL_IM_TRCNDT_BADIMPL=========ccdef.
+
+*"* class ZCL_IM_TRCNDT_BADIMPL definition
+*"* public declarations
+  include ZCL_IM_TRCNDT_BADIMPL=========cu.
+*"* protected declarations
+  include ZCL_IM_TRCNDT_BADIMPL=========co.
+*"* private declarations
+  include ZCL_IM_TRCNDT_BADIMPL=========ci.
+endclass. "ZCL_IM_TRCNDT_BADIMPL definition
+
+*"* macro definitions
+include ZCL_IM_TRCNDT_BADIMPL=========ccmac.
+*"* local class implementation
+include ZCL_IM_TRCNDT_BADIMPL=========ccimp.
+
+class ZCL_IM_TRCNDT_BADIMPL implementation.
+*"* method's implementations
+  include methods.
+endclass. "ZCL_IM_TRCNDT_BADIMPL implementation
+

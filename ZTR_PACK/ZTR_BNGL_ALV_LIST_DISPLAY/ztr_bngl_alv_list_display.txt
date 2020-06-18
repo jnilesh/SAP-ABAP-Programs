@@ -1,0 +1,137 @@
+*&---------------------------------------------------------------------*
+*& Report ZTR_BNGL_ALV_LIST_DISPLAY
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ZTR_BNGL_ALV_LIST_DISPLAY.
+
+INCLUDE ZTR_BNGL_ALV_LIST_TOP.
+
+SELECT-OPTIONS S_MATNR FOR LV_MATNR.
+
+
+START-OF-SELECTION.
+
+PERFORM GET_DATA.
+
+PERFORM GET_FCAT.
+
+PERFORM GET_DISPLAY.
+
+*&---------------------------------------------------------------------*
+*&      Form  GET_DATA
+*&---------------------------------------------------------------------*
+FORM GET_DATA .
+SELECT MATNR
+       MBRSH
+       MTART
+       MEINS
+       BRGEW
+       NTGEW
+   INTO TABLE IT_TAB
+   FROM MARA
+   WHERE MATNR IN S_MATNR.
+
+ENDFORM.
+*&---------------------------------------------------------------------*
+*&      Form  GET_DISPLAY
+*&---------------------------------------------------------------------*
+FORM GET_DISPLAY .
+
+
+CALL FUNCTION 'REUSE_ALV_LIST_DISPLAY'
+ EXPORTING
+*   I_INTERFACE_CHECK              = ' '
+*   I_BYPASSING_BUFFER             =
+*   I_BUFFER_ACTIVE                = ' '
+   I_CALLBACK_PROGRAM             = 'ZTR_BNGL_ALV_LIST_DISPLAY'
+*   I_CALLBACK_PF_STATUS_SET       = ' '
+*   I_CALLBACK_USER_COMMAND        = ' '
+*   I_STRUCTURE_NAME               =
+*   IS_LAYOUT                      =
+   IT_FIELDCAT                    = IT_FIELDCAT[]
+*   IT_EXCLUDING                   =
+*   IT_SPECIAL_GROUPS              =
+*   IT_SORT                        =
+*   IT_FILTER                      =
+*   IS_SEL_HIDE                    =
+*   I_DEFAULT                      = 'X'
+*   I_SAVE                         = ' '
+*   IS_VARIANT                     =
+*   IT_EVENTS                      =
+*   IT_EVENT_EXIT                  =
+*   IS_PRINT                       =
+*   IS_REPREP_ID                   =
+*   I_SCREEN_START_COLUMN          = 0
+*   I_SCREEN_START_LINE            = 0
+*   I_SCREEN_END_COLUMN            = 0
+*   I_SCREEN_END_LINE              = 0
+*   IR_SALV_LIST_ADAPTER           =
+*   IT_EXCEPT_QINFO                =
+*   I_SUPPRESS_EMPTY_DATA          = ABAP_FALSE
+* IMPORTING
+*   E_EXIT_CAUSED_BY_CALLER        =
+*   ES_EXIT_CAUSED_BY_USER         =
+  TABLES
+    T_OUTTAB                       = IT_TAB
+* EXCEPTIONS
+*   PROGRAM_ERROR                  = 1
+*   OTHERS                         = 2
+          .
+IF SY-SUBRC <> 0.
+* Implement suitable error handling here
+ENDIF.
+endform.
+
+FORM GET_FCAT .
+*  MATNR
+IT_FIELDCAT-COL_POS = '1'.
+IT_FIELDCAT-FIELDNAME = 'MATNR'.
+IT_FIELDCAT-TABNAME = 'IT_TAB'.
+IT_FIELDCAT-SELTEXT_L = 'MATERIAL NO'.
+
+APPEND IT_FIELDCAT.
+
+* MBRSH
+IT_FIELDCAT-COL_POS = '2'.
+IT_FIELDCAT-FIELDNAME = 'MBRSH'.
+IT_FIELDCAT-TABNAME = 'IT_TAB'.
+IT_FIELDCAT-SELTEXT_L = 'MAT IND SECTOR'.
+
+APPEND IT_FIELDCAT.
+
+
+* MTART
+IT_FIELDCAT-COL_POS = '3'.
+IT_FIELDCAT-FIELDNAME = 'MTART'.
+IT_FIELDCAT-TABNAME = 'IT_TAB'.
+IT_FIELDCAT-SELTEXT_L = 'MATERIAL TYPE'.
+
+APPEND IT_FIELDCAT.
+
+
+* MEINS
+IT_FIELDCAT-COL_POS = '4'.
+IT_FIELDCAT-FIELDNAME = 'MEINS'.
+IT_FIELDCAT-TABNAME = 'IT_TAB'.
+IT_FIELDCAT-SELTEXT_L = 'MAT BASE UOM'.
+
+APPEND IT_FIELDCAT.
+
+*  BRGEW
+IT_FIELDCAT-COL_POS = '5'.
+IT_FIELDCAT-FIELDNAME = 'BRGEW'.
+IT_FIELDCAT-TABNAME = 'IT_TAB'.
+IT_FIELDCAT-SELTEXT_L = 'MAT GROSS WEIGHT'.
+
+APPEND IT_FIELDCAT.
+
+*  NTGEW
+IT_FIELDCAT-COL_POS = '6'.
+IT_FIELDCAT-FIELDNAME = 'NTGEW'.
+IT_FIELDCAT-TABNAME = 'IT_TAB'.
+IT_FIELDCAT-SELTEXT_L = 'MAT NET WEIGHT'.
+
+APPEND IT_FIELDCAT.
+
+ENDFORM.

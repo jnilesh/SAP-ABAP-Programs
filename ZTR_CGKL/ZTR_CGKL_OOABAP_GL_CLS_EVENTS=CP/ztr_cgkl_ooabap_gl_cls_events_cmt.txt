@@ -1,0 +1,2 @@
+ZTR_CGKL_OOABAP_GL_CLS_EVENTS GET_MATERIAL                  EGet Material Details
+ZTR_CGKL_OOABAP_GL_CLS_EVENTS MAT_EVENT                     EMaterials not Found

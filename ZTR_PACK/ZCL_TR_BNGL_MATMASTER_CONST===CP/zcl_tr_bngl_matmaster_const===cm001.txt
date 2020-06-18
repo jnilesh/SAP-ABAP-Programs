@@ -1,0 +1,25 @@
+  method METH_MAT.
+  DATA LV_MATNR TYPE MATNR.
+  SELECT SINGLE MATNR
+          FROM MARA
+        INTO (LV_MATNR)
+    WHERE MATNR BETWEEN I_MATNR1 AND I_MATNR2.
+    IF SY-SUBRC NE 0.
+      RAISE MAT_NOT_FOUND.
+      ELSE.
+        SELECT MATNR
+               MBRSH
+               MTART
+               MEINS
+               BRGEW
+               NTGEW
+            FROM MARA
+            INTO TABLE E_TAB
+            WHERE MATNR BETWEEN I_MATNR1 AND I_MATNR2.
+          ENDIF.
+
+
+
+
+
+  endmethod.

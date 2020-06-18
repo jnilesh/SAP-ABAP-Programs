@@ -1,0 +1,45 @@
+*&---------------------------------------------------------------------*
+*&  Include           ZTR_CGKL_AT_SELECT_SCREEN_TOP
+*&---------------------------------------------------------------------*
+
+*
+DATA LV_VBELN TYPE VBELN_VA.
+
+TYPES : BEGIN OF TY_TAB1,  " vbak
+          VBELN TYPE VBELN_VA,
+          ERDAT TYPE ERDAT,
+          ERZET TYPE ERZET,
+        END OF TY_TAB1.
+
+DATA :IT_TAB1 TYPE STANDARD TABLE OF TY_TAB1,
+      WA_TAB1 TYPE TY_TAB1.
+
+TYPES : BEGIN OF TY_TAB2,   " vbap
+          VBELN TYPE VBELN_VA,
+          POSNR TYPE POSNR,
+          MATNR TYPE MATNR,
+        END OF TY_TAB2.
+
+DATA :IT_TAB2 TYPE STANDARD TABLE OF TY_TAB2,
+      WA_TAB2 TYPE TY_TAB2.
+*&---------------------------------------------------------------------*
+*&      Form  RADIO_DATA
+*&---------------------------------------------------------------------*
+FORM RADIO_DATA .
+
+IF PDISPLAY EQ 'X'.
+  LOOP AT SCREEN.
+    IF SCREEN-GROUP1 = 'F1'.
+      SCREEN-INPUT = '0'.
+      MODIFY SCREEN.
+
+      ENDLOOP.
+      ELSEIF PUPLOAD EQ 'X'.
+        LOOP AT SCREEN.
+        IF SCREEN-GROUP1 = 'F1'.
+          SCREEN-INPUT = '1'.
+          MODIFY SCREEN.
+          ENDLOOP.
+          ENDIF.
+
+ENDFORM.

@@ -1,0 +1,8 @@
+ZCL_CLS_DTP_INTER=============CCDEF
+ZCL_CLS_DTP_INTER=============CCIMP
+ZCL_CLS_DTP_INTER=============CCMAC
+ZCL_CLS_DTP_INTER=============CI
+ZCL_CLS_DTP_INTER=============CM001
+ZCL_CLS_DTP_INTER=============CO
+ZCL_CLS_DTP_INTER=============CU
+ZIF_CLS_DTP_INTER=============IU

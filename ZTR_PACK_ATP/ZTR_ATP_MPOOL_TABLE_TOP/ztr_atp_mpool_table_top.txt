@@ -1,0 +1,22 @@
+*&---------------------------------------------------------------------*
+*& Include ZTR_ATP_MPOOL_TABLE_TOP                           Module Pool      ZTR_ATP_MPOOL_TABLE
+*&
+*&---------------------------------------------------------------------*
+PROGRAM ZTR_ATP_MPOOL_TABLE.
+
+DATA : LV_MATNR1 TYPE MATNR,
+       LV_MATNR2 TYPE MATNR.
+*
+CONTROLS TC1 TYPE TABLEVIEW USING SCREEN 0200.
+
+TYPES: BEGIN OF TY_TAB,  " LOCAL STRS MARA
+      MATNR TYPE MATNR, " Material Number
+      MBRSH TYPE MBRSH, " Industry sector
+      MTART TYPE MTART, " Material type
+      MEINS TYPE MEINS, " Base Unit of Measure
+      BRGEW TYPE BRGEW, " Gross weight
+      NTGEW TYPE NTGEW, " Net weight
+     END OF TY_TAB.
+
+DATA :IT_TAB TYPE STANDARD TABLE OF TY_TAB,  " ITAB
+      WA_TAB TYPE TY_TAB. " WORK AREA

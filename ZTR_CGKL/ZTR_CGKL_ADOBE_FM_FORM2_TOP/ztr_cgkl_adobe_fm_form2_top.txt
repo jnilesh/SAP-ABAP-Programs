@@ -1,0 +1,13 @@
+*&---------------------------------------------------------------------*
+*&  Include           ZTR_CGKL_ADOBE_FM_FORM2_TOP
+*&---------------------------------------------------------------------*
+
+DATA LV_KUNNR TYPE KUNNR.
+DATA :  GV_KUNNR TYPE KUNNR,
+        GV_LAND1 TYPE LAND1_GP,
+        GV_NAME1 TYPE NAME1_GP,
+        GV_NAME2 TYPE NAME2_GP,
+        GV_ORT01 TYPE ORT01_GP.
+DATA FM_ADOBE TYPE RS38L_FNAM.
+DATA WA_DOCPARAMS TYPE SFPDOCPARAMS.
+DATA WA_OUTPUTPARAMS TYPE SFPOUTPUTPARAMS.

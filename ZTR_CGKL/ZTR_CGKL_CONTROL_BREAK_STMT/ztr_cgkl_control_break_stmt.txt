@@ -1,0 +1,180 @@
+*&---------------------------------------------------------------------*
+*& Report ZTR_160694_CONTROLBREAK
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ZTR_CGKL_CONTROL_BREAK_STMT.
+*
+*" USING AT FIRST,AT NEW,AT END OF,AT LAST.
+
+*DATA : BEGIN OF ITAB OCCURS 0,
+*       F1 TYPE I,
+*       F2 TYPE C,
+*       F3(10) TYPE N,
+*       F4(16) TYPE P DECIMALS 2,
+*  END OF ITAB.
+*
+*
+*DATA : SUB_TOT(10) TYPE P DECIMALS 3.
+*
+**--1
+*
+*ITAB-F1 = 1.
+*ITAB-F2 = 'ONE'.
+*ITAB-F3 = 10.
+*ITAB-F4 = '1000.00'.
+*
+*APPEND ITAB.
+*CLEAR ITAB.
+*
+*ITAB-F1 = 1.
+*ITAB-F2 = 'ONE'.
+*ITAB-F3 = 20.
+*ITAB-F4 = '2000.00'.
+*
+*APPEND ITAB.
+*CLEAR ITAB.
+*
+*ITAB-F1 = 1.
+*ITAB-F2 = 'ONE'.
+*ITAB-F3 = 30.
+*ITAB-F4 = '3000.00'.
+*
+*APPEND ITAB.
+*CLEAR ITAB.
+*
+*ITAB-F1 = 2.
+*ITAB-F2 = 'TWO'.
+*ITAB-F3 = 10.
+*ITAB-F4 = '1000.00'.
+*
+*APPEND ITAB.
+*CLEAR ITAB.
+*
+*
+*ITAB-F1 = 2.
+*ITAB-F2 = 'TWO'.
+*ITAB-F3 = 20.
+*ITAB-F4 = '2000.00'.
+*
+*APPEND ITAB.
+*CLEAR ITAB.
+*
+*
+*ITAB-F1 = 3.
+*ITAB-F2 = 'THREE'.
+*ITAB-F3 = 10.
+*ITAB-F4 = '1000.00'.
+*
+*APPEND ITAB.
+*CLEAR ITAB.
+*
+*
+*ITAB-F1 = 3.
+*ITAB-F2 = 'THREE'.
+*ITAB-F3 = 20.
+*ITAB-F4 = '2000.00'.
+*
+*APPEND ITAB.
+*CLEAR ITAB.
+*
+*SORT ITAB BY F1.
+*
+*
+*LOOP AT ITAB.
+*
+*AT FIRST.
+*WRITE : /35 'MATERIAL DETAILS :'.
+*ULINE.
+*ENDAT.
+*
+*AT NEW F1.
+* WRITE : / 'DETAILS OF MATERIAL :' COLOR 7,ITAB-F1.
+* ULINE.
+* ENDAT.
+*
+* WRITE : / ITAB-F1, ITAB-F2, ITAB-F3, ITAB-F4.
+* SUB_TOT = SUB_TOT + ITAB-F4.
+*
+* AT END OF F1.
+* ULINE.
+* WRITE : / 'SUB TOTAL :'COLOR 3 INVERSE ON,
+* SUB_TOT COLOR 3 INVERSE ON.
+* CLEAR SUB_TOT.
+* ENDAT.
+*
+* AT LAST.
+*   SUM.
+*   ULINE.
+*   WRITE : 'SUM :', ITAB-F4.
+*   ULINE.
+*   ENDAT.
+*   ENDLOOP.
+*
+
+
+
+" REPORT WITH SELECT QUERIES *************************************
+
+TYPES : BEGIN OF TY_MARC,
+        MATNR TYPE MARC-MATNR,
+        WERKS TYPE MARC-WERKS,
+      END OF TY_MARC.
+
+DATA : IT_MARC TYPE STANDARD TABLE OF TY_MARC,
+        WA_MARC TYPE TY_MARC,
+        WA_TEMP TYPE TY_MARC.
+
+
+ FIELD-SYMBOLS <MATNR>.
+
+ SELECT MATNR WERKS FROM MARC INTO TABLE IT_MARC
+                    UP TO 10 ROWS
+                    WHERE MATNR > 40.
+   SORT IT_MARC BY MATNR.
+
+   WRITE : / 'FULL TABLE'.
+   LOOP AT IT_MARC INTO WA_MARC.
+     WA_TEMP = WA_MARC.
+   WRITE : / SY-TABIX, WA_TEMP-MATNR, WA_TEMP-WERKS.
+   ENDLOOP.
+
+   WRITE : / 'AT FIRST AND LAST'.
+   LOOP AT IT_MARC INTO WA_MARC.
+     WA_TEMP = WA_MARC.
+
+    AT FIRST.
+     WRITE : / 'FIRST ENTRY'.
+     WRITE : / WA_TEMP-MATNR, WA_TEMP-WERKS.
+    ENDAT.
+
+    AT LAST.
+      WRITE : / 'LAST ENTRY'.
+      WRITE : / WA_TEMP-MATNR, WA_TEMP-WERKS.
+    ENDAT.
+    ENDLOOP.
+
+    WRITE : / 'AT END OF'.
+    LOOP AT IT_MARC INTO WA_MARC.
+      WA_TEMP = WA_MARC.
+    AT END OF MATNR.
+      WRITE : / SY-TABIX, WA_TEMP-MATNR, WA_TEMP-WERKS.
+    ENDAT.
+    ENDLOOP.
+
+     WRITE : / 'AT NEW'.
+    LOOP AT IT_MARC INTO WA_MARC.
+      WA_TEMP = WA_MARC.
+    AT NEW MATNR.
+      WRITE : / SY-TABIX, WA_TEMP-MATNR, WA_TEMP-WERKS.
+    ENDAT.
+    ENDLOOP.
+*
+*    WRITE : / 'ON CHANGE OF'.
+*    LOOP AT IT_MARC INTO WA_MARC.
+*      WA_TEMP = WA_MARC.
+*     ASSIGN WA_MARC-MATNR TO <MATNR>.
+*    ON CHANGE OF WA_MARC-MATNR.
+*      WRITE : / SY-TABIX, WA_TEMP-MATNR, WA_TEMP-WERKS.
+*    ENDON.
+*    ENDLOOP.

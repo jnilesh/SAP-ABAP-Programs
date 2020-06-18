@@ -1,0 +1,20 @@
+*&---------------------------------------------------------------------*
+*& Report ZTR_CNDT_ITAB2
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ZTR_CNDT_ITAB2.
+
+
+
+TABLES MARA.
+
+SELECT-OPTIONS S_MATNR FOR MARA-MATNR.
+SELECT * FROM MARA
+   INTO MARA
+  WHERE MATNR IN S_MATNR.
+  WRITE : / MARA-MATNR,
+            MARA-MBRSH,
+            MARA-MTART.
+
+  ENDSELECT.

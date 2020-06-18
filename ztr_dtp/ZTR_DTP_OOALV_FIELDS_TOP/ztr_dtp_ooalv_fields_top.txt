@@ -1,0 +1,24 @@
+*&---------------------------------------------------------------------*
+*&  Include           ZTR_DTP_OOALV_PROG1_TOP
+*&---------------------------------------------------------------------*
+
+
+DATA LV_VBELN TYPE VBELN_VA.
+TYPES: BEGIN OF TY_TAB,
+       VBELN TYPE VBELN_VA, " Sales Document
+       ERDAT TYPE ERDAT, " Date on Which Record Was Created
+       ERZET TYPE ERZET, " Entry time
+       AUDAT TYPE AUDAT, " Document Date (Date Received/Sent)
+       VBTYP TYPE VBTYP, " Transaction group
+       NETWR TYPE NETWR_AK, " Net Value of DOC CURR
+       END OF TY_TAB.
+
+DATA :IT_TAB TYPE STANDARD TABLE OF TY_TAB,
+      WA_TAB TYPE TY_TAB.
+
+DATA :WA_FCAT TYPE LVC_S_FCAT,
+      IT_FCAT TYPE LVC_T_FCAT,
+      TY_LAYOUT TYPE LVC_S_LAYO.
+
+DATA : I_GRID TYPE REF TO CL_GUI_ALV_GRID,
+       I_CONTAINER TYPE REF TO CL_GUI_CUSTOM_CONTAINER.

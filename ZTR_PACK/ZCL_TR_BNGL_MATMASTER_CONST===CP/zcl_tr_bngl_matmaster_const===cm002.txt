@@ -1,0 +1,6 @@
+  method CONSTRUCTOR.
+
+   WRITE 'calling gl constructors'.
+
+
+  endmethod.

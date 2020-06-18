@@ -1,0 +1,135 @@
+REPORT ztr_dtp_alv_popup_disp.
+
+INCLUDE ZTR_DTP_ALV_POPUP_DISPLAY_TOP.
+
+
+SELECT-OPTIONS: s_matnr FOR lv_matnr.
+
+
+START-OF-SELECTION.
+
+  PERFORM get_mat_data.
+
+  PERFORM fieldcat_prep.
+
+  PERFORM GET_ALV_DISP.
+*&---------------------------------------------------------------------*
+*&      Form  GET_MAT_DATA
+*&---------------------------------------------------------------------*
+FORM get_mat_data .
+
+  SELECT matnr
+         mbrsh
+         mtart
+         meins
+         brgew
+         ntgew
+            INTO TABLE it_tab
+       FROM mara
+       WHERE matnr IN s_matnr.
+
+
+ENDFORM.
+*&---------------------------------------------------------------------*
+*&      Form  FIELDCAT_PREP
+*&---------------------------------------------------------------------*
+FORM fieldcat_prep .
+
+* MATNR
+IT_FIELDCAT-COL_POS = '1'.
+IT_FIELDCAT-SELTEXT_L =  'MAT NUMBER'.
+IT_FIELDCAT-FIELDNAME  = 'MATNR'.
+IT_FIELDCAT-TABNAME =  'IT_TAB'.
+*IT_FIELDCAT-EMPHASIZE =  'C111'.
+
+APPEND IT_FIELDCAT.
+
+* MBRSH
+IT_FIELDCAT-COL_POS = '2'.
+IT_FIELDCAT-SELTEXT_L =  'MAT IND SECTOR'.
+IT_FIELDCAT-FIELDNAME  = 'MBRSH'.
+IT_FIELDCAT-TABNAME =  'IT_TAB'.
+*IT_FIELDCAT-EMPHASIZE =  'C400'.
+APPEND IT_FIELDCAT.
+
+
+* MTART
+IT_FIELDCAT-COL_POS = '3'.
+IT_FIELDCAT-SELTEXT_L =  'MAT TYPE'.
+IT_FIELDCAT-FIELDNAME  = 'MTART'.
+IT_FIELDCAT-TABNAME =  'IT_TAB'.
+*IT_FIELDCAT-EMPHASIZE =  'C500'.
+APPEND IT_FIELDCAT.
+
+* MEINS
+
+IT_FIELDCAT-COL_POS = '4'.
+IT_FIELDCAT-SELTEXT_L =  'MAT BASE UOM'.
+IT_FIELDCAT-FIELDNAME  = 'MEINS'.
+IT_FIELDCAT-TABNAME =  'IT_TAB'.
+*IT_FIELDCAT-EMPHASIZE =  'C711'.
+APPEND IT_FIELDCAT.
+
+
+* BRGEW
+
+IT_FIELDCAT-COL_POS = '5'.
+IT_FIELDCAT-SELTEXT_L =  'MAT GROSS WEIGHT'.
+IT_FIELDCAT-FIELDNAME  = 'BRGEW'.
+IT_FIELDCAT-TABNAME =  'IT_TAB'.
+APPEND IT_FIELDCAT.
+
+
+* NTGEW
+
+IT_FIELDCAT-COL_POS = '6'.
+IT_FIELDCAT-SELTEXT_L =  'MAT NET WEIGHT'.
+IT_FIELDCAT-FIELDNAME  = 'NTGEW'.
+IT_FIELDCAT-TABNAME =  'IT_TAB'.
+IT_FIELDCAT-DO_SUM =  'X'.
+*IT_FIELDCAT-EMPHASIZE =  'C111'.
+APPEND IT_FIELDCAT.
+
+
+ENDFORM.
+*&---------------------------------------------------------------------*
+*&      Form  GET_ALV_DISP
+*&---------------------------------------------------------------------*
+FORM get_alv_disp .
+
+
+CALL FUNCTION 'REUSE_ALV_POPUP_TO_SELECT'
+  EXPORTING
+   I_TITLE                       = 'ALV_POPUP_DEMO_DTP'
+*   I_SELECTION                   = 'X'
+*   I_ALLOW_NO_SELECTION          =
+   I_ZEBRA                       = 'X'
+*   I_SCREEN_START_COLUMN         = 0
+*   I_SCREEN_START_LINE           = 0
+*   I_SCREEN_END_COLUMN           = 0
+*   I_SCREEN_END_LINE             = 0
+*   I_CHECKBOX_FIELDNAME          =
+*   I_LINEMARK_FIELDNAME          =
+*   I_SCROLL_TO_SEL_LINE          = 'X'
+    i_tabname                     = 'IT_TAB'
+*   I_STRUCTURE_NAME              = 'TY_TAB'
+   IT_FIELDCAT                   = IT_FIELDCAT[]
+*   IT_EXCLUDING                  =
+   I_CALLBACK_PROGRAM            = SY-REPID
+*   I_CALLBACK_USER_COMMAND       =
+*   IS_PRIVATE                    =
+* IMPORTING
+*   ES_SELFIELD                   =
+*   E_EXIT                        =
+  tables
+    t_outtab                      = IT_TAB
+* EXCEPTIONS
+*   PROGRAM_ERROR                 = 1
+*   OTHERS                        = 2
+          .
+IF sy-subrc <> 0.
+* Implement suitable error handling here
+ENDIF.
+
+
+ENDFORM.

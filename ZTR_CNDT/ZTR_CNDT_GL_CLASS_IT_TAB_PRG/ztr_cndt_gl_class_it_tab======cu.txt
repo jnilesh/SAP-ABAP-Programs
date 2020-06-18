@@ -1,0 +1,15 @@
+class ZTR_CNDT_GL_CLASS_IT_TAB definition
+  public
+  final
+  create public .
+
+public section.
+
+  methods GET_MAT
+    importing
+      !I_MATNR1 type MATNR default '1'
+      !I_MATNR2 type MATNR default '100'
+    exporting
+      !E_TAB type TABLE
+    exceptions
+      MAT_NOT_FOUND .

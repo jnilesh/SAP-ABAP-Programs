@@ -1,0 +1,23 @@
+*&---------------------------------------------------------------------*
+*&  Include           ZTR_CNDT_ITAB_FINAL_TOP
+*&---------------------------------------------------------------------*
+
+TYPES : BEGIN OF TY_TAB,
+           MATNR TYPE MATNR,
+           MBRSH TYPE MBRSH,
+           MTART TYPE MTART,
+           MEINS TYPE MEINS,
+           MATKL TYPE MATKL,
+           WERKS TYPE WERKS_D,
+           PSTAT TYPE PSTAT_D,
+
+           MAKTX TYPE MAKTX,
+           SPRAS TYPE SPRAS,
+           MAKTG TYPE MAKTG,
+
+          END OF TY_TAB.
+
+DATA: IT_TAB TYPE STANDARD TABLE OF TY_TAB,
+      WA_TAB TYPE TY_TAB.
+
+DATA LV_MATNR TYPE MATNR.

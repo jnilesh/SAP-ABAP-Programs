@@ -1,0 +1,5 @@
+  method IST_METH1.
+
+ WRITE ' CALLING GLOBAL CLASS IST_METH1 CODE'.
+
+  endmethod.

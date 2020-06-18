@@ -1,0 +1,25 @@
+  method GET_MAT.
+    DATA GV_MATNR TYPE MATNR.
+
+    SELECT SINGLE MATNR
+         FROM MARA
+       INTO GV_MATNR
+      WHERE MATNR BETWEEN I_MATNR1 AND I_MATNR2.
+      IF SY-SUBRC NE 0.
+        RAISE MAT_NOT_FOUND.
+        ELSE.
+        WRITE 'MAT FOUND'.
+                ENDIF.
+
+ SELECT MATNR
+       MBRSH
+       MTART
+       MEINS
+       MATKL
+       BRGEW
+       NTGEW
+    FROM MARA
+     INTO TABLE E_TAB  " EXPORT
+    WHERE MATNR BETWEEN I_MATNR1 AND I_MATNR2.
+
+  endmethod.

@@ -1,0 +1,113 @@
+*&---------------------------------------------------------------------*
+*& Report ZTR_CNDT_OOALV_REPORT1
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ztr_cndt_ooalv_report1.
+
+
+INCLUDE ztr_cndt_ooalv_report1_top.
+
+SELECT-OPTIONS s_matnr FOR lv_matnr.
+
+
+START-OF-SELECTION.
+  PERFORM get_mat_data.
+
+  CALL SCREEN 0100.
+
+*&---------------------------------------------------------------------*
+*&      Form  GET_MAT_DATA
+*&---------------------------------------------------------------------*
+FORM get_mat_data .
+  SELECT * FROM mara
+         INTO TABLE it_tab
+         WHERE matnr IN s_matnr.
+ENDFORM.
+*&---------------------------------------------------------------------*
+*&      Module  STATUS_0100  OUTPUT
+*&---------------------------------------------------------------------*
+*       text
+*----------------------------------------------------------------------*
+MODULE status_0100 OUTPUT.
+  SET PF-STATUS space.
+*  SET TITLEBAR 'xxx'.
+
+
+
+ENDMODULE.
+*&---------------------------------------------------------------------*
+*&      Module  USER_COMMAND_0100  INPUT
+*&---------------------------------------------------------------------*
+*       text
+*----------------------------------------------------------------------*
+MODULE user_command_0100 INPUT.
+  CASE sy-ucomm.
+    WHEN 'EXIT'.
+      LEAVE TO SCREEN 0.
+  ENDCASE.
+ENDMODULE.
+*&---------------------------------------------------------------------*
+*&      Module  OOALV_DISP  OUTPUT
+*&---------------------------------------------------------------------*
+*       text
+*----------------------------------------------------------------------*
+MODULE ooalv_disp OUTPUT.
+
+
+CREATE OBJECT i_container
+  EXPORTING
+    container_name              = 'CNT1'   "SCREEN CONT NAME
+    .
+IF sy-subrc <> 0.
+* MESSAGE ID SY-MSGID TYPE SY-MSGTY NUMBER SY-MSGNO
+*            WITH SY-MSGV1 SY-MSGV2 SY-MSGV3 SY-MSGV4.
+ENDIF.
+
+CREATE OBJECT i_alvgrid
+  EXPORTING
+    i_parent          = i_container
+    .
+IF sy-subrc <> 0.
+* MESSAGE ID SY-MSGID TYPE SY-MSGTY NUMBER SY-MSGNO
+*            WITH SY-MSGV1 SY-MSGV2 SY-MSGV3 SY-MSGV4.
+ENDIF.
+
+
+
+CALL METHOD i_alvgrid->set_table_for_first_display
+  EXPORTING
+*    i_buffer_active               =
+*    i_bypassing_buffer            =
+*    i_consistency_check           =
+    i_structure_name              = 'MARA'
+*    is_variant                    =
+*    i_save                        =
+*    i_default                     = 'X'
+*    is_layout                     =
+*    is_print                      =
+*    it_special_groups             =
+*    it_toolbar_excluding          =
+*    it_hyperlink                  =
+*    it_alv_graphics               =
+*    it_except_qinfo               =
+*    ir_salv_adapter               =
+  CHANGING
+    it_outtab                     = IT_TAB
+*    it_fieldcatalog               =
+*    it_sort                       =
+*    it_filter                     =
+*  EXCEPTIONS
+*    invalid_parameter_combination = 1
+*    program_error                 = 2
+*    too_many_lines                = 3
+*    others                        = 4
+        .
+IF sy-subrc <> 0.
+* Implement suitable error handling here
+ENDIF.
+
+
+
+
+ENDMODULE.

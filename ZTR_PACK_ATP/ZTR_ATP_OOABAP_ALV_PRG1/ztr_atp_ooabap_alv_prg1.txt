@@ -1,0 +1,89 @@
+*&---------------------------------------------------------------------*
+*& Report ZTR_ATP_OOABAP_ALV_PRG1
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ZTR_ATP_OOABAP_ALV_PRG1.
+
+INCLUDE ZTR_ATP_OOABAP_ALV_TOP.
+
+SELECTION-SCREEN BEGIN OF BLOCK B1 WITH FRAME TITLE TEXT-001.
+
+SELECT-OPTIONS S_MATNR FOR LV_MATNR.
+
+SELECTION-SCREEN END OF BLOCK B1 .
+
+
+START-OF-SELECTION.
+
+PERFORM GET_DATA.
+
+*PERFORM ALV_FCAT.
+
+CALL SCREEN 0100.
+
+
+*&---------------------------------------------------------------------*
+*&      Form  GET_DATA
+*&---------------------------------------------------------------------*
+FORM GET_DATA .
+SELECT * FROM MARA
+  INTO TABLE IT_TAB
+  WHERE MATNR IN S_MATNR.
+
+ENDFORM.
+*&---------------------------------------------------------------------*
+*&      Form  ALV_FCAT
+*&---------------------------------------------------------------------*
+*       text
+*----------------------------------------------------------------------*
+FORM ALV_FCAT .
+*CLEAR  WA_FCAT.
+* WA_FCAT-COL_POS = '1'
+
+
+ENDFORM.
+*&---------------------------------------------------------------------*
+*&      Module  STATUS_0100  OUTPUT
+*&---------------------------------------------------------------------*
+*       text
+*----------------------------------------------------------------------*
+MODULE STATUS_0100 OUTPUT.
+  SET PF-STATUS 'ZTR_OOABAP'.
+*  SET TITLEBAR 'xxx'.
+ENDMODULE.
+*&---------------------------------------------------------------------*
+*&      Module  USER_COMMAND_0100  INPUT
+*&---------------------------------------------------------------------*
+MODULE USER_COMMAND_0100 INPUT.
+CASE SY-UCOMM.
+  WHEN 'EXIT'.
+  LEAVE TO SCREEN 0.
+ENDCASE.
+
+ENDMODULE.
+*&---------------------------------------------------------------------*
+*&      Module  ALV_DISP  OUTPUT
+*&---------------------------------------------------------------------*
+MODULE ALV_DISP OUTPUT.
+CREATE OBJECT I_CONTAINER
+ EXPORTING
+    CONTAINER_NAME              = 'CNT1'  "SECREEN
+.
+
+CREATE OBJECT I_ALV_GRID
+  EXPORTING
+    I_PARENT          = I_CONTAINER
+    .
+
+CALL METHOD I_ALV_GRID->SET_TABLE_FOR_FIRST_DISPLAY
+  EXPORTING
+    I_STRUCTURE_NAME              = 'MARA'
+  CHANGING
+    IT_OUTTAB                     = IT_TAB
+.
+
+
+
+
+ENDMODULE.

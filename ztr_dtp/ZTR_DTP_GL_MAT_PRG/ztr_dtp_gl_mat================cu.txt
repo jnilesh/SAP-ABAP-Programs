@@ -1,0 +1,15 @@
+class ZTR_DTP_GL_MAT definition
+  public
+  final
+  create public .
+
+public section.
+
+  methods METH_MAT
+    importing
+      !I_MATNR1 type MATNR default '1'
+      !I_MATNR2 type MATNR default '100'
+    exporting
+      !E_MATTAB type TABLE
+    exceptions
+      MAT_NOT_FOUND .

@@ -1,0 +1,11 @@
+*&---------------------------------------------------------------------*
+*&  Include           ZTR_ATP_SMARTFORM_TABLE_TOP
+*&---------------------------------------------------------------------*
+
+
+DATA LV_MATNR TYPE MATNR.
+
+DATA FM TYPE RS38L_FNAM.
+
+
+DATA IT_TAB2 TYPE STANDARD TABLE OF ZTR_ATP_SM_STRS.

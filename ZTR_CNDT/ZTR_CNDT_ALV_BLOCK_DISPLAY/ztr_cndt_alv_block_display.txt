@@ -1,0 +1,169 @@
+*&---------------------------------------------------------------------*
+*& Report ZTR_CNDT_ALV_BLOCK_DISPLAY
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ZTR_CNDT_ALV_BLOCK_DISPLAY.
+
+INCLUDE ZTR_CNDT_ALV_BLOCK_DISPLAY_TOP.
+
+
+SELECT-OPTIONS S_VBELN FOR LV_VBELN.
+
+START-OF-SELECTION.
+PERFORM GET_SALES_DATA.
+
+PERFORM FILL_FCAT.
+
+PERFORM GET_SALES_DISP.
+
+*&---------------------------------------------------------------------*
+*&      Form  GET_SALES_DATA
+*&---------------------------------------------------------------------*
+FORM get_sales_data .
+
+SELECT VBELN
+       ERDAT
+       ERZET
+     INTO TABLE IT_TAB1
+     FROM VBAK
+     WHERE VBELN IN S_VBELN.
+
+SELECT VBELN
+       POSNR
+       MATNR
+     INTO TABLE IT_TAB2
+     FROM VBAP
+     WHERE VBELN IN S_VBELN.
+
+
+
+
+ENDFORM.
+*&---------------------------------------------------------------------*
+*&      Form  FILL_FCAT
+*&---------------------------------------------------------------------*
+*       text
+*----------------------------------------------------------------------*
+*  -->  p1        text
+*  <--  p2        text
+*----------------------------------------------------------------------*
+FORM fill_fcat .
+
+*  VBELN
+IT_FIELDCAT1-COL_POS  = '1'.
+IT_FIELDCAT1-FIELDNAME = 'VBELN'.
+IT_FIELDCAT1-TABNAME =  'IT_TAB1'.
+IT_FIELDCAT1-SELTEXT_L =  'SALES OR NO'.
+
+APPEND IT_FIELDCAT1.
+
+*  ERDAT
+IT_FIELDCAT1-COL_POS  = '2'.
+IT_FIELDCAT1-FIELDNAME = 'ERDAT'.
+IT_FIELDCAT1-TABNAME =  'IT_TAB1'.
+IT_FIELDCAT1-SELTEXT_L =  'SALES OR DATE'.
+
+APPEND IT_FIELDCAT1.
+
+
+*  ERZET
+IT_FIELDCAT1-COL_POS  = '3'.
+IT_FIELDCAT1-FIELDNAME = 'ERZET'.
+IT_FIELDCAT1-TABNAME =  'IT_TAB1'.
+IT_FIELDCAT1-SELTEXT_L =  'SALES OR TIME'.
+
+APPEND IT_FIELDCAT1.
+
+*--------------------- vbap-----------------
+
+*  VBELN
+IT_FIELDCAT2-COL_POS  = '1'.
+IT_FIELDCAT2-FIELDNAME = 'VBELN'.
+IT_FIELDCAT2-TABNAME =  'IT_TAB2'.
+IT_FIELDCAT2-SELTEXT_L =  'SALES OR NO'.
+
+APPEND IT_FIELDCAT2.
+
+*  POSNR
+IT_FIELDCAT2-COL_POS  = '2'.
+IT_FIELDCAT2-FIELDNAME = 'POSNR'.
+IT_FIELDCAT2-TABNAME =  'IT_TAB2'.
+IT_FIELDCAT2-SELTEXT_L =  'SALES OR ITEMS'.
+
+APPEND IT_FIELDCAT2.
+
+*  VBELN
+IT_FIELDCAT2-COL_POS  = '3'.
+IT_FIELDCAT2-FIELDNAME = 'MATNR'.
+IT_FIELDCAT2-TABNAME =  'IT_TAB2'.
+IT_FIELDCAT2-SELTEXT_L =  'SALES MAT NO'.
+
+APPEND IT_FIELDCAT2.
+
+
+
+ENDFORM.
+*&---------------------------------------------------------------------*
+*&      Form  GET_SALES_DISP
+*&---------------------------------------------------------------------*
+*       text
+*----------------------------------------------------------------------*
+*  -->  p1        text
+*  <--  p2        text
+*----------------------------------------------------------------------*
+FORM get_sales_disp .
+
+CALL FUNCTION 'REUSE_ALV_BLOCK_LIST_INIT'
+  EXPORTING
+    i_callback_program             = SY-REPID.
+
+CALL FUNCTION 'REUSE_ALV_BLOCK_LIST_APPEND'  " VBAK
+  EXPORTING
+    is_layout                        = IT_LAYOUT
+    it_fieldcat                      = IT_FIELDCAT1[]
+    i_tabname                        = 'IT_TAB1'
+    it_events                        = IT_EVENT[]
+*   IT_SORT                          =
+*   I_TEXT                           = ' '
+  TABLES
+    t_outtab                         = IT_TAB1
+* EXCEPTIONS
+*   PROGRAM_ERROR                    = 1
+*   MAXIMUM_OF_APPENDS_REACHED       = 2
+*   OTHERS                           = 3
+          .
+IF sy-subrc <> 0.
+* Implement suitable error handling here
+ENDIF.
+
+CALL FUNCTION 'REUSE_ALV_BLOCK_LIST_APPEND'   " VBAP
+  EXPORTING
+    is_layout                        = IT_LAYOUT
+    it_fieldcat                      = IT_FIELDCAT2[]
+    i_tabname                        = 'IT_TAB2'
+    it_events                        = IT_EVENT[]
+*   IT_SORT                          =
+*   I_TEXT                           = ' '
+  TABLES
+    t_outtab                         = IT_TAB2
+* EXCEPTIONS
+*   PROGRAM_ERROR                    = 1
+*   MAXIMUM_OF_APPENDS_REACHED       = 2
+*   OTHERS                           = 3
+          .
+IF sy-subrc <> 0.
+* Implement suitable error handling here
+ENDIF.
+
+
+
+
+CALL FUNCTION 'REUSE_ALV_BLOCK_LIST_DISPLAY'  .
+*IF sy-subrc <> 0.
+** Implement suitable error handling here
+*ENDIF.
+*
+
+
+ENDFORM.

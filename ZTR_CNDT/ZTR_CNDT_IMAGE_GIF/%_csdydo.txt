@@ -1,0 +1,93 @@
+TYPE-POOL sdydo .
+
+TYPES: sdydo_html_line LIKE w3html.
+TYPES: sdydo_html_table TYPE sdydo_html_line OCCURS 10.
+
+TYPES: sdydo_element_name(100) TYPE c.
+TYPES: sdydo_element_name_table TYPE sdydo_element_name OCCURS 5.
+TYPES: sdydo_wrapped_element_name(120) TYPE c.
+TYPES: sdydo_area_cursor(11) TYPE c.   " do not use any longer
+
+TYPES: sdydo_c1(1) TYPE c.
+TYPES: sdydo_flag(1) TYPE c.
+TYPES: sdydo_c100(100) TYPE c.         "Texte, Bitmapbezeichnungen
+TYPES: sdydo_value TYPE w3_qvalue.     " Query table, Value
+TYPES: sdydo_attribute(50) TYPE c.
+TYPES: sdydo_info(100) TYPE c.         " Link_info
+
+TYPES: sdydo_text_element(255) TYPE c.
+TYPES: sdydo_text_table TYPE sdydo_text_element OCCURS 5.
+
+TYPES: sdydo_progid LIKE sy-repid.
+TYPES: sdydo_dynnr LIKE sy-dynnr.
+
+TYPES: sdydo_url(256) TYPE c.
+TYPES: sdydo_key LIKE bapibds01-objkey." Objekt-ID in BDS
+TYPES: BEGIN OF sdydo_picture,
+         object_id       TYPE sdydo_key,
+         object_internal TYPE string,
+         got_object      TYPE i,
+       END OF sdydo_picture.
+TYPES: sdydo_picture_table TYPE sdydo_picture OCCURS 0.
+
+TYPES: BEGIN OF sdydo_graphic,         " do not use any longer
+         object_id(100),               "Objekt-ID in SAP-Web-Repository
+         object_url(100),     "relative URL zum Adressieren des Objekts
+       END OF sdydo_graphic.
+TYPES: sdydo_graphic_table TYPE sdydo_graphic OCCURS 3.     "do not use
+
+TYPES: BEGIN OF sdydo_style_class,
+         property(50),
+         value(50),     "relative URL zum Adressieren des O
+       END OF sdydo_style_class.
+TYPES: sdydo_style_table TYPE sdydo_style_class OCCURS 3 .
+
+TYPES: sdydo_icon_info TYPE icon.
+
+TYPES: sdydo_object_table TYPE REF TO object OCCURS 5.
+
+types: begin of sdydo_col_style_tab_entry_type,
+         class type string,                    " style class
+         style type string,                    " style string
+         alignment type string,                " alignment string
+       end of sdydo_col_style_tab_entry_type.
+types: sdydo_col_style_tab type sdydo_col_style_tab_entry_type occurs 5.
+
+TYPES: BEGIN OF sdydo_option,
+         value TYPE sdydo_value,
+         text TYPE string,
+       END OF sdydo_option.
+TYPES: sdydo_option_tab TYPE sdydo_option OCCURS 0.
+
+TYPES: BEGIN OF sdydo_act_gui_properties,
+         fore_color  TYPE sdydo_attribute,     " text
+         back_color  TYPE sdydo_attribute,     " control background
+         col_key     TYPE sdydo_attribute,     " list col key
+         col_success TYPE sdydo_attribute,     " list col positive
+         col_warning TYPE sdydo_attribute,     " list col negative
+         fontsize    TYPE sdydo_attribute,
+         fontstyle   TYPE sdydo_attribute,
+       END OF sdydo_act_gui_properties.
+
+TYPES: BEGIN OF sdydo_col_value,
+           id        TYPE i,
+           state     TYPE i,
+           value     TYPE i,
+           code      TYPE sdydo_attribute,
+       END OF sdydo_col_value.
+TYPES: sdydo_col_value_tab TYPE sdydo_col_value OCCURS 0.
+
+TYPES: BEGIN OF sdydo_table_span,
+           col_start_span TYPE i,
+           span_width     TYPE i,
+           span_type,
+       END OF sdydo_table_span.
+TYPES: sdydo_table_span_tab TYPE sdydo_table_span OCCURS 0.
+
+TYPES: BEGIN OF sdydo_image_name,
+           image_id    TYPE sdydo_key,
+           bds_class   TYPE sdydo_key,
+           image_name  TYPE string,
+       END OF sdydo_image_name.
+TYPES: sdydo_image_names TYPE HASHED TABLE OF sdydo_image_name
+       WITH UNIQUE KEY image_id bds_class.

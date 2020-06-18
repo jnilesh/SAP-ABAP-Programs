@@ -1,0 +1,130 @@
+REPORT ZTR_DTP_BDC_MAT_SESSION_FILES.
+
+INCLUDE ZTR_DTP_BDC_MAT_FILE_TOP.
+
+
+OPEN DATASET 'DTPMAT' FOR INPUT IN TEXT MODE ENCODING DEFAULT.
+DO.
+   READ DATASET 'DTPMAT' INTO WA_TAB.
+  IF SY-SUBRC EQ 0.
+  APPEND WA_TAB TO IT_TAB.
+  CLEAR WA_TAB.
+  ELSE.
+    EXIT.
+    ENDIF.
+    ENDDO.
+
+CLOSE DATASET 'DTPMAT'.
+
+
+
+CALL FUNCTION 'BDC_OPEN_GROUP'
+ EXPORTING
+   CLIENT                    = SY-MANDT
+*   DEST                      = FILLER8
+   GROUP                     = 'ZTR_DTP_FILE' " SM35 T-CODE
+*   HOLDDATE                  = FILLER8
+   KEEP                      = 'X'
+   USER                      = SY-UNAME
+          .
+IF SY-SUBRC <> 0.
+* Implement suitable error handling here
+ENDIF.
+
+
+LOOP AT IT_TAB INTO WA_TAB.
+
+
+perform bdc_dynpro      using 'SAPLMGMM' '0060'.
+perform bdc_field       using 'BDC_CURSOR'
+                              'RMMG1-MTART'.
+perform bdc_field       using 'BDC_OKCODE'
+                              '=ENTR'.
+perform bdc_field       using 'RMMG1-MATNR'
+                              WA_TAB-MATNR. " 'MAT_DTP2324'.
+
+perform bdc_field       using 'RMMG1-MBRSH'
+                              WA_TAB-MBRSH.  "  'W'.
+perform bdc_field       using 'RMMG1-MTART'
+                              WA_TAB-MTART. " 'ZMDG'.
+
+perform bdc_dynpro      using 'SAPLMGMM' '0070'.
+perform bdc_field       using 'BDC_CURSOR'
+                              'MSICHTAUSW-DYTXT(01)'.
+perform bdc_field       using 'BDC_OKCODE'
+                              '=ENTR'.
+perform bdc_field       using 'MSICHTAUSW-KZSEL(01)'
+                              'X'.
+
+perform bdc_dynpro      using 'SAPLMGMM' '4004'.
+perform bdc_field       using 'BDC_OKCODE'
+                              '=BU'.
+perform bdc_field       using 'MAKT-MAKTX'
+                             WA_TAB-MAKTX." 'MATDTETETT'.
+perform bdc_field       using 'BDC_CURSOR'
+                              'MARA-MATKL'.
+perform bdc_field       using 'MARA-MEINS'
+                             WA_TAB-MEINS ."  'CCM'.
+perform bdc_field       using 'MARA-MATKL'
+                             WA_TAB-MATKL. "  '01'.
+*+ ADD
+
+*perform bdc_field       using 'MARA-BRGEW'
+*                             WA_TAB-BRGEW. "
+*
+*perform bdc_field       using 'MARA-GEWEI'
+*                             WA_TAB-GEWEI. "
+*
+*perform bdc_field       using 'MARA-NTGEW'
+*                             WA_TAB-NTGEW. "
+
+
+CALL FUNCTION 'BDC_INSERT'
+ EXPORTING
+   TCODE                  = 'MM01'
+  TABLES
+    DYNPROTAB              = IT_BDCDATA
+          .
+IF SY-SUBRC <> 0.
+* Implement suitable error handling here
+ENDIF.
+
+REFRESH IT_BDCDATA.
+
+ENDLOOP.
+
+
+CALL FUNCTION 'BDC_CLOSE_GROUP'
+          .
+IF SY-SUBRC <> 0.
+* Implement suitable error handling here
+ENDIF.
+
+WRITE 'GO TO SM35 T-CODE AND PROCESS YOUR SESSION'.
+*&---------------------------------------------------------------------*
+*&      Form  BDC_DYNPRO
+*&---------------------------------------------------------------------*
+FORM BDC_DYNPRO  USING P_PROGRAM P_DYNPRO .
+
+CLEAR IT_BDCDATA.
+
+IT_BDCDATA-PROGRAM = P_PROGRAM.
+IT_BDCDATA-DYNPRO  = P_DYNPRO.
+IT_BDCDATA-DYNBEGIN = 'X'.
+
+APPEND IT_BDCDATA.
+
+ENDFORM.
+*&---------------------------------------------------------------------*
+*&      Form  BDC_FIELD
+*&---------------------------------------------------------------------*
+FORM BDC_FIELD  USING  P_FNAM P_FVAL .
+
+CLEAR IT_BDCDATA.
+
+IT_BDCDATA-FNAM = P_FNAM.
+IT_BDCDATA-FVAL  = P_FVAL.
+APPEND IT_BDCDATA.
+
+
+ENDFORM.

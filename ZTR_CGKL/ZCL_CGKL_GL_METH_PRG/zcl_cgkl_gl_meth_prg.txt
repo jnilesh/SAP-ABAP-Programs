@@ -1,0 +1,14 @@
+*&---------------------------------------------------------------------*
+*& Report ZCL_CGKL_GL_METH_PRG
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ZCL_CGKL_GL_METH_PRG.
+
+START-OF-SELECTION.
+
+DATA OBJ_METH TYPE REF TO ZCL_CGKL_GL_METH.
+CREATE OBJECT OBJ_METH.
+CALL METHOD OBJ_METH->IST_METH1.
+SKIP.
+CALL METHOD ZCL_CGKL_GL_METH=>STA_METH2.

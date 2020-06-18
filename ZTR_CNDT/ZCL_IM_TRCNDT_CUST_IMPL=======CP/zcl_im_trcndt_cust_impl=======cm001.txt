@@ -1,0 +1,9 @@
+  method ZIF_EX_CUST1~METH_CUST.
+
+    SELECT *
+        FROM KNA1
+        INTO TABLE E_TAB
+       WHERE KUNNR BETWEEN I_KUNNR1 AND I_KUNNR2.
+
+
+  endmethod.

@@ -1,0 +1,14 @@
+*&---------------------------------------------------------------------*
+*&  Include           ZTR_DTP_FM_FORM2_TOP
+*&---------------------------------------------------------------------*
+DATA: LV_KUNNR TYPE KUNNR,
+      LV_NAME1 TYPE NAME1,
+      LV_ORT01 TYPE ORT01,
+      LV_LAND1 TYPE LAND1.
+
+DATA :FM_NAME TYPE RS38L_FNAM,
+      LV_CUST TYPE KUNNR.
+
+data wa_outputparams type sfpoutputparams.
+
+data wa_docparams type sfpdocparams.

@@ -1,0 +1,8 @@
+*&---------------------------------------------------------------------*
+*&  Include           ZTR_BNGL_OOABAP_PRG_TOP
+*&---------------------------------------------------------------------*
+
+DATA : LV_MATNR TYPE MATNR.
+
+DATA: IT_TAB TYPE ZTR_CGKL_MAT_TT,
+      WA_TAB LIKE LINE OF IT_TAB.

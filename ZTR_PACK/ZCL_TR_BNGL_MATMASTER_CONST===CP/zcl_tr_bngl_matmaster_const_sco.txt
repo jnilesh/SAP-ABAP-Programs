@@ -1,0 +1,6 @@
+ZCL_TR_BNGL_MATMASTER_CONST   CONSTRUCTOR                   E1                            121
+ZCL_TR_BNGL_MATMASTER_CONST   CONSTRUCTOR                   I_MAT123                      120
+ZCL_TR_BNGL_MATMASTER_CONST   METH_MAT                      E_TAB                         100
+ZCL_TR_BNGL_MATMASTER_CONST   METH_MAT                      I_MATNR1                      100
+ZCL_TR_BNGL_MATMASTER_CONST   METH_MAT                      I_MATNR2                      100
+ZCL_TR_BNGL_MATMASTER_CONST   METH_MAT                      MAT_NOT_FOUND                 101

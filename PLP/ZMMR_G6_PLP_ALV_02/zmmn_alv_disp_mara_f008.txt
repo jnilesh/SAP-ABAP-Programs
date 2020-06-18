@@ -1,0 +1,33 @@
+*&---------------------------------------------------------------------*
+*&  Include           ZMMN_ALV_DISP_MARA_F008
+*&---------------------------------------------------------------------*
+FORM f007_disp_inter.
+  IF NOT it_mara IS INITIAL.
+
+    CLEAR it_marc.
+    CLEAR it_makt.
+    CLEAR it_listheader.
+    PERFORM f006_alv_head .                            " Initialising Header for alv
+
+    CALL FUNCTION 'REUSE_ALV_GRID_DISPLAY'             " function ALV grid display for interactive
+      EXPORTING
+        i_callback_program      = sy-repid
+        i_callback_user_command = 'F009_GET_MARC'
+        i_callback_top_of_page  = 'TOPPAGE'
+        i_structure_name        = 'Z187511_MARA'
+        is_layout               = it_layout
+        it_sort                 = it_sort
+        i_default               = 'X'
+      TABLES
+        t_outtab                = it_mara
+      EXCEPTIONS
+        program_error           = 1
+        OTHERS                  = 2.
+
+    IF sy-subrc <> 0.
+* IMPLEMENT SUITABLE ERROR HANDLING HERE
+      MESSAGE e004.
+    ENDIF.
+  ENDIF.
+
+ENDFORM.

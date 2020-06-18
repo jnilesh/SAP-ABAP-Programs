@@ -1,0 +1,41 @@
+*&---------------------------------------------------------------------*
+*&  Include           Z_160680_INTER_TOP
+*&---------------------------------------------------------------------*
+
+
+DATA : LV_DEPTNO  TYPE Z_80_DEDEPTNO.
+
+DATA:   IT_FCAT    TYPE SLIS_T_FIELDCAT_ALV,
+        WA_IT_FCAT LIKE LINE OF IT_FCAT,
+        IT_FCAT2    TYPE SLIS_T_FIELDCAT_ALV,
+        WA_IT_FCAT2 LIKE LINE OF IT_FCAT2,
+        IT_LAYOUT  TYPE SLIS_LAYOUT_ALV,
+        IT_EVENT TYPE SLIS_T_EVENT.
+
+
+
+TYPES: BEGIN OF TY_ITAB02,
+         EMPNO    TYPE Z_80_DEEMPNO,
+         ENAME    TYPE Z_80_DEENAME,
+         JOB      TYPE Z_80_DEJOB,
+         MGR      TYPE Z_80_DEMGR,
+         HIREDATE TYPE Z_80_DEHIREDATE,
+         SAL      TYPE Z_80_DESAL,
+         DEPTNO   TYPE Z_80_DEDEPTNO,
+       END OF TY_ITAB02.
+
+
+
+TYPES: BEGIN OF TY_ITAB01,
+         DEPTNO TYPE  Z_80_DEDEPTNO,
+         DNAME  TYPE  Z_80_DEDNAME,
+         LOC    TYPE  Z_80_DELOC,
+         CCODE  TYPE  Z_80_CCODE,
+       END OF TY_ITAB01.
+
+
+
+DATA : ITAB01    TYPE STANDARD TABLE OF TY_ITAB01,
+       WA_ITAB01 TYPE TY_ITAB01,
+       ITAB02    TYPE STANDARD TABLE OF TY_ITAB02,
+       WA_ITAB02 TYPE TY_ITAB02.

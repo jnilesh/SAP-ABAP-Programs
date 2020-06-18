@@ -1,0 +1,6 @@
+class ZTR_BADI_IMPL99IMPL definition
+  public
+  final
+  create public .
+
+public section.

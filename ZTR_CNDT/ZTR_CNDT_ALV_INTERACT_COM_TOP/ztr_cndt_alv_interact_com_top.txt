@@ -1,0 +1,21 @@
+*&---------------------------------------------------------------------*
+*&  Include           ZTR_CNDT_ALV_INTERACT_COM_TOP
+*&---------------------------------------------------------------------*
+TABLES : mara , marc.
+TYPE-POOLS : slis.
+DATA : it_fcat TYPE slis_t_fieldcat_alv WITH HEADER LINE,
+       wa_fcat TYPE slis_fieldcat_alv.
+
+TYPES : BEGIN OF ty_mara,
+          matnr TYPE matnr,
+          mbrsh TYPE mbrsh,
+          mtart TYPE mtart,
+          meins TYPE meins,
+          brgew TYPE brgew,
+          ntgew TYPE ntgew,
+        END OF ty_mara.
+
+DATA : it_mara TYPE STANDARD TABLE OF ty_mara,
+       wa_mara TYPE ty_mara.
+
+DATA : sucom TYPE slis_formname VALUE 'SUCOM2'.

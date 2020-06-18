@@ -1,0 +1,8 @@
+class ZCL_CLS_DTP_INTER definition
+  public
+  final
+  create public .
+
+public section.
+
+  interfaces ZIF_CLS_DTP_INTER .

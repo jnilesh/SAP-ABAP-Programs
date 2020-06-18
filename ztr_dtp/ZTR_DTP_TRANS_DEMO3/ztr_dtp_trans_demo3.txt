@@ -1,0 +1,14 @@
+REPORT ZTR_DTP_TRANS_DEMO3.
+
+
+WRITE 'capgem'.
+
+* *SDFSDSGSD
+
+WRITE / 'bngl'.
+
+
+WRITE 'capgem2'.
+
+
+WRITE 'bngl2'.

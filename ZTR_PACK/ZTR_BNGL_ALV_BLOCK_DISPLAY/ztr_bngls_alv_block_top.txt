@@ -1,0 +1,33 @@
+*&---------------------------------------------------------------------*
+*&  Include           ZTR_BNGLS_ALV_BLOCK_TOP
+*&---------------------------------------------------------------------*
+DATA LV_MATNR TYPE MATNR.
+TYPE-POOLS : SLIS.
+
+DATA IT_FIELDCAT TYPE SLIS_T_FIELDCAT_ALV WITH HEADER LINE.
+DATA IT_FIELDCAT2 TYPE SLIS_T_FIELDCAT_ALV WITH HEADER LINE.
+DATA IT_EVENT TYPE SLIS_T_EVENT WITH HEADER LINE.
+DATA IT_LAYOUT TYPE SLIS_LAYOUT_ALV.
+
+
+TYPES: BEGIN OF YUGI,
+      MATNR TYPE MATNR, " Material Number
+      MBRSH TYPE MBRSH, " Industry sector
+      MTART TYPE MTART, " Material type
+      MEINS TYPE MEINS, " Base Unit of Measure
+      BRGEW TYPE BRGEW, " Gross weight
+      NTGEW TYPE NTGEW, " Net weight
+
+        END OF YUGI.
+
+DATA :IT_TAB TYPE STANDARD TABLE OF YUGI,
+       WA1 TYPE YUGI.
+
+
+TYPES: BEGIN OF RAVI,
+      MATNR TYPE MATNR, " Material Number
+      werks TYPE werks_d, " plant.
+        END OF RAVI.
+
+DATA :IT_TAB2 TYPE STANDARD TABLE OF RAVI,
+       WA2 TYPE RAVI.

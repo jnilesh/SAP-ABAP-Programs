@@ -1,0 +1,16 @@
+*&---------------------------------------------------------------------*
+*&  Include           ZCL_TR_BNGL_MAT_TOP
+*&---------------------------------------------------------------------*
+DATA LV_MATNR TYPE MATNR.
+
+TYPES: BEGIN OF TY_TAB,
+       MATNR TYPE MATNR,
+       MBRSH TYPE MBRSH,
+       MTART TYPE MTART,
+       MEINS TYPE MEINS,
+       BRGEW TYPE BRGEW,
+       NTGEW TYPE NTGEW,
+
+      END OF TY_TAB.
+ DATA :IT_TAB TYPE STANDARD TABLE OF TY_TAB.
+*       WA_TAB TYPE TY_TAB.

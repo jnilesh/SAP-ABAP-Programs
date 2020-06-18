@@ -1,0 +1,75 @@
+*&---------------------------------------------------------------------*
+*& Report ZTR_BNGL_SMFORM1_PRG
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ZTR_BNGL_SMFORM1_PRG2.
+INCLUDE ZTR_BNGL_SMF2_TOP.
+
+
+SELECT-OPTIONS S_MATNR FOR LV_MATNR.
+
+PARAMETERS LV_ADRS TYPE LFA1-ADRNR.
+
+START-OF-SELECTION.
+
+SELECT MATNR
+       MBRSH
+       MTART
+       MEINS
+       BRGEW
+       NTGEW
+    INTO TABLE IT_TAB2
+    FROM MARA
+    WHERE MATNR IN S_MATNR.
+
+
+
+CALL FUNCTION 'SSF_FUNCTION_MODULE_NAME'
+  EXPORTING
+    formname                 = 'ZTR_BNGL_SMFORM_TABLE2'
+*   VARIANT                  = ' '
+*   DIRECT_CALL              = ' '
+ IMPORTING
+   FM_NAME                  = LV_FMNAM
+* EXCEPTIONS
+*   NO_FORM                  = 1
+*   NO_FUNCTION_MODULE       = 2
+*   OTHERS                   = 3
+          .
+IF sy-subrc <> 0.
+* Implement suitable error handling here
+ENDIF.
+
+
+
+CALL FUNCTION LV_FMNAM
+ EXPORTING
+*   ARCHIVE_INDEX              =
+*   ARCHIVE_INDEX_TAB          =
+*   ARCHIVE_PARAMETERS         =
+*   CONTROL_PARAMETERS         =
+*   MAIL_APPL_OBJ              =
+*   MAIL_RECIPIENT             =
+*   MAIL_SENDER                =
+*   OUTPUT_OPTIONS             =
+*   USER_SETTINGS              = 'X'
+*   I_MATNR1                   =
+*   I_MATNR2                   = 'MAT00050'
+   LV_ADRNR                   = LV_ADRS
+* IMPORTING
+*   DOCUMENT_OUTPUT_INFO       =
+*   JOB_OUTPUT_INFO            =
+*   JOB_OUTPUT_OPTIONS         =
+  TABLES
+    it_tab                     = IT_TAB2
+* EXCEPTIONS
+*   FORMATTING_ERROR           = 1
+*   INTERNAL_ERROR             = 2
+*   SEND_ERROR                 = 3
+*   USER_CANCELED              = 4
+*   OTHERS                     = 5
+          .
+IF sy-subrc <> 0.
+* Implement suitable error handling here
+ENDIF.

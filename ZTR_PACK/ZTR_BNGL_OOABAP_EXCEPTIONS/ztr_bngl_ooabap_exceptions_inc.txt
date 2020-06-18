@@ -1,0 +1,6 @@
+CX_DYNAMIC_CHECK==============CU
+CX_ROOT=======================CU
+CX_SY_ARITHMETIC_ERROR========CU
+CX_SY_CONVERSION_ERROR========CU
+CX_SY_CONVERSION_NO_NUMBER====CU
+CX_SY_ZERODIVIDE==============CU

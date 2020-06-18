@@ -1,0 +1,31 @@
+*&---------------------------------------------------------------------*
+*&  Include           Z180191_ASGN1_1_TOP
+*&---------------------------------------------------------------------*
+TYPES : BEGIN OF VARA,
+        MATNR TYPE MATNR,
+        MTART TYPE MTART,
+        MBRSH TYPE MBRSH,
+        MATKL TYPE MATKL,
+        MEINS TYPE MEINS,
+        BRGEW TYPE BRGEW,
+        NTGEW TYPE NTGEW,
+        GEWEI TYPE GEWEI,
+        VOLUM TYPE VOLUM,
+        VOLEH TYPE VOLEH,
+        END OF VARA.
+
+DATA  L_MATNR TYPE MATNR.
+
+SELECT-OPTIONS S_MATNR FOR L_MATNR.
+
+DATA: IT_TAB TYPE TABLE OF VARA,
+      WA LIKE LINE OF IT_TAB.
+
+
+DATA:L_FIELDCAT TYPE TABLE OF LVC_S_FCAT,
+      WAFIELD LIKE LINE OF L_FIELDCAT.
+
+
+DATA:L_CONTAINER TYPE REF TO CL_GUI_CUSTOM_CONTAINER,
+             L_GRID TYPE REF TO CL_GUI_ALV_GRID,
+             l_cat TYPE REF TO CL_GUI_ALV_GRID.

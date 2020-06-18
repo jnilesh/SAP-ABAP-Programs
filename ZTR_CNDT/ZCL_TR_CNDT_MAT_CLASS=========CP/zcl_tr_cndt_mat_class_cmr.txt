@@ -1,0 +1,1 @@
+ZCL_TR_CNDT_MAT_CLASS         ZIF_TR_CNDT_MAT_CLASS         11TRAINEE01   20190802            000000001                              2  1

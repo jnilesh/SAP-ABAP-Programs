@@ -1,0 +1,67 @@
+*&---------------------------------------------------------------------*
+*& Modulpool  ZTR_CGKL_MODUEL_POOL1
+*&
+*&---------------------------------------------------------------------*
+*&
+*&
+*&---------------------------------------------------------------------*
+PROGRAM ZTR_CGKL_MODUEL_POOL1.
+
+DATA: LV_MATNR TYPE MATNR,  " Material Number1
+      LV_MBRSH TYPE MBRSH,  " Industry sector
+      LV_MTART TYPE MTART,  " Material type
+      LV_MEINS TYPE MEINS,  " Base Unit of Measure
+      LV_BRGEW TYPE BRGEW,  " Gross weight
+      LV_NTGEW TYPE NTGEW.  " Net weight
+*&---------------------------------------------------------------------*
+*&      Module  STATUS_0100  OUTPUT
+*&---------------------------------------------------------------------*
+*       text
+*----------------------------------------------------------------------*
+MODULE STATUS_0100 OUTPUT.
+  SET PF-STATUS 'ZTR_CGKL_MPOOL_STS1'.  " SE41
+*   SET TITLEBAR 'xxx'.
+
+  LV_MATNR =  'MAT00010'.
+ENDMODULE.
+*&---------------------------------------------------------------------*
+*&      Module  USER_COMMAND_0100  INPUT
+*&---------------------------------------------------------------------*
+*       text
+*----------------------------------------------------------------------*
+MODULE USER_COMMAND_0100 INPUT.
+
+  CASE SY-UCOMM.
+    WHEN 'GETMAT'.
+      SELECT SINGLE MATNR
+                    MBRSH
+                    MTART
+                    MEINS
+                    BRGEW
+                    NTGEW
+        FROM MARA
+        INTO (LV_MATNR,LV_MBRSH, LV_MTART, LV_MEINS, LV_BRGEW, LV_NTGEW)
+        WHERE MATNR EQ LV_MATNR.
+      LEAVE TO SCREEN 0200.
+
+    WHEN 'EXIT'.
+      LEAVE TO SCREEN 0.
+
+  ENDCASE.
+
+ENDMODULE.
+*&---------------------------------------------------------------------*
+*&      Module  USER_COMMAND_0200  INPUT
+*&---------------------------------------------------------------------*
+*       text
+*----------------------------------------------------------------------*
+MODULE USER_COMMAND_0200 INPUT.
+  CASE SY-UCOMM.
+    WHEN 'BACK'.
+      LEAVE TO SCREEN 0100.
+    WHEN 'EXIT'.
+      LEAVE TO SCREEN 0.
+
+  ENDCASE.
+
+ENDMODULE.

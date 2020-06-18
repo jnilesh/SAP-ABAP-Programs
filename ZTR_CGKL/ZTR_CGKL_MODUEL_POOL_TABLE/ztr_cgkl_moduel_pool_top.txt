@@ -1,0 +1,13 @@
+*&---------------------------------------------------------------------*
+*&  Include           ZTR_CGKL_MODUEL_POOL_TOP
+*&---------------------------------------------------------------------*
+TYPES: BEGIN OF TY_TAB, " LOCAL STRS
+      MATNR TYPE MATNR, " Material Number1
+      MBRSH TYPE MBRSH, " Industry sector
+      MTART TYPE MTART, " Material type
+      MEINS TYPE MEINS, " Base Unit of Measure
+      BRGEW TYPE BRGEW, " Gross weight
+      NTGEW TYPE NTGEW, " Net weight
+      END OF TY_TAB.
+DATA: IT_TAB TYPE STANDARD TABLE OF TY_TAB, " INTERNAL TABLE
+      WA_TAB TYPE TY_TAB. " WORK AREA

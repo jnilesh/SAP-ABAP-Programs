@@ -1,0 +1,17 @@
+class ZCL_TR_ATP_GL_CLS_MATERIAL definition
+  public
+  final
+  create public .
+
+public section.
+
+  events DOUBLE_CLICK .
+
+  methods MARA_MATERIAL
+    importing
+      !I_MATNR1 type MATNR default '1'
+      !I_MATNR2 type MATNR default '100'
+    exporting
+      !E_MATTAB type TABLE
+    exceptions
+      MAT_NOT_FOUND .

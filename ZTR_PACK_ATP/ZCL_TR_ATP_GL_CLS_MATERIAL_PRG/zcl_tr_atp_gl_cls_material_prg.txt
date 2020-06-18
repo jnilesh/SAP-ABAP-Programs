@@ -1,0 +1,45 @@
+*&---------------------------------------------------------------------*
+*& Report ZCL_TR_ATP_GL_CLS_MATERIAL_PRG
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ZCL_TR_ATP_GL_CLS_MATERIAL_PRG.
+
+
+INCLUDE ZCL_TR_ATP_GL_CLS_TOP.
+
+SELECT-OPTIONS S_MATNR FOR LV_MATNR.
+
+START-OF-SELECTION.
+
+DATA OBJ1 TYPE REF TO ZCL_TR_ATP_GL_CLS_MATERIAL.
+
+CREATE OBJECT OBJ1.
+
+CALL METHOD OBJ1->METH_MATERIAL
+  EXPORTING
+    I_MATNR1      = S_MATNR-LOW
+    I_MATNR2      = S_MATNR-HIGH
+  IMPORTING
+    E_MATTAB      = IT_TAB
+*  EXCEPTIONS
+*    MAT_NOT_FOUND = 1
+*    OTHERS        = 2
+        .
+IF SY-SUBRC <> 0.
+* Implement suitable error handling here
+ENDIF.
+
+LOOP AT IT_TAB INTO WA_TAB. " B TO WA
+   WRITE :/ SY-TABIX,  " SY-TFILL
+            20 WA_TAB-MATNR ,
+            30 WA_TAB-MBRSH ,
+            45 WA_TAB-MTART ,
+            60 WA_TAB-MEINS,
+            84 WA_TAB-BRGEW,
+            100 WA_TAB-NTGEW,
+            120 WA_TAB-WERKS,
+            130 WA_TAB-PSTAT.
+
+
+  ENDLOOP.

@@ -1,0 +1,9 @@
+interface ZTR_CGKL_INTERFACE
+  public .
+
+
+  methods MAT_METH1
+    importing
+      !I_MAT1 type MATNR
+      !I_MAT2 type MATNR .
+endinterface.

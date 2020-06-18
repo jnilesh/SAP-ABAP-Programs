@@ -1,0 +1,2 @@
+ZCL_IM_TRCNDT_CUST_IMPL       00000                                                             0
+ZCL_IM_TRCNDT_CUST_IMPL       00001ZIF_EX_CUST1~METH_CUST                                       0

@@ -1,0 +1,156 @@
+*&---------------------------------------------------------------------*
+*& Report ZTR_CNDT_ALV_GRID_DISPLAY
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ZTR_CNDT_ALV_GRID_DISPLAY MESSAGE-ID ZTR_CNDT_MSG.
+
+INCLUDE ZTR_CNDT_ALV_GRID_DISPLAY_TOP.
+
+
+SELECT-OPTIONS S_MATNR FOR LV_MATNR .
+
+INITIALIZATION.
+S_MATNR-LOW = '1'.
+S_MATNR-HIGH = '100'.
+APPEND S_MATNR.
+
+AT SELECTION-SCREEN ON S_MATNR.
+  SELECT SINGLE MATNR
+       FROM MARA
+      INTO LV_MTMSG
+      WHERE MATNR IN S_MATNR.
+IF SY-SUBRC EQ 0.
+*  MESSAGE S125.
+  MESSAGE S006 WITH 'MAT FOUND LOCAL'.
+ELSE.
+MESSAGE E001.
+*MESSAGE A005(ZTR_CNDT_MSG).
+ENDIF.
+
+
+START-OF-SELECTION.
+
+PERFORM get_mat_alvdata.
+
+PERFORM get_alv_fcat.
+
+PERFORM dis_alv_output.
+
+*&---------------------------------------------------------------------*
+*&      Form  GET_MAT_ALVDATA
+*&---------------------------------------------------------------------*
+FORM GET_MAT_ALVDATA .
+
+SELECT MATNR
+       MBRSH
+       MTART
+       MEINS
+       MATKL
+       BRGEW
+       NTGEW
+    FROM MARA
+     INTO TABLE IT_TAB
+    WHERE MATNR IN S_MATNR.
+
+IF SY-SUBRC EQ 0.
+WRITE: 'No of Materials are found', SY-DBCNT.
+  ELSE.
+    WRITE: 'Materials are not found', SY-DBCNT.
+    ENDIF.
+
+
+ENDFORM.
+*&---------------------------------------------------------------------*
+*&      Form  GET_ALV_FCAT
+*&---------------------------------------------------------------------*
+FORM GET_ALV_FCAT .
+* MATNR
+IT_FIELDCAT-COL_POS  = '1'.
+IT_FIELDCAT-FIELDNAME = 'MATNR'.
+IT_FIELDCAT-TABNAME = 'IT_TAB'.
+IT_FIELDCAT-SELTEXT_L = 'MAT NUMBER'.
+IT_FIELDCAT-EMPHASIZE = 'C110'.
+APPEND IT_FIELDCAT.
+
+* MBRSH
+IT_FIELDCAT-COL_POS  = '2'.
+IT_FIELDCAT-FIELDNAME = 'MBRSH'.
+IT_FIELDCAT-TABNAME = 'IT_TAB'.
+IT_FIELDCAT-SELTEXT_L = 'MAT IND SECTOR'.
+IT_FIELDCAT-EMPHASIZE = 'C210'.
+APPEND IT_FIELDCAT.
+
+* MTART
+IT_FIELDCAT-COL_POS  = '3'.
+IT_FIELDCAT-FIELDNAME = 'MTART'.
+IT_FIELDCAT-TABNAME = 'IT_TAB'.
+IT_FIELDCAT-SELTEXT_L = 'MAT TYPE'.
+IT_FIELDCAT-EMPHASIZE = 'C500'.
+APPEND IT_FIELDCAT.
+
+* MEINS
+IT_FIELDCAT-COL_POS  = '4'.
+IT_FIELDCAT-FIELDNAME = 'MEINS'.
+IT_FIELDCAT-TABNAME = 'IT_TAB'.
+IT_FIELDCAT-SELTEXT_L = 'MAT BASE UOM'.
+IT_FIELDCAT-EMPHASIZE = 'C700'.
+
+APPEND IT_FIELDCAT.
+
+* MATKL
+IT_FIELDCAT-COL_POS  = '5'.
+IT_FIELDCAT-FIELDNAME = 'MATKL'.
+IT_FIELDCAT-TABNAME = 'IT_TAB'.
+IT_FIELDCAT-SELTEXT_L = 'MAT GROUP'.
+IT_FIELDCAT-EMPHASIZE = 'C110'.
+APPEND IT_FIELDCAT.
+
+
+* BRGEW
+IT_FIELDCAT-COL_POS  = '6'.
+IT_FIELDCAT-FIELDNAME = 'BRGEW'.
+IT_FIELDCAT-TABNAME = 'IT_TAB'.
+IT_FIELDCAT-SELTEXT_L = 'MAT GROSS WEIGHT'.
+IT_FIELDCAT-EMPHASIZE = 'C910'.
+APPEND IT_FIELDCAT.
+
+
+
+* NTGEW
+IT_FIELDCAT-COL_POS  = '7'.
+IT_FIELDCAT-FIELDNAME = 'NTGEW'.
+IT_FIELDCAT-TABNAME = 'IT_TAB'.
+IT_FIELDCAT-SELTEXT_L = 'MAT NET WEIGHT'.
+IT_FIELDCAT-DO_SUM = 'X'.
+IT_FIELDCAT-EMPHASIZE = 'C411'.
+APPEND IT_FIELDCAT.
+
+
+
+
+
+ENDFORM.
+*&---------------------------------------------------------------------*
+*&      Form  DIS_ALV_OUTPUT
+*&---------------------------------------------------------------------*
+FORM DIS_ALV_OUTPUT .
+
+
+CALL FUNCTION 'REUSE_ALV_GRID_DISPLAY'
+ EXPORTING
+   I_CALLBACK_PROGRAM                = SY-REPID
+   IT_FIELDCAT                       = IT_FIELDCAT[]
+  TABLES
+    T_OUTTAB                          = IT_TAB
+* EXCEPTIONS
+*   PROGRAM_ERROR                     = 1
+*   OTHERS                            = 2
+          .
+IF SY-SUBRC <> 0.
+* Implement suitable error handling here
+ENDIF.
+
+
+
+ENDFORM.

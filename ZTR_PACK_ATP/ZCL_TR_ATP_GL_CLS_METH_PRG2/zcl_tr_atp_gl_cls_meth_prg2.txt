@@ -1,0 +1,32 @@
+*&---------------------------------------------------------------------*
+*& Report ZCL_TR_ATP_GL_CLS_METH_PRG2
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ZCL_TR_ATP_GL_CLS_METH_PRG2.
+
+CLASS C2 DEFINITION.
+  PUBLIC SECTION.
+    METHODS ILC_METH1. " INST
+    CLASS-METHODS SLC_METH2.  " STAT
+ENDCLASS.
+
+CLASS C2 IMPLEMENTATION.
+  METHOD ILC_METH1.
+    WRITE: 'Calling LOCAL class ILC_METH1'.
+  ENDMETHOD.
+
+  METHOD SLC_METH2.
+    WRITE: 'Calling LOCAL class SLC_METH2'.
+  ENDMETHOD.
+
+ENDCLASS.
+
+
+START-OF-SELECTION.
+DATA OBJ1 TYPE REF TO C2.
+CREATE OBJECT OBJ1.
+
+CALL METHOD OBJ1->ILC_METH1.
+SKIP 3.
+CALL METHOD C2=>SLC_METH2.

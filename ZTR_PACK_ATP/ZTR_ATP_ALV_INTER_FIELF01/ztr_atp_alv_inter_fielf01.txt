@@ -1,0 +1,47 @@
+*----------------------------------------------------------------------*
+***INCLUDE Z_160680_ALV_INTER_ALV_FIELF01.
+*----------------------------------------------------------------------*
+*&---------------------------------------------------------------------*
+*&      Form  ALV_FIELDS
+*&---------------------------------------------------------------------*
+*       text
+*----------------------------------------------------------------------*
+*  -->  p1        text
+*  <--  p2        text
+*----------------------------------------------------------------------*
+FORM ALV_FIELDS .
+  WA_IT_FCAT-COL_POS = '1'.
+  WA_IT_FCAT-SELTEXT_L = 'DEP No.'.
+  WA_IT_FCAT-FIELDNAME = 'DEPTNO'.
+  WA_IT_FCAT-HOTSPOT = 'X' .
+  WA_IT_FCAT-EMPHASIZE = 'C200'.
+  APPEND WA_IT_FCAT TO IT_FCAT.
+  CLEAR WA_IT_FCAT.
+
+
+  "DNAME
+  WA_IT_FCAT-COL_POS = '2'.
+  WA_IT_FCAT-SELTEXT_L = 'DEPT NAME'.
+  WA_IT_FCAT-FIELDNAME = 'DNAME'.
+  WA_IT_FCAT-EMPHASIZE = 'C800'.
+  APPEND WA_IT_FCAT TO IT_FCAT.
+  CLEAR WA_IT_FCAT.
+
+
+  "DLOC
+  WA_IT_FCAT-COL_POS = '3'.
+  WA_IT_FCAT-SELTEXT_L = 'LOCATION'.
+  WA_IT_FCAT-FIELDNAME = 'LOC'.
+  WA_IT_FCAT-EMPHASIZE = 'C900'.
+  APPEND WA_IT_FCAT TO IT_FCAT.
+  CLEAR WA_IT_FCAT.
+
+
+  "CCODE
+  WA_IT_FCAT-COL_POS = '4'.
+  WA_IT_FCAT-SELTEXT_L = 'CON CODE'.
+  WA_IT_FCAT-FIELDNAME = 'CCODE'.
+  WA_IT_FCAT-EMPHASIZE = 'C100'.
+  APPEND WA_IT_FCAT TO IT_FCAT.
+  CLEAR WA_IT_FCAT.
+ENDFORM.

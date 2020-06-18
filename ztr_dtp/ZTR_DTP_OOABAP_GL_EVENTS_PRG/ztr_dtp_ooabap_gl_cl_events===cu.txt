@@ -1,0 +1,15 @@
+class ZTR_DTP_OOABAP_GL_CL_EVENTS definition
+  public
+  final
+  create public .
+
+public section.
+
+  events MAT_EVENT .
+
+  methods GET_MATERIAL
+    importing
+      !I_MATNR1 type MATNR
+      !I_MATNR2 type MATNR
+    exporting
+      !IT_TAB type ZTR_DTP_MAT_TT .

@@ -1,0 +1,7 @@
+ZTR_DTP_GL_MAT================CCDEF
+ZTR_DTP_GL_MAT================CCIMP
+ZTR_DTP_GL_MAT================CCMAC
+ZTR_DTP_GL_MAT================CI
+ZTR_DTP_GL_MAT================CM001
+ZTR_DTP_GL_MAT================CO
+ZTR_DTP_GL_MAT================CU

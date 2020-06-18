@@ -1,0 +1,48 @@
+*&---------------------------------------------------------------------*
+*& Report Z_160680_ALV_INTER
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ZTR_ATP_ALV_INTER.
+
+INCLUDE ZTR_ATP_ALV_INTER_TOP.
+*INCLUDE Z_160680_INTER_TOP.
+
+INITIALIZATION.
+
+IT_LAYOUT-ZEBRA = 'X'.
+
+
+
+
+SELECTION-SCREEN:BEGIN OF BLOCK B1 WITH FRAME TITLE TEXT-001.
+SELECT-OPTIONS S_DEPTNO FOR LV_DEPTNO OBLIGATORY DEFAULT 10 TO 60 NO-EXTENSION.
+SELECTION-SCREEN:END OF BLOCK B1.
+
+START-OF-SELECTION.
+
+
+PERFORM SELECT_DATA.
+PERFORM ALV_FIELDS.
+PERFORM ALV_DISP.
+INCLUDE ZTR_ATP_ALV_INTER_DF01.
+*INCLUDE z_160680_alv_inter_select_df01.
+
+
+INCLUDE ZTR_ATP_ALV_INTER_FIELF01.
+*INCLUDE z_160680_alv_inter_alv_fielf01.
+
+
+
+
+INCLUDE ZTR_ATP_ALV_INTER_DISPF01.
+*INCLUDE z_160680_alv_inter_alv_dispf01.
+
+INCLUDE ZTR_ATP_ALV_INTER_DF02.
+*INCLUDE z_160680_alv_inter_select_df02.
+
+INCLUDE ZTR_ATP_ALV_INTER_FIELF02.
+*INCLUDE z_160680_alv_inter_alv_fielf02.
+
+INCLUDE ZTR_ATP_ALV_INTER_DISPF02.
+*INCLUDE z_160680_alv_inter_alv_dispf02.

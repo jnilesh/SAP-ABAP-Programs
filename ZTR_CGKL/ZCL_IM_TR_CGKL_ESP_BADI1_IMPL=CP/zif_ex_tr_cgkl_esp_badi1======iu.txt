@@ -1,0 +1,13 @@
+interface ZIF_EX_TR_CGKL_ESP_BADI1
+  public .
+
+
+  interfaces IF_BADI_INTERFACE .
+
+  methods METH_CUST_BADI
+    importing
+      !I_KUNNR1 type KUNNR
+      !I_KUNNR2 type KUNNR
+    exporting
+      !IT_TAB type TABLE .
+endinterface.

@@ -1,0 +1,32 @@
+*&---------------------------------------------------------------------*
+*& Report ZCL_TR_BNGL_GL_METHODS_PRG2
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ZCL_TR_BNGL_GL_METHODS_PRG2.
+
+CLASS LCL_C1 DEFINITION.
+ PUBLIC SECTION.
+ METHODS I_METH1.
+ CLASS-METHODS S_METH2.
+
+ENDCLASS.
+
+CLASS LCL_C1 IMPLEMENTATION.
+ method I_METH1.
+   WRITE 'Calling local class meth I_METH1'.
+  endmethod.
+
+method S_METH2.
+   WRITE 'Calling local class meth S_METH2'.
+  endmethod.
+
+ENDCLASS.
+
+START-OF-SELECTION.
+
+DATA OBJ2 TYPE REF TO LCL_C1.
+CREATE OBJECT OBJ2.
+CALL METHOD OBJ2->I_METH1.
+SKIP.
+CALL METHOD LCL_C1=>S_METH2.

@@ -1,0 +1,132 @@
+*&---------------------------------------------------------------------*
+*& Report ZTR_BNGL_OOALV_PROG1
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ZTR_BNGL_OOALV_PROG1.
+
+INCLUDE ZTR_BNGL_OOALV_PROG1_TOP.
+
+SELECT-OPTIONS S_MATNR FOR LV_MATNR.
+
+START-OF-SELECTION.
+
+PERFORM GET_MAT_DATA.
+
+CALL SCREEN 0100.
+
+
+*&---------------------------------------------------------------------*
+*&      Form  GET_MAT_DATA
+*&---------------------------------------------------------------------*
+FORM GET_MAT_DATA .
+SELECT * FROM MARA
+    INTO TABLE IT_TAB
+   WHERE MATNR IN S_MATNR.
+
+
+ENDFORM.
+*&---------------------------------------------------------------------*
+*&      Module  STATUS_0100  OUTPUT
+*&---------------------------------------------------------------------*
+*       text
+*----------------------------------------------------------------------*
+MODULE STATUS_0100 OUTPUT.
+  SET PF-STATUS 'ZTR_OOLAV_PFS'.
+*  SET TITLEBAR 'xxx'.
+ENDMODULE.
+*&---------------------------------------------------------------------*
+*&      Module  USER_COMMAND_0100  INPUT
+*&---------------------------------------------------------------------*
+MODULE USER_COMMAND_0100 INPUT.
+CASE SY-UCOMM.
+  WHEN 'EXIT'.
+  LEAVE TO SCREEN 0.
+ENDCASE.
+
+
+ENDMODULE.
+*&---------------------------------------------------------------------*
+*&      Module  OOALV_OUTPUT  OUTPUT
+*&---------------------------------------------------------------------*
+MODULE OOALV_OUTPUT OUTPUT.
+CREATE OBJECT I_CONTAINER
+  EXPORTING
+*    PARENT                      =
+     CONTAINER_NAME              = 'OOALV_CNT1'
+*    STYLE                       =
+*    LIFETIME                    = lifetime_default
+*    REPID                       =
+*    DYNNR                       =
+*    NO_AUTODEF_PROGID_DYNNR     =
+*  EXCEPTIONS
+*    CNTL_ERROR                  = 1
+*    CNTL_SYSTEM_ERROR           = 2
+*    CREATE_ERROR                = 3
+*    LIFETIME_ERROR              = 4
+*    LIFETIME_DYNPRO_DYNPRO_LINK = 5
+*    OTHERS                      = 6
+    .
+IF SY-SUBRC <> 0.
+* MESSAGE ID SY-MSGID TYPE SY-MSGTY NUMBER SY-MSGNO
+*            WITH SY-MSGV1 SY-MSGV2 SY-MSGV3 SY-MSGV4.
+ENDIF.
+
+
+CREATE OBJECT I_ALVGRID
+  EXPORTING
+*    I_SHELLSTYLE      = 0
+*    I_LIFETIME        =
+    I_PARENT          = I_CONTAINER
+*    I_APPL_EVENTS     = space
+*    I_PARENTDBG       =
+*    I_APPLOGPARENT    =
+*    I_GRAPHICSPARENT  =
+*    I_NAME            =
+*    I_FCAT_COMPLETE   = SPACE
+*  EXCEPTIONS
+*    ERROR_CNTL_CREATE = 1
+*    ERROR_CNTL_INIT   = 2
+*    ERROR_CNTL_LINK   = 3
+*    ERROR_DP_CREATE   = 4
+*    OTHERS            = 5
+    .
+IF SY-SUBRC <> 0.
+* MESSAGE ID SY-MSGID TYPE SY-MSGTY NUMBER SY-MSGNO
+*            WITH SY-MSGV1 SY-MSGV2 SY-MSGV3 SY-MSGV4.
+ENDIF.
+
+CALL METHOD I_ALVGRID->SET_TABLE_FOR_FIRST_DISPLAY
+  EXPORTING
+*    I_BUFFER_ACTIVE               =
+*    I_BYPASSING_BUFFER            =
+*    I_CONSISTENCY_CHECK           =
+    I_STRUCTURE_NAME              = 'MARA'
+*    IS_VARIANT                    =
+    I_SAVE                        = 'X'
+    I_DEFAULT                     = 'X'
+*    IS_LAYOUT                     =
+*    IS_PRINT                      =
+*    IT_SPECIAL_GROUPS             =
+*    IT_TOOLBAR_EXCLUDING          =
+*    IT_HYPERLINK                  =
+*    IT_ALV_GRAPHICS               =
+*    IT_EXCEPT_QINFO               =
+*    IR_SALV_ADAPTER               =
+  CHANGING
+    IT_OUTTAB                     = IT_TAB
+*    IT_FIELDCATALOG               =
+*    IT_SORT                       =
+*    IT_FILTER                     =
+*  EXCEPTIONS
+*    INVALID_PARAMETER_COMBINATION = 1
+*    PROGRAM_ERROR                 = 2
+*    TOO_MANY_LINES                = 3
+*    OTHERS                        = 4
+        .
+IF SY-SUBRC <> 0.
+* Implement suitable error handling here
+ENDIF.
+
+
+ENDMODULE.

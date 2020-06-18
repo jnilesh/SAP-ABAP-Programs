@@ -1,0 +1,2 @@
+ZCL_IM_TR_CGKL_ESP_BADI1_IMPL IF_BADI_INTERFACE             11TRAINEE02   20190306            000000001                              2  0
+ZCL_IM_TR_CGKL_ESP_BADI1_IMPL ZIF_EX_TR_CGKL_ESP_BADI1      11TRAINEE02   20190306            000000001                              2  0

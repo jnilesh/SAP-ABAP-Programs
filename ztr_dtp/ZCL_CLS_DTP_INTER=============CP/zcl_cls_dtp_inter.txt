@@ -1,0 +1,25 @@
+class-pool .
+*"* class pool for class ZCL_CLS_DTP_INTER
+
+*"* local type definitions
+include ZCL_CLS_DTP_INTER=============ccdef.
+
+*"* class ZCL_CLS_DTP_INTER definition
+*"* public declarations
+  include ZCL_CLS_DTP_INTER=============cu.
+*"* protected declarations
+  include ZCL_CLS_DTP_INTER=============co.
+*"* private declarations
+  include ZCL_CLS_DTP_INTER=============ci.
+endclass. "ZCL_CLS_DTP_INTER definition
+
+*"* macro definitions
+include ZCL_CLS_DTP_INTER=============ccmac.
+*"* local class implementation
+include ZCL_CLS_DTP_INTER=============ccimp.
+
+class ZCL_CLS_DTP_INTER implementation.
+*"* method's implementations
+  include methods.
+endclass. "ZCL_CLS_DTP_INTER implementation
+

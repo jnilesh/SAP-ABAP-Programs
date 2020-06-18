@@ -1,0 +1,25 @@
+class-pool .
+*"* class pool for class ZCL_TR_BNGL_MATMASTER_INT
+
+*"* local type definitions
+include ZCL_TR_BNGL_MATMASTER_INT=====ccdef.
+
+*"* class ZCL_TR_BNGL_MATMASTER_INT definition
+*"* public declarations
+  include ZCL_TR_BNGL_MATMASTER_INT=====cu.
+*"* protected declarations
+  include ZCL_TR_BNGL_MATMASTER_INT=====co.
+*"* private declarations
+  include ZCL_TR_BNGL_MATMASTER_INT=====ci.
+endclass. "ZCL_TR_BNGL_MATMASTER_INT definition
+
+*"* macro definitions
+include ZCL_TR_BNGL_MATMASTER_INT=====ccmac.
+*"* local class implementation
+include ZCL_TR_BNGL_MATMASTER_INT=====ccimp.
+
+class ZCL_TR_BNGL_MATMASTER_INT implementation.
+*"* method's implementations
+  include methods.
+endclass. "ZCL_TR_BNGL_MATMASTER_INT implementation
+

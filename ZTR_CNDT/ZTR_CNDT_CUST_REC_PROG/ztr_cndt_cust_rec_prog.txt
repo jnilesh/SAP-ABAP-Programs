@@ -1,0 +1,44 @@
+report ZTR_CNDT_CUST_REC_PROG
+       no standard page heading line-size 255.
+
+include bdcrecx1.
+
+start-of-selection.
+
+perform open_group.
+
+perform bdc_dynpro      using 'SAPMF02D' '0100'.
+perform bdc_field       using 'BDC_CURSOR'
+                              'RF02D-KTOKD'.
+perform bdc_field       using 'BDC_OKCODE'
+                              '/00'.
+perform bdc_field       using 'RF02D-KTOKD'
+                              '0001'.
+perform bdc_dynpro      using 'SAPMF02D' '0110'.
+perform bdc_field       using 'BDC_CURSOR'
+                              'KNA1-SPRAS'.
+perform bdc_field       using 'BDC_OKCODE'
+                              '=UPDA'.
+perform bdc_field       using 'KNA1-ANRED'
+                              'COMPANY'.
+perform bdc_field       using 'KNA1-NAME1'
+                              'CAPGEM'.
+perform bdc_field       using 'KNA1-SORTL'
+                              'ZTERM'.
+perform bdc_field       using 'KNA1-STRAS'
+                              'CNDT'.
+perform bdc_field       using 'KNA1-PFACH'
+                              '562526'.
+perform bdc_field       using 'KNA1-ORT01'
+                              'BENGAL'.
+perform bdc_field       using 'KNA1-PSTLZ'
+                              '566655'.
+perform bdc_field       using 'KNA1-ORT02'
+                              'WB'.
+perform bdc_field       using 'KNA1-LAND1'
+                              'IN'.
+perform bdc_field       using 'KNA1-SPRAS'
+                              'EN'.
+perform bdc_transaction using 'XD01'.
+
+perform close_group.

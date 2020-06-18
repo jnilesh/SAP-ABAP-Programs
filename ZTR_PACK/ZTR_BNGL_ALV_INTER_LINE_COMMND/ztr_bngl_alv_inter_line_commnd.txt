@@ -1,0 +1,129 @@
+*&---------------------------------------------------------------------*
+*& Report ZTR_BNGL_ALV_INTER_LINE_COMMND
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ztr_bngl_alv_inter_line_commnd.
+
+INCLUDE ZTR_BNGL_ALV_INTER_CMND_TOP.
+
+
+SELECT-OPTIONS s_matnr FOR mara-matnr.
+
+START-OF-SELECTION.
+
+PERFORM GET_MAT_DATA.
+
+PERFORM FCAT_PREP.
+
+PERFORM DISP_INTER_OUT.
+
+FORM set_pf1 USING P_extab TYPE slis_t_extab.
+
+    SET PF-STATUS 'ZSTANDARD'.
+
+ENDFORM.
+
+FORM sucom2 USING p_sucomm LIKE sy-ucomm
+                  p_selfield TYPE slis_selfield.
+  CASE sy-ucomm.
+    WHEN 'CALLTRAN'.
+      CALL TRANSACTION 'SE11'.
+  ENDCASE.
+
+ENDFORM.
+*&---------------------------------------------------------------------*
+*&      Form  GET_MAT_DATA
+*&---------------------------------------------------------------------*
+FORM GET_MAT_DATA .
+SELECT matnr
+         mbrsh
+         mtart
+         meins
+         brgew
+         ntgew
+    FROM mara
+    INTO TABLE it_mara
+    WHERE matnr IN s_matnr.
+
+ENDFORM.
+*&---------------------------------------------------------------------*
+*&      Form  FCAT_PREP
+*&---------------------------------------------------------------------*
+FORM FCAT_PREP .
+
+* MATNR
+  wa_fcat-col_pos = '1'.
+  wa_fcat-fieldname  = 'MATNR'.
+  wa_fcat-tabname = 'IT_MARA'.
+  wa_fcat-seltext_l  = 'MATERIAL NO'.
+
+  APPEND wa_fcat to it_fcat.
+  CLEAR wa_fcat.
+* MBRSH
+  it_fcat-col_pos = '2'.
+  it_fcat-fieldname  = 'MBRSH'.
+  it_fcat-tabname = 'IT_MARA'.
+  it_fcat-seltext_l  = 'INDUSTRY SECTOR'.
+
+  APPEND it_fcat.
+  CLEAR it_fcat.
+
+* MTART
+  it_fcat-col_pos = '3'.
+  it_fcat-fieldname  = 'MTART'.
+  it_fcat-tabname = 'IT_MARA'.
+  it_fcat-seltext_l  = 'MATERIAL TYPE'.
+  APPEND it_fcat.
+  CLEAR it_fcat.
+
+
+* MEINS
+  it_fcat-col_pos = '4'.
+  it_fcat-fieldname  = 'MEINS'.
+  it_fcat-tabname = 'IT_MARA'.
+  it_fcat-seltext_l  = 'MATERIAL UOM'.
+  APPEND it_fcat.
+  CLEAR it_fcat.
+
+
+* BRGEW
+  it_fcat-col_pos = '5'.
+  it_fcat-fieldname  = 'BRGEW'.
+  it_fcat-tabname = 'IT_MARA'.
+  it_fcat-seltext_l  = 'MATERIAL GROSS WEIGHT'.
+  APPEND it_fcat.
+  CLEAR it_fcat.
+
+* NTGEW
+  it_fcat-col_pos = '6'.
+  it_fcat-fieldname  = 'NTGEW'.
+  it_fcat-tabname = 'IT_MARA'.
+  it_fcat-seltext_l  = 'MATERIAL NET WEIGHT'.
+  APPEND it_fcat.
+  CLEAR it_fcat.
+
+ENDFORM.
+*&---------------------------------------------------------------------*
+*&      Form  DISP_INTER_OUT
+*&---------------------------------------------------------------------*
+FORM DISP_INTER_OUT .
+CALL FUNCTION 'REUSE_ALV_GRID_DISPLAY'
+    EXPORTING
+      i_callback_program       = sy-repid
+      i_callback_pf_status_set = 'SET_PF1'
+      i_callback_user_command  = 'SUCOM2'
+      i_grid_title             = 'DATA FROM MARA TABLE'
+      it_fieldcat              = it_fcat[]
+      i_default                = 'X'
+    TABLES
+      t_outtab                 = it_mara
+* EXCEPTIONS
+*     PROGRAM_ERROR            = 1
+*     OTHERS                   = 2
+    .
+  IF sy-subrc <> 0.
+* Implement suitable error handling here
+  ENDIF.
+
+ENDFORM.

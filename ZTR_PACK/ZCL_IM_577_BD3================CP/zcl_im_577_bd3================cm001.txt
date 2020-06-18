@@ -1,0 +1,6 @@
+  method IF_EX_BADI_MATERIAL_CHECK~CHECK_DATA.
+    IF WMARA-MEINS EQ 'CM'.
+     MESSAGE 'BAdIs are implemented for MM01 by Vandana' TYPE 'E'.
+ENDIF.
+
+  endmethod.

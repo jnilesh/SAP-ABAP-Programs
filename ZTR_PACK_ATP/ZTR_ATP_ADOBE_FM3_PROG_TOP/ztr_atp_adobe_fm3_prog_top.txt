@@ -1,0 +1,21 @@
+*&---------------------------------------------------------------------*
+*&  Include           ZTR_ATP_ADOBE_FM3_PROG_TOP
+*&---------------------------------------------------------------------*
+
+
+
+TYPES: ty_outputparams type sfpoutputparams,
+       ty_docparams type sfpdocparams.
+
+data wa_outputparams type sfpoutputparams.
+
+data wa_docparams type sfpdocparams.
+
+DATA fm type rs38l_fnam.
+
+DATA PV_VBELN TYPE VBELN_VA.
+
+DATA : LV_VBELN TYPE VBELN_VA,
+       LV_ERDAT TYPE ERDAT,
+       LV_ERZET TYPE ERZET,
+       LV_ERNAM TYPE ERNAM.

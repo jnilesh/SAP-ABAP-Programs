@@ -1,0 +1,146 @@
+*&---------------------------------------------------------------------*
+*& Report ZTR_CGKL_BDC_SESSION_EXCEL
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ZTR_CGKL_BDC_SESSION_EXCEL.
+
+INCLUDE ZTR_CGKL_BDC_SESSION_EXCEL_TOP.
+
+
+PARAMETERS P_FLMAT TYPE RLGRAP-FILENAME.
+
+AT SELECTION-SCREEN ON VALUE-REQUEST FOR P_FLMAT.  " F4
+
+CALL FUNCTION 'F4_FILENAME'
+ EXPORTING
+   PROGRAM_NAME        = SYST-CPROG
+   DYNPRO_NUMBER       = SYST-DYNNR
+*   FIELD_NAME          = ' '
+ IMPORTING
+   FILE_NAME           = P_FLMAT
+          .
+
+START-OF-SELECTION.
+
+DATA IT_RAW TYPE TRUXS_T_TEXT_DATA.
+
+CALL FUNCTION 'TEXT_CONVERT_XLS_TO_SAP'
+  EXPORTING
+   I_FIELD_SEPERATOR          = 'X'
+   I_LINE_HEADER              = 'X'
+    I_TAB_RAW_DATA             = IT_RAW
+    I_FILENAME                 = P_FLMAT
+  TABLES
+    I_TAB_CONVERTED_DATA       = IT_TAB
+* EXCEPTIONS
+*   CONVERSION_FAILED          = 1
+*   OTHERS                     = 2
+          .
+IF SY-SUBRC <> 0.
+* Implement suitable error handling here
+ENDIF.
+
+
+CALL FUNCTION 'BDC_OPEN_GROUP'
+ EXPORTING
+   CLIENT                    = SY-MANDT
+*   DEST                      = FILLER8
+   GROUP                     = 'ZTR_CGKL_CAP'  " SM35
+*   HOLDDATE                  = DATE1  OR SY-DATUM
+   KEEP                      = 'X'
+   USER                      = SY-UNAME
+.
+
+LOOP AT IT_TAB INTO WA_TAB.
+
+
+perform bdc_dynpro      using 'SAPLMGMM' '0060'.
+perform bdc_field       using 'BDC_CURSOR'
+                              'RMMG1-MTART'.
+perform bdc_field       using 'BDC_OKCODE'
+                              '=ENTR'.
+perform bdc_field       using 'RMMG1-MATNR'
+                              WA_TAB-MATNR. " MATNR
+perform bdc_field       using 'RMMG1-MBRSH'
+                              WA_TAB-MBRSH. " MBRSH
+perform bdc_field       using 'RMMG1-MTART'
+                              WA_TAB-MTART. " MTART
+perform bdc_dynpro      using 'SAPLMGMM' '0070'.
+
+*if wa_tab-mTART = 'FERT'.
+*
+*ENDIF.
+
+perform bdc_field       using 'BDC_OKCODE'
+                              '=ENTR'.
+perform bdc_field       using 'MSICHTAUSW-KZSEL(01)'
+                              'X'.
+perform bdc_dynpro      using 'SAPLMGMM' '4004'.
+perform bdc_field       using 'BDC_OKCODE'
+                              '=BU'.
+perform bdc_field       using 'MAKT-MAKTX'
+                              WA_TAB-MAKTX.   " MAKTX
+perform bdc_field       using 'BDC_CURSOR'
+                              'MARA-MATKL'.
+perform bdc_field       using 'MARA-MEINS'
+                              WA_TAB-MEINS.   " MEINS
+perform bdc_field       using 'MARA-MATKL'
+                              WA_TAB-MATKL.          " MATKL
+
+*perform bdc_field       using 'MARA-BRGEW'
+*                              WA_TAB-BRGEW.          " MATKL
+*
+*
+*perform bdc_field       using 'MARA-NTGEW'
+*                              WA_TAB-NTGEW.          " MATKL
+
+
+
+ CALL FUNCTION 'BDC_INSERT'
+  EXPORTING
+    TCODE                  = 'MM01'
+   TABLES
+     DYNPROTAB              = IT_BDCDATA
+           .
+ IF SY-SUBRC <> 0.
+* Implement suitable error handling here
+ ENDIF.
+
+
+REFRESH IT_BDCDATA.
+
+  ENDLOOP.
+
+
+CALL FUNCTION 'BDC_CLOSE_GROUP'.
+
+WRITE 'GO TO SM35 T-CODE AND PROCESS YOUR BDEC SESSION METHOD'.
+
+*&---------------------------------------------------------------------*
+*&      Form  BDC_DYNPRO
+*&---------------------------------------------------------------------*
+FORM BDC_DYNPRO  USING  P_PROG  P_DYNPRO .
+
+CLEAR IT_BDCDATA.
+
+IT_BDCDATA-PROGRAM  = P_PROG.
+IT_BDCDATA-DYNPRO = P_DYNPRO.
+IT_BDCDATA-DYNBEGIN = 'X'.
+APPEND IT_BDCDATA.
+
+ENDFORM.
+*&---------------------------------------------------------------------*
+*&      Form  BDC_FIELD
+*&---------------------------------------------------------------------*
+FORM BDC_FIELD  USING  P_FNAM P_FVAL.
+
+CLEAR IT_BDCDATA.
+
+IT_BDCDATA-FNAM  = P_FNAM.
+IT_BDCDATA-FVAL = P_FVAL.
+
+APPEND IT_BDCDATA.
+                         .
+
+ENDFORM.

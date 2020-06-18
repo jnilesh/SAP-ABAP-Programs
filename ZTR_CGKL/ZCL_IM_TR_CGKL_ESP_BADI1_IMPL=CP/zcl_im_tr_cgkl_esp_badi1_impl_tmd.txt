@@ -1,0 +1,2 @@
+ZCL_IM_TR_CGKL_ESP_BADI1_IMPL 00000                                                             0
+ZCL_IM_TR_CGKL_ESP_BADI1_IMPL 00001ZIF_EX_TR_CGKL_ESP_BADI1~METH_CUST_BADI                      0

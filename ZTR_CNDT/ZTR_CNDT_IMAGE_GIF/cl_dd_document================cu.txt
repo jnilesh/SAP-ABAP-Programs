@@ -1,0 +1,76 @@
+class CL_DD_DOCUMENT definition
+  public
+  inheriting from CL_DD_AREA
+  create public .
+
+public section.
+  type-pools ABAP .
+
+  data AREA_COUNT type I read-only .
+  data HTML_CONTROL type ref to CL_GUI_HTML_VIEWER .
+  data CUSTOM_CONTAINER type ref to CL_GUI_CUSTOM_CONTAINER .
+
+  type-pools SDYDO .
+  methods VERTICAL_SPLIT
+    importing
+      !SPLIT_AREA type ref to CL_DD_AREA
+      !SPLIT_WIDTH type SDYDO_VALUE default   '30%'
+    exporting
+      !RIGHT_AREA type ref to CL_DD_AREA
+    exceptions
+      INVALID_SPLIT_AREA
+      SPLIT_AREA_EQ_RIGHT_AREA
+      RIGHT_AREA_ALREADY_USED .
+  methods HORIZONTAL_SPLIT
+    importing
+      !SPLIT_AREA type ref to CL_DD_AREA
+    exporting
+      !BELOW_AREA type ref to CL_DD_AREA
+    exceptions
+      INVALID_SPLIT_AREA
+      SPLIT_AREA_EQ_BELOW_AREA
+      BELOW_AREA_ALREADY_USED .
+  methods MERGE_DOCUMENT .
+  methods DISPLAY_DOCUMENT
+    importing
+      !REUSE_CONTROL type SDYDO_FLAG optional
+      !REUSE_REGISTRATION type SDYDO_FLAG optional
+      !CONTAINER type SDYDO_VALUE optional
+      !PARENT type ref to CL_GUI_CONTAINER optional
+    exceptions
+      HTML_DISPLAY_ERROR .
+  methods EXPORT_DOCUMENT
+    importing
+      !TO_FILESYSTEM type SDYDO_FLAG optional
+    exceptions
+      EXPORT_ERROR .
+  methods PRINT_DOCUMENT
+    importing
+      !REUSE_CONTROL type SDYDO_FLAG optional
+    exceptions
+      HTML_PRINT_ERROR .
+  methods CONSTRUCTOR
+    importing
+      !STYLE type SDYDO_ATTRIBUTE optional
+      !BACKGROUND_COLOR type I optional
+      !BDS_STYLESHEET type SDYDO_KEY optional
+      !NO_MARGINS type SDYDO_FLAG optional .
+  methods ADD_STYLE
+    importing
+      !PROPERTY_TABLE type SDYDO_STYLE_TABLE optional
+      !STYLE_CLASS type SDYDO_C100 optional
+      !STYLESHEET type SDYDO_KEY optional
+    exporting
+      !STYLESHEET_INT type STRING .
+  methods SET_DOCUMENT_BACKGROUND
+    importing
+      !PICTURE_ID type SDYDO_KEY optional .
+  methods INITIALIZE_DOCUMENT
+    importing
+      !FIRST_TIME type C optional
+      !STYLE type SDYDO_ATTRIBUTE optional
+      !BACKGROUND_COLOR type I optional
+      !BDS_STYLESHEET type SDYDO_KEY optional
+      !NO_MARGINS type SDYDO_FLAG optional .
+  type-pools CNTL .
+  type-pools OLE2 .

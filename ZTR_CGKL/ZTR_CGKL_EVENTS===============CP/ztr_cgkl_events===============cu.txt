@@ -1,0 +1,6 @@
+class ZTR_CGKL_EVENTS definition
+  public
+  final
+  create public .
+
+public section.

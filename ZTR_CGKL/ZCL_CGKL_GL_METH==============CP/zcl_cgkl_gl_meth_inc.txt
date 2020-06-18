@@ -1,0 +1,9 @@
+ZCL_CGKL_GL_METH==============CCAU
+ZCL_CGKL_GL_METH==============CCDEF
+ZCL_CGKL_GL_METH==============CCIMP
+ZCL_CGKL_GL_METH==============CCMAC
+ZCL_CGKL_GL_METH==============CI
+ZCL_CGKL_GL_METH==============CM001
+ZCL_CGKL_GL_METH==============CM002
+ZCL_CGKL_GL_METH==============CO
+ZCL_CGKL_GL_METH==============CU

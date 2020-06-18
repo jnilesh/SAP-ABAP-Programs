@@ -1,0 +1,18 @@
+*&---------------------------------------------------------------------*
+*& Report ZTR_CNDT_INTERACTIVE_ATPF_KEY
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ZTR_CNDT_INTERACTIVE_ATPF_KEY.
+
+DATA LV_INDEX LIKE SY-INDEX.
+START-OF-SELECTION.
+DO 12 TIMES.
+  WRITE : / 'Current ROW', SY-INDEX.
+  LV_INDEX =  SY-INDEX.
+  HIDE LV_INDEX.
+  ENDDO.
+  AT PF7.
+    CHECK NOT LV_INDEX IS INITIAL.
+    WRITE : / 'Cursor was in row', LV_INDEX.
+    Clear LV_INDEX.

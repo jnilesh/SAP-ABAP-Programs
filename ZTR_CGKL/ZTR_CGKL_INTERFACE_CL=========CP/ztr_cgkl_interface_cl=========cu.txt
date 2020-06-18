@@ -1,0 +1,10 @@
+class ZTR_CGKL_INTERFACE_CL definition
+  public
+  final
+  create public .
+
+public section.
+
+  interfaces ZTR_CGKL_INTERFACE .
+
+  methods CL_METH1 .

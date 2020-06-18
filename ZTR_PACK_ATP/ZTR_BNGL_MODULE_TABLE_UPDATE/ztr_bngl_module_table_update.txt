@@ -1,0 +1,91 @@
+*&---------------------------------------------------------------------*
+*& Module Pool   ZTR_BNGL_MODULE_TABLE_UPDATE
+*&
+*&---------------------------------------------------------------------*
+
+
+INCLUDE ZTR_BNGL_MODULE_TOP.
+*INCLUDE ZTR_BNGL_MODULE_del.
+*&---------------------------------------------------------------------*
+*&      Module  USER_COMMAND_0100  INPUT
+*&---------------------------------------------------------------------*
+
+MODULE USER_COMMAND_0100 INPUT.
+CASE SY-UCOMM.
+  WHEN 'EXIT'.
+     LEAVE PROGRAM.
+  WHEN 'DISPLAY'.
+    PERFORM DISPLAY_PARA.
+  WHEN 'SAVE'.
+    PERFORM SAVE_PARA.
+ENDCASE.
+ENDMODULE.
+
+*&---------------------------------------------------------------------*
+* MODULE FILL_TC OUTPUT
+*&---------------------------------------------------------------------*
+MODULE FILL_TC OUTPUT.
+  MOVE-CORRESPONDING WA_TAB TO ZTR_BNGL_DEPT.
+ENDMODULE.
+
+FORM DISPLAY_PARA.
+  SELECT DEPTNO DNAME LOC  FROM ZTR_BNGL_DEPT INTO TABLE IT_TAB.
+      REFRESH CONTROL 'TC1' FROM SCREEN '0100'.
+ENDFORM.
+
+FORM SAVE_PARA.
+   INSERT ZTR_BNGL_DEPT FROM ZTR_BNGL_DEPT.
+   MESSAGE I000(ZTR_BNGL_MSG) WITH 'SY-SUBRC'  SY-SUBRC.
+  PERFORM DISPLAY_PARA.
+ENDFORM.
+*&---------------------------------------------------------------------*
+*&      Module  ADDBLANKRECORD  OUTPUT
+*&---------------------------------------------------------------------*
+
+MODULE ADD_BLANK_RECORD OUTPUT.
+  IF SY-UCOMM = 'INSERT'  .
+SELECT * FROM ZTR_BNGL_DEPT INTO TABLE ITDEPT.
+ APPEND INITIAL LINE TO ITDEPT.
+ TC1-LINES = LINES( ITDEPT ).
+ENDIF.
+ENDMODULE.
+
+INCLUDE ZTR_BNGL_MODULE_DEL.
+
+INCLUDE ZTR_BNGL_MODULE_DISP.
+
+*&---------------------------------------------------------------------*
+*&      Module  DELET_UPDATE  INPUT
+*&---------------------------------------------------------------------*
+
+MODULE DELET_UPDATE INPUT.
+if sy-ucomm eq 'DELETE'.
+ IF SELEC = 'X'.
+
+DELETE FROM ZTR_BNGL_DEPT WHERE DEPTNO = ZTR_BNGL_DEPT-DEPTNO.
+   MESSAGE I003(ZTR_BNGL_MSG) WITH 'SY-SUBRC'  SY-SUBRC.
+
+   ENDIF.
+
+ ELSEIF sy-ucomm eq 'UPDATE'.
+
+IF SELEC = 'X'.
+    UPDATE ZTR_BNGL_DEPT SET DNAME =  ZTR_BNGL_DEPT-DNAME
+                             LOC   =  ZTR_BNGL_DEPT-LOC
+                      WHERE DEPTNO =   ZTR_BNGL_DEPT-DEPTNO.
+    MESSAGE I001(ZTR_BNGL_MSG) WITH SY-SUBRC.
+    PERFORM DISPLAY_PARA.
+ENDIF.
+   ENDIF.
+ENDMODULE.
+*&---------------------------------------------------------------------*
+*&      Module  STATUS_0100  OUTPUT
+*&---------------------------------------------------------------------*
+*       text
+*----------------------------------------------------------------------*
+MODULE status_0100 OUTPUT.
+  SET PF-STATUS SPACE.
+*  SET TITLEBAR 'xxx'.
+ENDMODULE.
+
+INCLUDE ztr_bngl_module_table_updato02.

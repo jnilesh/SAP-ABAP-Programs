@@ -1,0 +1,20 @@
+class ZCL_TR_BNGL_MATMASTER_CONST definition
+  public
+  final
+  create public .
+
+public section.
+
+  methods CONSTRUCTOR
+    importing
+      !I_MAT123 type MATNR
+    exceptions
+      E1 .
+  methods METH_MAT
+    importing
+      !I_MATNR1 type MATNR
+      !I_MATNR2 type MATNR
+    exporting
+      !E_TAB type TABLE
+    exceptions
+      MAT_NOT_FOUND .

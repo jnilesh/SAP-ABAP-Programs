@@ -1,0 +1,102 @@
+*"* components of interface IF_EX_BADI_MATERIAL_CHECK
+interface IF_EX_BADI_MATERIAL_CHECK
+  public .
+
+
+  type-pools MGINT .
+  methods CHECK_DATA
+    importing
+      value(WMARA) type MARA
+      value(WMARC) type MARC
+      value(WMARD) type MARD
+      value(WMBEW) type MBEW
+      value(WMLGN) type MLGN
+      value(WMLGT) type MLGT
+      value(WMVKE) type MVKE
+      value(WSTAT) type MGSTAT
+      value(WMFHM) type MFHM
+      value(WMPOP) type MPOP
+      value(SSTEUERTAB) type MGINT_MG03STEUER
+      value(SSTEUMMTAB) type MGINT_MG03STEUMM
+      value(WMEINH) type MGINT_SMEINH
+      value(SMEAN_ME_TAB) type MGINT_ME_MEAN_TAB
+    changing
+      value(CMARA) type MARU
+      value(STEXT) type MGINT_SHORT_DESC
+    exceptions
+      APPLICATION_ERROR .
+  methods CHECK_CHANGE_MARA_MEINS
+    importing
+      !NEW_MEINS type MARA-MEINS
+      !OLD_MEINS type MARA-MEINS
+      !MATNR type MARA-MATNR
+    changing
+      !IN_USE type CHAR1
+      !ERROR_TEXT type CHART128 optional
+    exceptions
+      CHANGE_NOT_POSSIBLE .
+  methods CHECK_CHANGE_PMATA
+    importing
+      value(MATNR) type MARA-MATNR
+      value(VKORG) type MVKE-VKORG optional
+      value(VTWEG) type MVKE-VTWEG optional
+      value(PRICING_MATNR) type MARA-MATNR
+    changing
+      !MSG_ID type SY-MSGID optional
+      !MSG_NO type SY-MSGNO optional
+      !MSG_V1 type SY-MSGV1 optional
+      !MSG_V2 type SY-MSGV2 optional
+      !MSG_V3 type SY-MSGV3 optional
+      !MSG_V4 type SY-MSGV4 optional
+      value(IN_USE) type SY-BATCH .
+  methods CHECK_DATA_RETAIL
+    importing
+      value(WMARA) type MARA optional
+      value(WMARC) type MARC optional
+      value(WMPGD) type MPGD optional
+      value(WMARD) type MARD optional
+      value(WMBEW) type MBEW optional
+      value(WMFHM) type MFHM optional
+      value(WMLGN) type MLGN optional
+      value(WMLGT) type MLGT optional
+      value(WMPOP) type MPOP optional
+      value(WMVKE) type MVKE optional
+      value(WMYMS) type MYMS optional
+      value(WMAW1) type MAW1 optional
+      value(WWLK2) type WLK2 optional
+      value(WMWLI) type MWLI optional
+      value(WSTAT) type T130M optional
+      value(WRMMG1) type RMMG1 optional
+      value(WRMMG2) type RMMG2 optional
+      value(WRMMW2) type RMMW2 optional
+      value(WRMMW3) type RMMW3 optional
+      value(WNEU) type KZREF optional
+      value(WFIRST_VORG) type XFELD optional
+      value(TMALG) type MALG_TTY optional
+      value(TMLEA) type MLEA_TTY optional
+      value(TMAMT) type MAMT_TTY optional
+      value(TTEXT) type MAT_KTEXT optional
+      value(TMEINH) type MGINT_SMEINH optional
+      value(TSTEUERTAB) type MGINT_MG03STEUER optional
+      value(TSTEUMMTAB) type MGINT_MG03STEUMM optional
+      value(TMEAN_ME_TAB) type MAT_EAN optional
+    changing
+      value(RT_ERRDAT) type MERRDAT_TT optional .
+  methods FRE_SUPPRESS_MARC_CHECK
+    importing
+      value(MARC_DISMM) type DISMM
+    changing
+      value(SUPPRESS_CHECK) type XFELD .
+  methods CHECK_MASS_MARC_DATA
+    importing
+      value(OLD_MARC_DATA) type MARC optional
+      value(NEW_MARC_DATA) type MARC optional
+      value(OLD_MPOP_DATA) type MPOP optional
+      value(NEW_MPOP_DATA) type MPOP optional
+      value(OLD_WRPL_DATA) type WRPL optional
+      value(NEW_WRPL_DATA) type WRPL optional
+      !UPD_FIELD_TAB type UPD_FIELD_TAB_TT
+    changing
+      !ERROR_FLAG type XFELD
+      !MESSAGES type TT_BAPIRET2 .
+endinterface.

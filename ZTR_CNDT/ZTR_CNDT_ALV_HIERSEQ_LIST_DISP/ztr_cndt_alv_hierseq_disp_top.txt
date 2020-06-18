@@ -1,0 +1,32 @@
+*&---------------------------------------------------------------------*
+*&  Include           ZTR_CNDT_ALV_HIERSEQ_DISP_TOP
+*&---------------------------------------------------------------------*
+ TYPE-POOLS SLIS.
+
+ DATA :IT_FCAT TYPE SLIS_T_FIELDCAT_ALV WITH HEADER LINE,
+       IT_KEY TYPE SLIS_KEYINFO_ALV,
+       LV_VBELN TYPE VBELN_VA,
+       IT_LAYOUT TYPE SLIS_LAYOUT_ALV.
+
+TYPES: BEGIN OF TY_TAB1,
+       KEY(1),
+       VBELN TYPE VBELN_VA, " Sales Document
+       ERDAT TYPE ERDAT,  " Sales Document Item
+       ERZET TYPE ERZET, " Material Number
+       AUART TYPE AUART, " Sales Document Type
+       VKORG TYPE VKORG, " Sales Organization
+  END OF TY_TAB1.
+
+ DATA : IT_TAB1 TYPE STANDARD TABLE OF TY_TAB1,
+        WA_TAB1 TYPE TY_TAB1.
+
+TYPES: BEGIN OF TY_TAB2,
+       VBELN TYPE VBELN_VA, " Sales Document
+       POSNR TYPE POSNR_va, " LINE ITEMS
+       MATNR TYPE MATNR,   " MAT NO
+       MATKL TYPE MATKL, " MAT GRP
+
+  END OF TY_TAB2.
+
+ DATA : IT_TAB2 TYPE STANDARD TABLE OF TY_TAB2,
+        WA_TAB2 TYPE TY_TAB2.

@@ -1,0 +1,9 @@
+%_CABAP
+CL_ABAP_DATADESCR=============CT
+CL_ABAP_TYPEDESCR=============CT
+CX_DYNAMIC_CHECK==============CU
+CX_ROOT=======================CU
+CX_SY_ARITHMETIC_ERROR========CU
+CX_SY_ZERODIVIDE==============CU
+IF_MESSAGE====================IU
+IF_SERIALIZABLE_OBJECT========IU

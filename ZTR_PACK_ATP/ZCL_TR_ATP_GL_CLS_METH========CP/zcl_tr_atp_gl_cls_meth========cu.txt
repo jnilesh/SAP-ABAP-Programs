@@ -1,0 +1,10 @@
+class ZCL_TR_ATP_GL_CLS_METH definition
+  public
+  final
+  create public .
+
+public section.
+
+  methods I_METH1 .
+  class-methods S_METH2 .
+  class-methods S_METH3 .

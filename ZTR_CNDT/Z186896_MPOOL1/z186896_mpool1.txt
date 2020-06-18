@@ -1,0 +1,60 @@
+*&---------------------------------------------------------------------*
+*& Modulpool  Z186896_MPOOL1
+*&
+*&---------------------------------------------------------------------*
+*&
+*&
+*&---------------------------------------------------------------------*
+PROGRAM Z186896_MPOOL1.
+
+DATA :
+      LV_EMPNO TYPE Z_186896_DEEMPNO,
+      LV_ENAME TYPE Z_186896_DEENAME,
+      LV_JOB TYPE Z_186896_DEJOB.
+*&---------------------------------------------------------------------*
+*&      Module  STATUS_0100  OUTPUT
+*&---------------------------------------------------------------------*
+*       text
+*----------------------------------------------------------------------*
+MODULE status_0100 OUTPUT.
+*  SET PF-STATUS 'xxxxxxxx'.
+*  SET TITLEBAR 'xxx'.
+
+  CASE SY-UCOMM.
+    WHEN 'NEXT'.
+      SELECT SINGLE   EMPNO
+                      ENAME
+                      JOB
+      FROM Z186896_EMPT INTO (LV_EMPNO,LV_ENAME,LV_JOB)
+      WHERE EMPNO EQ LV_EMPNO.
+        LEAVE TO SCREEN 0200.
+    WHEN 'EXIT' .
+      LEAVE TO SCREEN 0.
+
+
+  ENDCASE.
+ENDMODULE.
+*&---------------------------------------------------------------------*
+*&      Module  USER_COMMAND_0100  INPUT
+*&---------------------------------------------------------------------*
+*       text
+*----------------------------------------------------------------------*
+MODULE user_command_0100 INPUT.
+  SET PF-STATUS 'Z186896_MPAINT'.
+
+  "LV_EMPNO = '7369'.
+
+ENDMODULE.
+*&---------------------------------------------------------------------*
+*&      Module  USER_COMMAND_0200  INPUT
+*&---------------------------------------------------------------------*
+*       text
+*----------------------------------------------------------------------*
+MODULE user_command_0200 INPUT.
+CASE SY-UCOMM.
+  WHEN 'BACK'.
+  LEAVE TO SCREEN 0100.
+  WHEN 'EXIT'.
+  LEAVE TO SCREEN 0.
+ENDCASE.
+ENDMODULE.

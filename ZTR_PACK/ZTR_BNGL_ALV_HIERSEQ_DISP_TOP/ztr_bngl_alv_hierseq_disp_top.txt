@@ -1,0 +1,30 @@
+*&---------------------------------------------------------------------*
+*&  Include           ZTR_BNGL_ALV_HIERSEQ_DISP_TOP
+*&---------------------------------------------------------------------*
+ DATA LV_VBELN TYPE VBELN_VA.
+
+TYPE-POOLS SLIS.
+
+ DATA IT_FIELDCAT TYPE SLIS_T_FIELDCAT_ALV WITH HEADER LINE.
+DATA IT_KEYINFO  TYPE SLIS_KEYINFO_ALV.
+DATA IT_LAYOUT TYPE SLIS_LAYOUT_ALV.
+
+TYPES: BEGIN OF TY_TAB1,
+       EXP(1),
+       VBELN TYPE VBELN_VA,
+       ERDAT TYPE ERDAT,
+       ERZET TYPE ERZET,
+     END OF  TY_TAB1.
+
+DATA : IT_TAB1 TYPE STANDARD TABLE OF TY_TAB1,
+       WA_TAB1 TYPE TY_TAB1.
+
+TYPES: BEGIN OF TY_TAB2,
+       VBELN TYPE VBELN_VA,
+       POSNR TYPE POSNR_VA,
+       MATNR TYPE MATNR,
+
+     END OF  TY_TAB2.
+
+DATA : IT_TAB2 TYPE STANDARD TABLE OF TY_TAB2,
+       WA_TAB2 TYPE TY_TAB2.

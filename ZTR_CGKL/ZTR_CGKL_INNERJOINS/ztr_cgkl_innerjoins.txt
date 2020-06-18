@@ -1,0 +1,68 @@
+*&---------------------------------------------------------------------*
+*& Report ZTR_CGKL_INNERJOINS
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ZTR_CGKL_INNERJOINS LINE-SIZE 600.
+
+INCLUDE ZTR_CGKL_JOINS_TOP.
+
+
+SELECT-OPTIONS S_MATNR FOR LV_MATNR.
+
+SELECT M~MATNR
+       M~MBRSH
+       M~MTART
+       M~MEINS
+       M~BRGEW
+       M~NTGEW
+
+       P~WERKS
+       P~PSTAT
+       P~BSTMI
+       P~BSTMA
+
+       S~MAKTX
+       S~SPRAS
+       S~MAKTG
+
+  INTO TABLE IT_TAB
+  FROM MARA AS M
+
+     INNER JOIN MARC AS P
+     ON M~MATNR EQ P~MATNR
+
+     INNER JOIN MAKT AS S
+     ON M~MATNR EQ S~MATNR
+
+     WHERE M~MATNR IN S_MATNR AND
+           S~SPRAS EQ 'EN'.
+
+IF SY-SUBRC EQ 0.
+  WRITE:'RECORDS ARE FOUND FROM MARA TABLE:' , SY-DBCNT.
+ELSE.
+  WRITE:'RECORDS ARE NOT FOUND FROM MARA TABLE:' , SY-DBCNT.
+ENDIF.
+
+
+LOOP AT IT_TAB INTO WA_TAB. " B TO W
+
+  WRITE :/ SY-TABIX,
+           WA_TAB-MATNR,
+           WA_TAB-MBRSH,
+           WA_TAB-MTART,
+           WA_TAB-MEINS,
+           WA_TAB-BRGEW,
+           WA_TAB-NTGEW,
+
+           WA_TAB-WERKS,
+           WA_TAB-PSTAT,
+           WA_TAB-BSTMI,
+           WA_TAB-BSTMA,
+
+           WA_TAB-MAKTX,
+           WA_TAB-SPARS,
+           WA_TAB-MAKTG.
+
+
+ENDLOOP.

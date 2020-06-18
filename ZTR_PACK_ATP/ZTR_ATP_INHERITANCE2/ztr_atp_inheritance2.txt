@@ -1,0 +1,33 @@
+**&---------------------------------------------------------------------*
+**& Report ZTR_ATP_INHERITANCE2
+**&---------------------------------------------------------------------*
+**&
+**&---------------------------------------------------------------------*
+REPORT ZTR_ATP_INHERITANCE2.
+
+INCLUDE ZTR_ATP_INHERITANCE2_TOP.
+
+DATA: R_PLANE TYPE REF TO LCL_AIR,
+      R_PLANE1 TYPE REF TO LCL_PLANE1,
+      R_PASSENGER TYPE REF TO LCL_PASSENGER,
+      PLANELIST TYPE TABLE OF REF TO LCL_AIR.
+
+START-OF-SELECTION.
+
+LCL_AIR=>DISPLAY_NO_PLANES( ).
+
+CREATE OBJECT R_PASSENGER EXPORTING
+  IM_NAME = 'AIRINDIA'
+  IM_PLANE = '879-787'
+  IM_SEATS = 343.
+
+CREATE OBJECT R_PLANE1 EXPORTING
+   IM_NAME = 'EMIRATES'
+  IM_PLANE = '876-787'
+  IM_PLANE1 = 393.
+
+R_PLANE1->DISPLAY_ATRIBUTES( ).
+
+R_PASSENGER->DISPLAY_ATRIBUTES( ).
+
+LCL_AIR=>DISPLAY_NO_PLANES( ).

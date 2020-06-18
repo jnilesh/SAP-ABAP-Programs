@@ -1,0 +1,41 @@
+*&---------------------------------------------------------------------*
+*& Report ZTR_CGKL_FIELDSYMBOLS
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ZTR_CGKL_FIELDSYMBOLS.
+
+
+
+********1*********
+*
+*DATA : F1(20) TYPE C.
+*FIELD-SYMBOLS <CAP>.
+*F1 = 'Capgemini tech'.
+*ASSIGN F1 TO <CAP>.
+*WRITE : <CAP>.
+
+*******2********
+*
+data  : BEGIN OF line, "FIELD STRING
+         col_1 TYPE i ,
+         col_2 TYPE i,
+       END OF line.
+
+DATA itab LIKE SORTED TABLE OF line
+               WITH UNIQUE KEY col_1.
+
+FIELD-SYMBOLS <CAP> LIKE LINE OF itab.
+
+*BREAK-POINT.
+
+DO 10 TIMES.
+  line-col_1 = sy-index.
+  line-col_2 = 2 * sy-index.
+  APPEND line TO itab.
+ENDDO.
+
+
+READ TABLE itab ASSIGNING <CAP> INDEX 4.
+WRITE : / sy-subrc, sy-tabix.
+WRITE : / <CAP>-col_1, <CAP>-col_2.

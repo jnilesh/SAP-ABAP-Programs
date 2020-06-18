@@ -1,0 +1,42 @@
+*&---------------------------------------------------------------------*
+*& Report ZTR_BNGL_OOABAP_GL_EVENTS_PRG
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ZTR_BNGL_OOABAP_GL_EVENTS_PRG.
+
+INCLUDE ZTR_BNGL_OOABAP_PRG_TOP.
+
+SELECT-OPTIONS S_MATNR FOR LV_MATNR.
+
+CLASS EVENTHANDLER DEFINITION.
+  PUBLIC SECTION.
+    METHODS:HANDLING_EVENT FOR EVENT MAT_EVENT OF ZTR_BNGL_OOABAP_GL_CL_EVENTS.
+ENDCLASS.
+
+
+CLASS EVENTHANDLER IMPLEMENTATION.
+  METHOD:HANDLING_EVENT.
+    MESSAGE 'Please enter the proper material range' TYPE 'I'.
+  ENDMETHOD.
+ENDCLASS.
+
+
+START-OF-SELECTION.
+  DATA: OBJ1 TYPE REF TO ZTR_BNGL_OOABAP_GL_CL_EVENTS.
+  DATA:EVENT_HANDL TYPE REF TO EVENTHANDLER.
+  CREATE OBJECT OBJ1.
+  CREATE OBJECT EVENT_HANDL.
+
+
+   SET HANDLER EVENT_HANDL->HANDLING_EVENT FOR OBJ1.
+OBJ1->GET_MATERIAL(
+  EXPORTING
+    I_MATNR1 = s_matnr-low
+    I_MATNR2 = s_matnr-high
+  IMPORTING
+    IT_TAB   = IT_TAB
+       ).
+
+
+CL_DEMO_OUTPUT=>DISPLAY_DATA( IT_TAB ).

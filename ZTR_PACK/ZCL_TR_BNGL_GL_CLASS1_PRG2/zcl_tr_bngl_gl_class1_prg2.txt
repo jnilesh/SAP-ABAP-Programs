@@ -1,0 +1,26 @@
+*&---------------------------------------------------------------------*
+*& Report ZCL_TR_BNGL_GL_CLASS1_PRG2
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ZCL_TR_BNGL_GL_CLASS1_PRG2.
+
+CLASS LCL_C1 DEFINITION.
+PUBLIC SECTION.
+DATA I_VAR1 TYPE I VALUE 300.
+
+CLASS-DATA I_VAR2 TYPE I VALUE 400.
+
+ENDCLASS.
+
+*CLASS LCL_C1 IMPLEMENTATION.
+*
+*
+*ENDCLASS.
+
+START-OF-SELECTION.
+DATA I_OBJ1 TYPE REF TO LCL_C1.
+CREATE OBJECT I_OBJ1.
+
+WRITE : / I_OBJ1->I_VAR1,
+          LCL_C1=>I_VAR2.

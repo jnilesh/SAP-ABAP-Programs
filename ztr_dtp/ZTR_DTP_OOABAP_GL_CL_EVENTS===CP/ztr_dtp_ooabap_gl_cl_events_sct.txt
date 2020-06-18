@@ -1,0 +1,3 @@
+ZTR_DTP_OOABAP_GL_CL_EVENTS   GET_MATERIAL                  IT_TAB                        Emat tab
+ZTR_DTP_OOABAP_GL_CL_EVENTS   GET_MATERIAL                  I_MATNR1                      EMaterial Number1
+ZTR_DTP_OOABAP_GL_CL_EVENTS   GET_MATERIAL                  I_MATNR2                      EMaterial Number1

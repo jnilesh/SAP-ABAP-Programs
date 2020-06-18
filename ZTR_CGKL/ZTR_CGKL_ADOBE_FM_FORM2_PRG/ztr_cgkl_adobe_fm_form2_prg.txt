@@ -1,0 +1,90 @@
+*&---------------------------------------------------------------------*
+*& Report ZTR_CGKL_ADOBE_FM_FORM2_PRG
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ZTR_CGKL_ADOBE_FM_FORM2_PRG.
+
+
+INCLUDE ZTR_CGKL_ADOBE_FM_FORM2_TOP.
+
+
+PARAMETERS P_CUST TYPE KUNNR.
+
+START-OF-SELECTION.
+WA_OUTPUTPARAMS-DEVICE = 'PRINTER'.
+WA_OUTPUTPARAMS-DEST = 'LP01'.
+WA_OUTPUTPARAMS-NODIALOG = 'X'.
+WA_OUTPUTPARAMS-PREVIEW = 'X'.
+
+
+CALL FUNCTION 'FP_JOB_OPEN'
+  CHANGING
+    IE_OUTPUTPARAMS       = WA_OUTPUTPARAMS
+* EXCEPTIONS
+*   CANCEL                = 1
+*   USAGE_ERROR           = 2
+*   SYSTEM_ERROR          = 3
+*   INTERNAL_ERROR        = 4
+*   OTHERS                = 5
+          .
+IF SY-SUBRC <> 0.
+* Implement suitable error handling here
+ENDIF.
+
+
+CALL FUNCTION 'FP_FUNCTION_MODULE_NAME'
+  EXPORTING
+    I_NAME                     = 'ZTR_CGKL_ADOBE_FM_FORM2'
+ IMPORTING
+   E_FUNCNAME                 = FM_ADOBE
+*   E_INTERFACE_TYPE           =
+*   EV_FUNCNAME_INBOUND        =
+          .
+
+WA_DOCPARAMS-LANGU   = 'EN' .
+WA_DOCPARAMS-COUNTRY   = 'IN'.
+
+SELECT SINGLE KUNNR
+              LAND1
+              NAME1
+              NAME2
+              ORT01
+      FROM KNA1
+      INTO (GV_KUNNR, GV_LAND1, GV_NAME1, GV_NAME2, GV_ORT01)
+     WHERE KUNNR EQ P_CUST.
+
+
+CALL FUNCTION FM_ADOBE
+  EXPORTING
+   /1BCDWB/DOCPARAMS        = WA_DOCPARAMS
+    KUNNR                    = GV_KUNNR
+    LAND1                    = GV_LAND1
+    NAME1                    = GV_NAME1
+    NAME2                    = GV_NAME2
+    ORT01                    = GV_ORT01
+* IMPORTING
+*   /1BCDWB/FORMOUTPUT       =
+* EXCEPTIONS
+*   USAGE_ERROR              = 1
+*   SYSTEM_ERROR             = 2
+*   INTERNAL_ERROR           = 3
+*   OTHERS                   = 4
+          .
+IF SY-SUBRC <> 0.
+* Implement suitable error handling here
+ENDIF.
+
+
+CALL FUNCTION 'FP_JOB_CLOSE'
+* IMPORTING
+*   E_RESULT             =
+* EXCEPTIONS
+*   USAGE_ERROR          = 1
+*   SYSTEM_ERROR         = 2
+*   INTERNAL_ERROR       = 3
+*   OTHERS               = 4
+          .
+IF SY-SUBRC <> 0.
+* Implement suitable error handling here
+ENDIF.

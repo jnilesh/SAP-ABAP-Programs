@@ -1,0 +1,9 @@
+class ZCL_TR_CNDT_GL_CLASS_METHODS definition
+  public
+  final
+  create public .
+
+public section.
+
+  methods I_METH1 .
+  class-methods S_METH2 .

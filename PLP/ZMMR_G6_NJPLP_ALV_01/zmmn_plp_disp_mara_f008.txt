@@ -1,0 +1,31 @@
+*&---------------------------------------------------------------------*
+*&  Include           ZMM_DISP_MARA_F008
+*&---------------------------------------------------------------------*
+FORM f007_disp_inter.
+  IF NOT it_mara IS INITIAL.
+
+    CALL FUNCTION 'REUSE_ALV_GRID_DISPLAY'
+      EXPORTING
+        i_callback_program      = sy-repid
+        i_callback_user_command = 'F009_GET_MARC'
+        i_callback_top_of_page  = 'TOPPAGE'
+        i_structure_name        = 'Z187511_MARA'
+        is_layout               = it_layout
+        it_sort                 = it_sort
+        i_default               = 'X'
+      TABLES
+        t_outtab                = it_mara
+      EXCEPTIONS
+        program_error           = 1
+        OTHERS                  = 2.
+
+    IF sy-subrc <> 0.
+* IMPLEMENT SUITABLE ERROR HANDLING HERE
+      MESSAGE e004.
+    ENDIF.
+  ELSE.
+*    MESSAGE i010 DISPLAY LIKE 'E'.
+    Exit.
+  ENDIF.
+
+ENDFORM.

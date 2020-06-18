@@ -1,0 +1,209 @@
+*&---------------------------------------------------------------------*
+*& Report ZTR_CNDT_OOALV_INTERACT_COMMND
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ZTR_CNDT_OOALV_INTERACT_COMMND.
+
+INCLUDE ZTR_CNDT_OOALV_INT_COMMND_TOP.
+
+
+CLASS LCL_ALV_INTER DEFINITION.
+  PUBLIC SECTION.
+    METHODS :
+      HANDLE_DOUBLE_CLICK FOR EVENT
+                    DOUBLE_CLICK OF CL_GUI_ALV_GRID
+                    IMPORTING E_ROW,
+
+      HANDLE_USER_COMMAND FOR EVENT
+                    USER_COMMAND OF CL_GUI_ALV_GRID
+        IMPORTING E_UCOMM,
+
+      HANDLE_TOOLBAR FOR EVENT
+                    TOOLBAR OF CL_GUI_ALV_GRID
+        IMPORTING E_OBJECT.
+
+ENDCLASS.
+
+CLASS LCL_ALV_INTER IMPLEMENTATION.
+  METHOD HANDLE_TOOLBAR.
+    DATA WA_TTB TYPE LINE OF TTB_BUTTON.
+    WA_TTB-FUNCTION = 'GET_PLANT'.
+    WA_TTB-TEXT     = 'GET_PLANT_MARC_DATA'.
+    APPEND WA_TTB TO E_OBJECT->MT_TOOLBAR.
+  ENDMETHOD.
+
+  METHOD HANDLE_USER_COMMAND .
+    CASE E_UCOMM.
+      WHEN 'GET_PLANT'.
+        IF IT_TAB1 IS NOT INITIAL.
+*          READ TABLE
+          SELECT * INTO TABLE IT_TAB2 FROM MARC
+                   FOR ALL ENTRIES IN IT_TAB1
+                    WHERE MATNR = IT_TAB1-MATNR.
+          CALL SCREEN 200.
+        ENDIF.
+    ENDCASE.
+
+  ENDMETHOD.
+
+  METHOD  HANDLE_DOUBLE_CLICK.
+    CLEAR IT_TAB2.
+    READ TABLE IT_TAB1 INTO WA_TAB1 INDEX E_ROW-INDEX.
+    SELECT * INTO TABLE IT_TAB2 FROM MARC
+                  WHERE MATNR = WA_TAB1-MATNR.
+    IF IT_TAB1 IS INITIAL.
+      MESSAGE 'Material not found for the selected plant' TYPE 'I'.
+    ELSE.
+      CALL SCREEN 200.
+    ENDIF.
+  ENDMETHOD.
+ENDCLASS.
+
+START-OF-SELECTION.
+
+  CALL SCREEN 100.
+
+  SELECT-OPTIONS S_MATNR FOR LV_MATNR.
+*&---------------------------------------------------------------------*
+*&      Module  STATUS_0100  OUTPUT
+*&---------------------------------------------------------------------*
+
+MODULE STATUS_0100 OUTPUT.
+  SET PF-STATUS 'ZTR_PFS'.
+*  SET TITLEBAR 'xxx'.
+ENDMODULE.
+*&---------------------------------------------------------------------*
+*&      Module  USER_COMMAND_0100  INPUT
+*&---------------------------------------------------------------------*
+MODULE USER_COMMAND_0100 INPUT.
+  CASE SY-UCOMM.
+    WHEN 'BACK'.
+      LEAVE TO SCREEN 0.
+  ENDCASE.
+ENDMODULE.
+*&---------------------------------------------------------------------*
+*&      Module  GET_MATERIALS  OUTPUT
+*&---------------------------------------------------------------------*
+
+MODULE GET_MATERIALS OUTPUT.
+
+  SELECT * FROM MARA
+           INTO TABLE IT_TAB1
+           WHERE MATNR IN S_MATNR.
+ENDMODULE.
+*&---------------------------------------------------------------------*
+*&      Module  ALV_DISPLAY  OUTPUT
+*&---------------------------------------------------------------------*
+*       text
+*----------------------------------------------------------------------*
+MODULE ALV_DISPLAY OUTPUT.
+  CREATE OBJECT I_CONTAINER
+    EXPORTING
+      CONTAINER_NAME = 'ALV_CNT1'.
+  IF SY-SUBRC <> 0.
+* MESSAGE ID SY-MSGID TYPE SY-MSGTY NUMBER SY-MSGNO
+*            WITH SY-MSGV1 SY-MSGV2 SY-MSGV3 SY-MSGV4.
+  ENDIF.
+  CREATE OBJECT I_GRID
+    EXPORTING
+      I_PARENT = I_CONTAINER.
+  IF SY-SUBRC <> 0.
+* MESSAGE ID SY-MSGID TYPE SY-MSGTY NUMBER SY-MSGNO
+*            WITH SY-MSGV1 SY-MSGV2 SY-MSGV3 SY-MSGV4.
+  ENDIF.
+
+  DATA IT_FCAT TYPE LVC_T_FCAT.
+
+  CALL FUNCTION 'LVC_FIELDCATALOG_MERGE'
+    EXPORTING
+      I_STRUCTURE_NAME = 'MARA'
+    CHANGING
+      CT_FIELDCAT      = IT_FCAT.
+  IF SY-SUBRC <> 0.
+* Implement suitable error handling here
+  ENDIF.
+
+  DATA I_HANDLER TYPE REF TO LCL_ALV_INTER.
+  CREATE OBJECT I_HANDLER.
+
+  SET HANDLER : I_HANDLER->HANDLE_USER_COMMAND FOR I_GRID,
+                I_HANDLER->HANDLE_TOOLBAR      FOR I_GRID.
+
+  CALL METHOD I_GRID->SET_TABLE_FOR_FIRST_DISPLAY
+    CHANGING
+      IT_OUTTAB       = IT_TAB1
+      IT_FIELDCATALOG = IT_FCAT.
+  IF SY-SUBRC <> 0.
+* Implement suitable error handling here
+  ENDIF.
+
+ENDMODULE.
+*&---------------------------------------------------------------------*
+*&      Module  STATUS_0200  OUTPUT
+*&---------------------------------------------------------------------*
+*       text
+*----------------------------------------------------------------------*
+MODULE STATUS_0200 OUTPUT.
+  SET PF-STATUS 'ZTR_PFS2'.
+*  SET TITLEBAR 'xxx'.
+ENDMODULE.
+*&---------------------------------------------------------------------*
+*&      Module  USER_COMMAND_0200  INPUT
+*&---------------------------------------------------------------------*
+*       text
+*----------------------------------------------------------------------*
+MODULE USER_COMMAND_0200 INPUT.
+  CASE SY-UCOMM.
+    WHEN 'BACK'.
+      LEAVE TO SCREEN 0.
+  ENDCASE.
+ENDMODULE.
+*&---------------------------------------------------------------------*
+*&      Module  ALV_PLANT  OUTPUT
+*&---------------------------------------------------------------------*
+*       text
+*----------------------------------------------------------------------*
+MODULE ALV_PLANT OUTPUT.
+
+  IF  I_CONTAINER2 IS INITIAL.
+    CREATE OBJECT I_CONTAINER2
+      EXPORTING
+        CONTAINER_NAME = 'ALV_CNT2'.
+    IF SY-SUBRC <> 0.
+*   MESSAGE ID SY-MSGID TYPE SY-MSGTY NUMBER SY-MSGNO
+*              WITH SY-MSGV1 SY-MSGV2 SY-MSGV3 SY-MSGV4.
+    ENDIF.
+  ENDIF.
+  IF I_GRID2 IS INITIAL.
+    CREATE OBJECT I_GRID2
+      EXPORTING
+        I_PARENT = I_CONTAINER2.
+    IF SY-SUBRC <> 0.
+*   MESSAGE ID SY-MSGID TYPE SY-MSGTY NUMBER SY-MSGNO
+*              WITH SY-MSGV1 SY-MSGV2 SY-MSGV3 SY-MSGV4.
+    ENDIF.
+  ENDIF.
+
+  DATA IT_FCAT2 TYPE LVC_T_FCAT.
+
+  CALL FUNCTION 'LVC_FIELDCATALOG_MERGE'
+    EXPORTING
+      I_STRUCTURE_NAME = 'MARC'
+    CHANGING
+      CT_FIELDCAT      = IT_FCAT2.
+  IF SY-SUBRC <> 0.
+* Implement suitable error handling here
+  ENDIF.
+
+  CALL METHOD I_GRID2->SET_TABLE_FOR_FIRST_DISPLAY
+    EXPORTING
+      I_STRUCTURE_NAME = 'MARC'
+    CHANGING
+      IT_OUTTAB        = IT_TAB2
+      IT_FIELDCATALOG  = IT_FCAT2.
+  IF SY-SUBRC <> 0.
+*   Implement suitable error handling here
+  ENDIF.
+
+ENDMODULE.

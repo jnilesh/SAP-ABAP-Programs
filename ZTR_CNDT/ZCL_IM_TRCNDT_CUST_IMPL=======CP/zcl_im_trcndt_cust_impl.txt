@@ -1,0 +1,25 @@
+class-pool .
+*"* class pool for class ZCL_IM_TRCNDT_CUST_IMPL
+
+*"* local type definitions
+include ZCL_IM_TRCNDT_CUST_IMPL=======ccdef.
+
+*"* class ZCL_IM_TRCNDT_CUST_IMPL definition
+*"* public declarations
+  include ZCL_IM_TRCNDT_CUST_IMPL=======cu.
+*"* protected declarations
+  include ZCL_IM_TRCNDT_CUST_IMPL=======co.
+*"* private declarations
+  include ZCL_IM_TRCNDT_CUST_IMPL=======ci.
+endclass. "ZCL_IM_TRCNDT_CUST_IMPL definition
+
+*"* macro definitions
+include ZCL_IM_TRCNDT_CUST_IMPL=======ccmac.
+*"* local class implementation
+include ZCL_IM_TRCNDT_CUST_IMPL=======ccimp.
+
+class ZCL_IM_TRCNDT_CUST_IMPL implementation.
+*"* method's implementations
+  include methods.
+endclass. "ZCL_IM_TRCNDT_CUST_IMPL implementation
+

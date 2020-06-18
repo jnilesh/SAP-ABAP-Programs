@@ -1,0 +1,37 @@
+*&---------------------------------------------------------------------*
+*& Report ZTR_CGKL_IT_TAB1
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ZTR_CGKL_IT_TAB1.
+
+INCLUDE ZTR_CGKL_IT_TAB1_TOP.
+
+
+SELECT-OPTIONS S_MATNR FOR LV_MATNR.
+
+SELECT MATNR
+       MBRSH
+       MTART
+       MEINS
+       BRGEW
+       NTGEW
+*     INTO IT_TAB   " H
+      INTO TABLE IT_TAB   " B
+    FROM MARA
+    WHERE MATNR IN S_MATNR.
+*
+*APPEND IT_TAB TO IT_TAB.  " H TO B
+*ENDSELECT.
+
+
+  LOOP AT IT_TAB."  INTO IT_TAB. " B TO H
+
+    WRITE :/ IT_TAB-MATNR,   " H-F
+             IT_TAB-MBRSH,
+             IT_TAB-MTART,
+             IT_TAB-MEINS,
+             IT_TAB-BRGEW,
+             IT_TAB-NTGEW.
+
+    ENDLOOP.

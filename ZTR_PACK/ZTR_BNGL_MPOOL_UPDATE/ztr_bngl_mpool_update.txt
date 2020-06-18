@@ -1,0 +1,82 @@
+*&---------------------------------------------------------------------*
+*& Modulpool  ZTR_BNGL_MPOOL_UPDATE
+*&
+*&---------------------------------------------------------------------*
+*&
+*&
+*&---------------------------------------------------------------------*
+PROGRAM ZTR_BNGL_MPOOL_UPDATE.
+
+INCLUDE ZTR_BNGL_MPOOL_UPDATE_TOP.
+
+*&---------------------------------------------------------------------*
+*&      Module  STATUS_0100  OUTPUT
+*&---------------------------------------------------------------------*
+*       text
+*----------------------------------------------------------------------*
+MODULE STATUS_0100 OUTPUT.
+  SET PF-STATUS SPACE.
+  SET TITLEBAR 'xxx'.
+
+ENDMODULE.
+*&---------------------------------------------------------------------*
+*&      Module  USER_COMMAND_0100  INPUT
+*&---------------------------------------------------------------------*
+*       text
+*----------------------------------------------------------------------*
+MODULE USER_COMMAND_0100 INPUT.
+* INSERT.
+  CASE SY-UCOMM.
+    WHEN 'INSERT'.
+      MOVE ZTR_BNGL_EMP TO WA_TAB.
+      APPEND WA_TAB TO IT_TAB.
+      INSERT INTO ZTR_BNGL_EMP VALUES WA_TAB.
+      IF SY-SUBRC EQ 0.
+        MESSAGE I001(0) WITH 'succesfully updated'.
+      ELSE.
+        MESSAGE E001(0) WITH 'failed'.
+      ENDIF.
+* UPDATE
+    WHEN 'UPDATE'.
+      MOVE ZTR_BNGL_EMP TO WA_TAB.
+      APPEND WA_TAB TO IT_TAB.
+      UPDATE ZTR_BNGL_EMP FROM TABLE IT_TAB.
+
+      IF SY-SUBRC EQ 0.
+        MESSAGE I001(0) WITH 'EMPLOYEE TABLE HAS BEEN UPDATED SUCCESSFULLY'.
+      ELSE.
+        MESSAGE W001(0) WITH 'EMPLOYEE HAS NOT UPDATED'.
+      ENDIF.
+*DELETE.
+    WHEN 'DELETE'.
+      MOVE ZTR_BNGL_EMP TO WA_TAB.
+      APPEND WA_TAB TO IT_TAB.
+      DELETE FROM ZTR_BNGL_EMP
+      WHERE empno = WA_TAB-empNO.
+      IF SY-SUBRC EQ 0.
+        MESSAGE I001(0) WITH 'EMPLOYEE TABLE HAS BEEN DELETED SUCCESSFULLY'.
+      ELSE.
+        MESSAGE W001(0) WITH 'EMPLOYEE HAS NOT DELETED'.
+      ENDIF.
+    WHEN 'EXIT'.
+      LEAVE PROGRAM.
+  ENDCASE.
+ENDMODULE.
+*&---------------------------------------------------------------------*
+*&      Module  HIDE_BUTTONS  OUTPUT
+*&---------------------------------------------------------------------*
+*       text
+*----------------------------------------------------------------------*
+MODULE HIDE_BUTTONS OUTPUT.
+  LOOP AT SCREEN.
+    CASE SY-UCOMM.
+      WHEN 'INSERT'.
+        IF SCREEN-GROUP1 EQ 'G2' OR SCREEN-GROUP1 EQ 'G3'.
+          SCREEN-INPUT = '0'.
+*         SCREEN-ACTIVE = '0'.
+          MODIFY SCREEN.
+*            LEAVE TO SCREEN 100.
+        ENDIF.
+    ENDCASE.
+  ENDLOOP.
+ENDMODULE.

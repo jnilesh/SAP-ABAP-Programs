@@ -1,0 +1,25 @@
+*&---------------------------------------------------------------------*
+*&  Include           ZTR_ATP_BDC_PROG_COMMA_TOP
+*&---------------------------------------------------------------------*
+
+
+TYPES: BEGIN OF TY_TAB,
+       MATNR TYPE MATNR, " Material Number
+       MBRSH TYPE MBRSH, " Industry sector
+       MTART TYPE MTART, " Material Type
+       MAKTX TYPE MAKTX, " Material Description
+       MEINS TYPE MEINS, " Base Unit of Measure
+       MATKL TYPE MATKL, " Material Group
+         END OF TY_TAB.
+
+ DATA :IT_TAB TYPE STANDARD TABLE OF TY_TAB,
+       WA_TAB TYPE TY_TAB.
+
+ TYPES : BEGIN OF TY_TAB2,
+
+      TEXT(500),
+
+   END OF TY_TAB2.
+
+ DATA :IT_TAB2 TYPE STANDARD TABLE OF TY_TAB2,
+       WA_TAB2 TYPE TY_TAB2.

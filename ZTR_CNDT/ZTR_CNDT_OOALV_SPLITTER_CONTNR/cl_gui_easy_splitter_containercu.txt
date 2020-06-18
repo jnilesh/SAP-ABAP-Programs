@@ -1,0 +1,38 @@
+class CL_GUI_EASY_SPLITTER_CONTAINER definition
+  public
+  inheriting from CL_GUI_CONTAINER
+  create public .
+
+*"* public components of class CL_GUI_EASY_SPLITTER_CONTAINER
+*"* do not include other source files here!!!
+public section.
+
+  class-data ORIENTATION_HORIZONTAL type I value 1 read-only .
+  class-data ORIENTATION_VERTICAL type I value 0 read-only .
+  data TOP_LEFT_CONTAINER type ref to CL_GUI_CONTAINER read-only .
+  data BOTTOM_RIGHT_CONTAINER type ref to CL_GUI_CONTAINER read-only .
+  data PANE_ORIENTATION type I read-only .
+
+  methods GET_SASH_POSITION
+    exporting
+      !SASH_POSITION type I
+    exceptions
+      CNTL_SYSTEM_ERROR
+      CNTL_ERROR .
+  methods SET_SASH_POSITION
+    importing
+      value(SASH_POSITION) type I .
+  type-pools CNTL .
+  methods CONSTRUCTOR
+    importing
+      value(LINK_DYNNR) type SY-DYNNR optional
+      value(LINK_REPID) type SY-REPID optional
+      value(METRIC) type CNTL_METRIC default CNTL_METRIC_DYNPRO
+      value(PARENT) type ref to CL_GUI_CONTAINER optional
+      value(ORIENTATION) type I default 0
+      value(SASH_POSITION) type I default 50
+      value(WITH_BORDER) type I default 1
+      value(NAME) type STRING optional
+    exceptions
+      CNTL_ERROR
+      CNTL_SYSTEM_ERROR .

@@ -1,0 +1,25 @@
+class-pool .
+*"* class pool for class ZTR_BADI_IMPL99IMPL
+
+*"* local type definitions
+include ZTR_BADI_IMPL99IMPL===========ccdef.
+
+*"* class ZTR_BADI_IMPL99IMPL definition
+*"* public declarations
+  include ZTR_BADI_IMPL99IMPL===========cu.
+*"* protected declarations
+  include ZTR_BADI_IMPL99IMPL===========co.
+*"* private declarations
+  include ZTR_BADI_IMPL99IMPL===========ci.
+endclass. "ZTR_BADI_IMPL99IMPL definition
+
+*"* macro definitions
+include ZTR_BADI_IMPL99IMPL===========ccmac.
+*"* local class implementation
+include ZTR_BADI_IMPL99IMPL===========ccimp.
+
+class ZTR_BADI_IMPL99IMPL implementation.
+*"* method's implementations
+  include methods.
+endclass. "ZTR_BADI_IMPL99IMPL implementation
+

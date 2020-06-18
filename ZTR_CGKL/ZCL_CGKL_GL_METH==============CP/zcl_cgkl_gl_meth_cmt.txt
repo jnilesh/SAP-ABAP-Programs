@@ -1,0 +1,2 @@
+ZCL_CGKL_GL_METH              IST_METH1                     EIST_METH1
+ZCL_CGKL_GL_METH              STA_METH2                     ESTA_METH2

@@ -1,0 +1,15 @@
+*&---------------------------------------------------------------------*
+*&  Include           ZTR_CNDT_MPOOL_UPDATE_TOP
+*&---------------------------------------------------------------------*
+TABLES ZTR_CNDT_EMP.
+
+TYPES:BEGIN OF TY_TAB,
+    MANDT TYPE ZTR_CNDT_EMP-MANDT,
+    EMPNO TYPE ZTR_CNDT_EMP-EMPNO,
+    EMPNAME TYPE ZTR_CNDT_EMP-EMPNAME,
+    EMPSAL TYPE ZTR_CNDT_EMP-EMPSAL,
+    EMPADDR TYPE ZTR_CNDT_EMP-EMPADDR,
+  END OF TY_TAB.
+
+  DATA IT_TAB TYPE STANDARD TABLE OF TY_TAB.
+  DATA WA_TAB TYPE TY_TAB.

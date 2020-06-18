@@ -1,0 +1,23 @@
+  method ZIF_CLS_DTP_INTE~RMETH_MAT.
+
+   DATA GV_MATNR TYPE MATNR.
+   SELECT SINGLE MATNR
+         FROM MARA
+         INTO GV_MATNR
+     WHERE MATNR BETWEEN I_MATNR1 AND I_MATNR2.
+       IF SY-SUBRC NE 0.
+*              RAISE MAT_NOT_FOUND.
+         ELSE.
+           SELECT MATNR
+                  MBRSH
+                  MTART
+                  MEINS
+                  BRGEW
+                  NTGEW
+             INTO TABLE E_MATTAB
+             FROM MARA
+             WHERE MATNR BETWEEN I_MATNR1 AND  I_MATNR2.
+         ENDIF.
+
+
+  endmethod.

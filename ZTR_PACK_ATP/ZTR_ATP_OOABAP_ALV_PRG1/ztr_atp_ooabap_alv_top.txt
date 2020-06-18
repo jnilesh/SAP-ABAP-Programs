@@ -1,0 +1,14 @@
+*&---------------------------------------------------------------------*
+*&  Include           ZTR_ATP_OOABAP_ALV_TOP
+*&---------------------------------------------------------------------*
+
+DATA LV_MATNR TYPE MATNR.
+
+DATA: IT_TAB TYPE TABLE OF MARA, " ITNTERNAL TAB
+      WA_TAB TYPE MARA.  " WORK AREAS
+
+DATA: I_CONTAINER TYPE REF TO CL_GUI_CUSTOM_CONTAINER,
+      I_ALV_GRID TYPE REF TO CL_GUI_ALV_GRID.
+
+DATA: WA_FCAT TYPE LVC_S_FCAT,
+      IT_FCAT TYPE LVC_T_FCAT.

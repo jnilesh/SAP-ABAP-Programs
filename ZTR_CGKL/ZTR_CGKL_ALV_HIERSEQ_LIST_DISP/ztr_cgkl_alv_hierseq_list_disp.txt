@@ -1,0 +1,157 @@
+*&---------------------------------------------------------------------*
+*& Report ZTR_CGKL_ALV_HIERSEQ_LIST_DISP
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ZTR_CGKL_ALV_HIERSEQ_LIST_DISP.
+
+INCLUDE ZTR_CGKL_ALV_HIERSEQ_LIST_TOP.
+
+
+SELECT-OPTIONS S_VBELN FOR LV_VBELN.
+
+START-OF-SELECTION.
+
+PERFORM GET_DATA.
+
+PERFORM ALV_FCAT.
+
+PERFORM ALV_DISP.
+
+*&---------------------------------------------------------------------*
+*&      Form  GET_DATA
+*&---------------------------------------------------------------------*
+FORM get_data .
+ SELECT
+        VBELN
+        ERDAT
+        ERZET
+        AUART
+        VKORG
+   INTO CORRESPONDING FIELDS OF TABLE IT_TAB1
+   FROM VBAK
+   WHERE VBELN IN S_VBELN.
+
+ SELECT VBELN
+        POSNR
+        MATNR
+   INTO TABLE IT_TAB2
+   FROM VBAP
+   WHERE VBELN IN S_VBELN.
+
+ENDFORM.
+*&---------------------------------------------------------------------*
+*&      Form  ALV_FCAT
+*&---------------------------------------------------------------------*
+FORM alv_fcat .
+* VBAK-vbeln
+IT_FCAT-REF_TABNAME = 'VBAK'.
+IT_FCAT-COL_POS = '1'.
+IT_FCAT-SELTEXT_L = 'SALES ORDER NO'.
+IT_FCAT-TABNAME = 'IT_TAB1'.
+IT_FCAT-FIELDNAME  =  'VBELN'.
+
+ APPEND IT_FCAT.
+
+* VBAK-erdat
+IT_FCAT-REF_TABNAME = 'VBAK'.
+IT_FCAT-COL_POS = '2'.
+IT_FCAT-SELTEXT_L = 'SALES DATE'.
+IT_FCAT-TABNAME = 'IT_TAB1'.
+IT_FCAT-FIELDNAME  =  'ERDAT'.
+
+ APPEND IT_FCAT.
+
+* VBAK-erzet
+IT_FCAT-REF_TABNAME = 'VBAK'.
+IT_FCAT-COL_POS = '3'.
+IT_FCAT-SELTEXT_L = 'SALES TIME'.
+IT_FCAT-TABNAME = 'IT_TAB1'.
+IT_FCAT-FIELDNAME  =  'ERZET'.
+
+ APPEND IT_FCAT.
+
+
+* VBAK-erzet
+IT_FCAT-REF_TABNAME = 'VBAK'.
+IT_FCAT-COL_POS = '4'.
+IT_FCAT-SELTEXT_L = 'SALES DOC TYPE'.
+IT_FCAT-TABNAME = 'IT_TAB1'.
+IT_FCAT-FIELDNAME  =  'AUART'.
+
+ APPEND IT_FCAT.
+
+* VBAP-VKORG
+IT_FCAT-REF_TABNAME = 'VBAK'.
+IT_FCAT-COL_POS = '5'.
+IT_FCAT-SELTEXT_L = 'SALES ORG '.
+IT_FCAT-TABNAME = 'IT_TAB1'.
+IT_FCAT-FIELDNAME  =  'VKORG'.
+
+ APPEND IT_FCAT.
+*---------------------------- VBAP
+* VBAP-vbeln
+IT_FCAT-REF_TABNAME = 'VBAP'.
+IT_FCAT-COL_POS = '1'.
+IT_FCAT-SELTEXT_L = 'SALES ORDER NO'.
+IT_FCAT-TABNAME = 'IT_TAB2'.
+IT_FCAT-FIELDNAME  =  'VBELN'.
+
+ APPEND IT_FCAT.
+
+* VBAP-POSNR
+IT_FCAT-REF_TABNAME = 'VBAP'.
+IT_FCAT-COL_POS = '2'.
+IT_FCAT-SELTEXT_L = 'SALES ITEM NO'.
+IT_FCAT-TABNAME = 'IT_TAB2'.
+IT_FCAT-FIELDNAME  =  'POSNR'.
+
+ APPEND IT_FCAT.
+
+* VBAP-MATNR
+IT_FCAT-REF_TABNAME = 'VBAP'.
+IT_FCAT-COL_POS = '3'.
+IT_FCAT-SELTEXT_L = 'MAT NO'.
+IT_FCAT-TABNAME = 'IT_TAB2'.
+IT_FCAT-FIELDNAME  =  'MATNR'.
+ APPEND IT_FCAT.
+
+
+* VBAP-MATKL
+IT_FCAT-REF_TABNAME = 'VBAP'.
+IT_FCAT-COL_POS = '4'.
+IT_FCAT-SELTEXT_L = 'MAT GRP'.
+IT_FCAT-TABNAME = 'IT_TAB2'.
+IT_FCAT-FIELDNAME  =  'MATKL'.
+ APPEND IT_FCAT.
+
+
+ENDFORM.
+*&---------------------------------------------------------------------*
+*&      Form  ALV_DISP
+*&---------------------------------------------------------------------*
+FORM alv_disp .
+
+IT_KEY-HEADER01 = 'VBELN'.
+IT_LAYOUT-EXPAND_FIELDNAME = 'KEY'.
+
+CALL FUNCTION 'REUSE_ALV_HIERSEQ_LIST_DISPLAY'
+  EXPORTING
+   I_CALLBACK_PROGRAM             = SY-REPID
+   IS_LAYOUT                      = IT_LAYOUT
+   IT_FIELDCAT                    = IT_FCAT[]
+    i_tabname_header               = 'IT_TAB1'
+    i_tabname_item                 = 'IT_TAB2'
+    is_keyinfo                     = IT_KEY
+  TABLES
+    t_outtab_header                = IT_TAB1
+    t_outtab_item                  = IT_TAB2
+* EXCEPTIONS
+*   PROGRAM_ERROR                  = 1
+*   OTHERS                         = 2
+         .
+IF sy-subrc <> 0.
+* Implement suitable error handling here
+ENDIF.
+
+ENDFORM.

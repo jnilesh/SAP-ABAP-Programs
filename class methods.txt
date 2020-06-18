@@ -1,0 +1,33 @@
+REPORT ZAT_OOAP_DEMO01.
+
+CLASS zclass1 DEFINITION.
+
+  PUBLIC SECTION.
+    DATA:        v1 TYPE i VALUE 10. "instance var
+    CLASS-DATA : v2 TYPE i VALUE 100. "static var
+
+    METHODS add. "instannce method
+    CLASS-METHODS subtract. "static method
+
+ENDCLASS.
+CLASS zclass1 IMPLEMENTATION.
+  METHOD add.
+    WRITE:  /'This is from the method Add.'.
+  ENDMETHOD.
+
+  METHOD subtract.
+    WRITE: / 'This is from the method Subtract.'.
+  ENDMETHOD.
+ENDCLASS.
+
+
+START-OF-SELECTION.
+  DATA: obj TYPE REF TO zclass1.
+  CREATE OBJECT obj.
+
+CALL METHOD obj->add. "possible
+CALL METHOD obj->subtract. "possible
+obj->add( )."possible
+obj->subtract( )."possible
+*CALL METHOD zclass1=>add. " not possible
+CALL METHOD zclass1=>subtract."possible

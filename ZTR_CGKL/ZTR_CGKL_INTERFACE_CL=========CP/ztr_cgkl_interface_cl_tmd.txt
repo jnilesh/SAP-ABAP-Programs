@@ -1,0 +1,3 @@
+ZTR_CGKL_INTERFACE_CL         00000                                                             0
+ZTR_CGKL_INTERFACE_CL         00001CL_METH1                                                     0
+ZTR_CGKL_INTERFACE_CL         00002ZTR_CGKL_INTERFACE~MAT_METH1                                 0

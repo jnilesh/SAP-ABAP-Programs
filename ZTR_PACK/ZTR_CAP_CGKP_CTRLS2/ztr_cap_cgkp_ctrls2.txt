@@ -1,0 +1,88 @@
+*&---------------------------------------------------------------------*
+*& Report ZTR_CAP_CGKP_CTRLS
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ztr_cap_cgkp_ctrls2.
+
+
+* DO TIMES
+
+*
+*DO 10 TIMES.
+*
+* WRITE / 'CAPGEMINI'.
+*
+*  ENDDO.
+*---------------------------------------------
+*WHILE
+
+*data m TYPE i VALUE 0.
+*
+*WHILE M < 10.
+*
+*  WRITE / M.
+*
+*  M  =  M + 1.
+*
+*  ENDWHILE.
+
+*---------------------------------------------
+*CASE
+
+*PARAMETERS A TYPE I DEFAULT 2.
+*
+*CASE A.
+*  WHEN 1.
+*    WRITE 'FIRST BLOCK'.
+*  WHEN 2.
+*    WRITE 'SECOND BLOCK'.
+*  WHEN OTHERS.
+*
+*    WRITE 'DEFAULT BLOCK'.
+*
+*ENDCASE.
+*
+*WRITE A.
+
+
+*---------------------------------------------
+** EXIT AND STOP.
+*DO.
+*  WRITE SY-INDEX.
+*  IF SY-INDEX EQ 10.
+***    EXIT.
+*    STOP.
+*    ENDIF.
+*    ENDDO.
+*WRITE / 'CAPGEMIN'.
+
+
+*=------------------------
+*CONTINUE
+*
+*DO.
+*    IF sy-index EQ 2.
+*    CONTINUE.
+*  ENDIF.
+*  WRITE sy-index.
+*  IF sy-index EQ 10.
+*    EXIT.
+*  ENDIF.
+*ENDDO.
+*WRITE / 'CAPGEMIN'.
+
+*-----------------------------
+*CHECK
+*DO.
+* WRITE sy-index.
+*  IF sy-index EQ 10.
+*    EXIT.
+*   ENDIF.
+*
+*  CHECK sy-index eq 2.
+* WRITE sy-index.
+*
+* ENDDO.
+*
+*WRITE / 'CAPGEMIN'.

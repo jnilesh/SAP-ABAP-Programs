@@ -1,0 +1,151 @@
+*&---------------------------------------------------------------------*
+*& Report ZTR_ATP_SEL_SCREEN_OUTPUT
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ZTR_CGKL_AT_SELECT_SCREEN_OUT.
+
+INCLUDE ZTR_CGKL_AT_SELECT_SCREEN_TOP.
+
+TABLES VBAK.
+*
+********SELECTION SCREEN DESIGN **********
+*SELECTION-SCREEN BEGIN OF BLOCK B1 WITH FRAME TITLE TEXT-001.
+*  PARAMETERS : P_VBELN TYPE VBELN_VA MODIF ID S1.
+*  SELECT-OPTIONS : S_VBELN FOR LV_VBELN  MODIF ID S2.
+*SELECTION-SCREEN END OF BLOCK B1.
+*
+*SELECTION-SCREEN BEGIN OF BLOCK B2 WITH FRAME TITLE TEXT-002.
+*  SELECTION-SCREEN BEGIN OF LINE.
+*   PARAMETERS : R1 RADIOBUTTON GROUP G1 DEFAULT 'X'.
+**   PARAMETERS : R2 RADIOBUTTON GROUP G1.
+*   SELECTION-SCREEN COMMENT 5(20) TEXT-002 FOR FIELD R1.
+*SELECTION-SCREEN END OF LINE.
+*SELECTION-SCREEN BEGIN OF LINE.
+*    PARAMETERS : R2 RADIOBUTTON GROUP G1.
+*    SELECTION-SCREEN COMMENT 5(20) TEXT-003 FOR FIELD R2.
+*SELECTION-SCREEN END OF LINE.
+*SELECTION-SCREEN END OF BLOCK B2.
+*
+
+INITIALIZATION.
+*  P_VBELN = '3456'.
+*
+*  S_VBELN-LOW = '10001'.
+*  S_VBELN-HIGH = '10003'.
+*  S_VBELN-OPTION = 'BT'.
+*  S_VBELN-SIGN = 'I'.
+*
+*  APPEND S_VBELN.
+**  CLEAR S_VBELN.
+
+
+***********SCREEN MODIFICATIONS*******************
+*AT SELECTION-SCREEN OUTPUT.
+*  LOOP AT SCREEN.
+*    IF R1 EQ 'X' AND SCREEN-GROUP1 EQ 'S2'.
+*      SCREEN-INPUT = 1.
+*      MODIFY SCREEN.
+*    ENDIF.
+*    IF R2 EQ 'X' AND SCREEN-GROUP1 EQ 'S1'.
+*      SCREEN-INPUT = 1.
+*      MODIFY SCREEN.
+*    ENDIF.
+*  ENDLOOP.
+********END OF SCREEN MODIFICATIONS*****************
+**************SCREEN VALIDATIONS ****************
+*AT SELECTION-SCREEN.
+*
+*SELECT VBELN
+*       ERDAT
+*       ERZET
+*     INTO TABLE IT_TAB1
+*     FROM VBAK
+*     WHERE VBELN IN S_VBELN.
+* IF SY-SUBRC <> 0.
+**    SET CURSOR FIELD 'S_EBELN-LOW'.
+*       SET CURSOR FIELD 'S_VBELN-LOW'.
+**    MESSAGE e999 WITH text-005.
+*  ENDIF.
+*********end of screen validation*****************
+START-OF-SELECTION.
+*
+*  IF R1 EQ 'X'.
+*
+*    SELECT VBELN
+*       ERDAT
+*       ERZET
+*     INTO TABLE IT_TAB1
+*     FROM VBAK
+*     WHERE VBELN EQ P_VBELN.
+*
+*  LOOP AT IT_TAB1 INTO WA_TAB1.
+*
+*    WRITE: / WA_TAB1-VBELN,
+*             WA_TAB1-ERDAT,
+*             WA_TAB1-ERZET.
+*
+*    ENDLOOP.
+*  ENDIF.
+*  IF R2 EQ 'X'.
+*        SELECT VBELN
+*       POSNR
+*       MATNR
+*     INTO TABLE IT_TAB2
+*     FROM VBAP
+*     WHERE VBELN IN S_VBELN.
+*
+*  LOOP AT IT_TAB2 INTO WA_TAB2.
+*
+*    WRITE: / WA_TAB2-VBELN,
+*             WA_TAB2-POSNR,
+*             WA_TAB2-MATNR.
+*    ENDLOOP.
+* ENDIF.
+
+*TOP-OF-PAGE.
+*  IF R1 EQ 'X'.
+**ULINE AT /1(48).
+*    WRITE : SY-VLINE ,2 'MATERIAL NUMBER',
+*            21 SY-VLINE , 22 'PLANT',
+*            27 SY-VLINE , 28 'STATUS',
+*            43 SY-VLINE , 44 'GRUP', 48 SY-VLINE.
+*    ULINE AT /1(48).
+*  ENDIF.
+*  IF R2 EQ 'X'.
+*    WRITE : SY-VLINE , 2 'PO NUMBER',
+*           12 SY-VLINE, 13 'ITEM',
+*           18 SY-VLINE,19 'MATERIAL NUMBER',
+*           37 SY-VLINE, 38 'PLANT',
+*           44 SY-VLINE, 45 'GRUP',
+*           49 SY-VLINE.
+*    ULINE AT /1(50).
+*  ENDIF.
+*
+*END-OF-PAGE.
+*  ULINE AT /1(50).
+*  WRITE :/10 'PAGE NUMBER', SY-PAGNO.
+
+
+
+
+*  # 2
+
+PARAMETERS P_ENABLE AS CHECKBOX USER-COMMAND UC1.
+PARAMETERS: INPUT(5) TYPE C MODIF ID IN1 . "Based on modif id we will perform dynamic operations
+
+AT SELECTION-SCREEN OUTPUT.
+
+  LOOP AT SCREEN.
+    IF P_ENABLE = 'X'  . " If check box is selected
+      IF SCREEN-GROUP1 = 'IN1' .
+        SCREEN-ACTIVE = 1.
+        MODIFY SCREEN.
+      ENDIF.
+    ELSE.
+      IF SCREEN-GROUP1 = 'IN1' .
+        SCREEN-ACTIVE = 0.
+        MODIFY SCREEN.
+      ENDIF.
+    ENDIF.
+  ENDLOOP.

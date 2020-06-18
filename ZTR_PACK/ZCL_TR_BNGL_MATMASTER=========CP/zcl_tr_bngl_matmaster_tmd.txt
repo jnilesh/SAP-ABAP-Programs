@@ -1,0 +1,2 @@
+ZCL_TR_BNGL_MATMASTER         00000                                                             0
+ZCL_TR_BNGL_MATMASTER         00001METH_MAT                                                     0

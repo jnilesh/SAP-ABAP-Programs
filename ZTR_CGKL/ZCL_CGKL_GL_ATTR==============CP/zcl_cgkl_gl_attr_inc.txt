@@ -1,0 +1,7 @@
+ZCL_CGKL_GL_ATTR==============CCAU
+ZCL_CGKL_GL_ATTR==============CCDEF
+ZCL_CGKL_GL_ATTR==============CCIMP
+ZCL_CGKL_GL_ATTR==============CCMAC
+ZCL_CGKL_GL_ATTR==============CI
+ZCL_CGKL_GL_ATTR==============CO
+ZCL_CGKL_GL_ATTR==============CU

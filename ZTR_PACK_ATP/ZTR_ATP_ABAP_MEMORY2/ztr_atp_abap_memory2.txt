@@ -1,0 +1,59 @@
+*&---------------------------------------------------------------------*
+*& Report ZTR_ATP_ABAP_MEMORY2
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ZTR_ATP_ABAP_MEMORY2.
+
+TYPES: BEGIN OF TY_TAB,  " LOCAL STRS
+
+      MATNR TYPE MATNR, " Material Number
+      MBRSH TYPE MBRSH, " Industry sector
+      MTART TYPE MTART, " Material type
+      MEINS TYPE MEINS, " Base Unit of Measure
+      BRGEW TYPE BRGEW, " Gross weight
+      NTGEW TYPE NTGEW, " Net weight
+
+     END OF TY_TAB.
+
+DATA :IT_TAB TYPE STANDARD TABLE OF TY_TAB,  " ITAB
+      WA_TAB TYPE TY_TAB. " WORK AREA
+
+DATA P_MATNR  TYPE MARA-MATNR.
+
+
+IMPORT P_MATNR FROM MEMORY ID 'CAPMEM'.
+
+SELECT MATNR
+       MBRSH
+       MTART
+       MEINS
+       BRGEW
+       NTGEW
+  INTO TABLE IT_TAB " IT_TAB BODY
+    FROM MARA
+  WHERE MATNR EQ P_MATNR.
+*
+*  FREE MEMORY ID 'CAPMEM'.
+
+*IF SY-SUBRC EQ 0.
+*  WRITE:'Records are found in mara table', 'Total no of Recrds: ' ,sy-dbcnt,
+*         / 'sy-subrc:', sy-subrc.
+*SKIP .
+**ULINE.
+* else.
+*   WRITE:'Records are not found in mara table', 'Total no of Recrds: ' ,sy-dbcnt,
+*        / 'sy-subrc:', sy-subrc.
+*     ENDIF.
+
+       LOOP AT IT_TAB INTO WA_TAB. " B TO WA
+*    LOOP AT IT_TAB. " B TO H
+    WRITE :/ SY-TABIX,  " SY-TFILL
+            20 WA_TAB-MATNR ,  " FROM WORK AREA
+            30 WA_TAB-MBRSH ,
+            45 WA_TAB-MTART ,
+            60 WA_TAB-MEINS,
+            84 WA_TAB-BRGEW,
+            100 WA_TAB-NTGEW.
+
+    ENDLOOP.

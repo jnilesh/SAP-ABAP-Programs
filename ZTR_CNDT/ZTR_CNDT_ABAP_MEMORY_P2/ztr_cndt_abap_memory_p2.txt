@@ -1,0 +1,34 @@
+*&---------------------------------------------------------------------*
+*& Report ZTR_CNDT_ABAP_MEMORY_P2
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ZTR_CNDT_ABAP_MEMORY_P2.
+
+INCLUDE ZTR_CNDT_ABAP_MEMORY_P2_TOP.
+
+IMPORT P_MATNR FROM MEMORY ID 'CAPCNDT'.
+
+*FREE MEMORY ID 'CAPCNDT'.
+
+START-OF-SELECTION.
+
+SELECT matnr
+         mbrsh
+         mtart
+         meins
+         brgew
+         ntgew
+  INTO TABLE it_tab
+    FROM mara
+    WHERE matnr EQ P_MATNR.
+
+
+  LOOP AT it_tab INTO wa_tab.  " BODY TO HEADER
+    WRITE : / wa_tab-matnr,
+              wa_tab-mbrsh,
+              wa_tab-mtart,
+              wa_tab-meins,
+              wa_tab-brgew,
+              wa_tab-ntgew.
+  ENDLOOP.

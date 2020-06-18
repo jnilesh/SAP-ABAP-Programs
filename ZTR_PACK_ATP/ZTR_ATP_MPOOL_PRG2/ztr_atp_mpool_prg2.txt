@@ -1,0 +1,19 @@
+*&---------------------------------------------------------------------*
+*& Module Pool       ZTR_ATP_MPOOL_PRG2
+*&
+*&---------------------------------------------------------------------*
+*&
+*&
+*&---------------------------------------------------------------------*
+
+
+INCLUDE ZTR_MPOOL_TOP                           .    " global Data
+
+* INCLUDE ZTR_MPOOL_O01                           .  " PBO-Modules
+* INCLUDE ZTR_MPOOL_I01                           .  " PAI-Modules
+* INCLUDE ZTR_MPOOL_F01                           .  " FORM-Routines
+
+
+INCLUDE ztr_atp_mpool_prg2_status_0o01.
+
+INCLUDE ztr_atp_mpool_prg2_user_comi01.

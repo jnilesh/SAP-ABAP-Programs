@@ -1,0 +1,211 @@
+*&---------------------------------------------------------------------*
+*& Report ZTR_ATP_INTERACTIVE_LINE
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ZTR_ATP_CLASSICAL_REPORT NO STANDARD PAGE HEADING LINE-SIZE 500
+MESSAGE-ID ZTR_ATP_MSG.
+
+
+
+INCLUDE ZTR_ATP_INTERACTIVE_TOP.
+
+SELECTION-SCREEN: BEGIN OF BLOCK B1 WITH FRAME TITLE TEXT-001.
+
+SELECT-OPTIONS S_MATNR FOR LV_MATNR OBLIGATORY NO-EXTENSION.
+
+SELECTION-SCREEN: END OF BLOCK B1.
+
+*LOAD-of-PROGRAM.
+
+
+INITIALIZATION.
+S_MATNR-low = '1'.
+S_MATNR-high = '100'.
+append S_MATNR.  " special itab.
+
+
+at SELECTION-SCREEN on s_matnr.
+  PERFORM GET_VALIDATE.
+
+*data lv_date1 type sy-datum.
+*lv_date1 = sy-datum - 5.
+*S_MATNR-low = lv_date1.
+*S_MATNR-high = sy-datum.
+*append S_MATNR.  " special itab.
+
+
+START-OF-SELECTION.
+PERFORM GET_DATA.
+
+TOP-OF-PAGE.
+PERFORM HEADER_DISP.
+
+END-OF-SELECTION.
+PERFORM GET_DISPLAY.
+BACK.
+SKIP 7.
+WRITE /120 'CAPGEMINI'.
+LV_COUNT = SY-LINCT - SY-LINNO.
+SKIP  LV_COUNT.
+
+END-OF-PAGE.
+PERFORM PAGE_END.
+
+AT LINE-SELECTION.
+PERFORM AT_LINE.
+
+TOP-OF-PAGE DURING LINE-SELECTION.
+PERFORM ATLINE_TOP.
+
+
+
+
+*&---------------------------------------------------------------------*
+*&      Form  GET_DATA
+*&---------------------------------------------------------------------*
+FORM GET_DATA .
+
+SELECT MATNR
+       MBRSH
+       MTART
+       MEINS
+       BRGEW
+       NTGEW
+  INTO TABLE IT_TAB1 " IT_TAB BODY
+    FROM MARA
+  WHERE MATNR IN S_MATNR.
+
+IF SY-SUBRC EQ 0.
+  WRITE:'Records are found in mara table', 'Total no of Recrds: ' ,sy-dbcnt,
+         / 'sy-subrc:', sy-subrc.
+SKIP .
+*ULINE.
+ else.
+   WRITE:'Records are not found in mara table', 'Total no of Recrds: ' ,sy-dbcnt,
+        / 'sy-subrc:', sy-subrc.
+     ENDIF.
+ENDFORM.
+*&---------------------------------------------------------------------*
+*&      Form  GET_DISPLAY
+*&---------------------------------------------------------------------*
+
+FORM GET_DISPLAY .
+FORMAT COLOR COL_GROUP.
+
+  LOOP AT IT_TAB1 INTO WA_TAB1. " B TO WA
+    WRITE :/ SY-TABIX,  " SY-TFILL
+            20 WA_TAB1-MATNR HOTSPOT ,  " FROM WORK AREA
+            30 WA_TAB1-MBRSH, "COLOR COL_GROUP,
+            45 WA_TAB1-MTART,  "COLOR COL_POSITIVE,
+*      FORMAT COLOR OFF.
+            60 WA_TAB1-MEINS, "COLOR COL_NEGATIVE,
+            84 WA_TAB1-BRGEW,  " COLOR COL_KEY,
+            100 WA_TAB1-NTGEW.
+
+    HIDE WA_TAB1-MATNR.
+    ENDLOOP.
+ENDFORM.
+
+
+
+*&---------------------------------------------------------------------*
+*&      Form  HEADER_DISP
+*&---------------------------------------------------------------------*
+*       text
+*----------------------------------------------------------------------*
+FORM HEADER_DISP .
+  WRITE: 'MAT MASTER INFO FROM MARA TABLE',  'SYS LIST IND:', SY-LSIND .
+  ULINE.
+WRITE : 'TAB INDEX',
+        10 'MATERIAL NO',
+        20 'IND SECTOR',
+        25 'MAT TYPE',
+        30 'BASE UOM',
+        44 'MAT GROSS WEIGHT',
+        56 'MAT NET WEIGHT'.
+ULINE.
+
+
+ENDFORM.
+*&---------------------------------------------------------------------*
+*&      Form  PAGE_END
+*&---------------------------------------------------------------------*
+
+FORM PAGE_END .
+WRITE : 'PAGE NO:', SY-PAGNO, 'DATE:', SY-DATUM, 'TIME:', SY-UZEIT.
+ENDFORM.
+*&---------------------------------------------------------------------*
+*&      Form  GET_VALIDATE
+*&---------------------------------------------------------------------*
+
+FORM GET_VALIDATE .
+
+DATA LV_MATNR TYPE MATNR.
+
+SELECT SINGLE MATNR
+        INTO LV_MATNR
+  FROM MARA
+   WHERE MATNR IN S_MATNR.
+  IF SY-SUBRC EQ 0.
+
+    MESSAGE I000.
+
+    ELSE.
+      MESSAGE X005.
+
+      ENDIF.
+
+ENDFORM.
+*&---------------------------------------------------------------------*
+*&      Form  AT_LINE
+*&---------------------------------------------------------------------*
+
+FORM AT_LINE .
+ CASE  SY-LSIND.
+ 	WHEN 1.
+ 	SELECT MATNR
+         WERKS
+        FROM MARC
+     INTO TABLE IT_TAB2
+    WHERE MATNR EQ WA_TAB1-MATNR. "HIDE WA_TAB1-MATNR.
+
+    LOOP AT IT_TAB2 INTO WA_TAB2.
+      WRITE :/ WA_TAB2-MATNR HOTSPOT,
+               WA_TAB2-WERKS.
+
+      HIDE WA_TAB2-MATNR.
+
+      ENDLOOP.
+
+  WHEN 2.
+ 	SELECT MATNR
+         MAKTX
+        FROM MAKT
+     INTO TABLE IT_TAB3
+    WHERE MATNR EQ WA_TAB1-MATNR. " HIDE
+
+    LOOP AT IT_TAB3 INTO WA_TAB3.
+      WRITE :/ WA_TAB3-MATNR,
+               WA_TAB3-MAKTX.
+      ENDLOOP.
+
+
+ ENDCASE.
+
+
+ENDFORM.
+*&---------------------------------------------------------------------*
+*&      Form  ATLINE_TOP
+*&---------------------------------------------------------------------*
+
+FORM ATLINE_TOP .
+
+CASE SY-LSIND.
+  WHEN 1.
+  WRITE: 'MAT MASTER INFO FROM MARC TABLE', / 'SYS LIST IND:', SY-LSIND .
+  WHEN 2.
+  WRITE: 'MAT MASTER INFO FROM MAKT TABLE', 'SYS LIST IND:', SY-LSIND.
+ENDCASE.
+
+ENDFORM.

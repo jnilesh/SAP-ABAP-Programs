@@ -1,0 +1,4 @@
+ZTR_DTP_GL_MAT                METH_MAT                      E_MATTAB                      100
+ZTR_DTP_GL_MAT                METH_MAT                      I_MATNR1                      100
+ZTR_DTP_GL_MAT                METH_MAT                      I_MATNR2                      100
+ZTR_DTP_GL_MAT                METH_MAT                      MAT_NOT_FOUND                 101

@@ -1,0 +1,89 @@
+*&---------------------------------------------------------------------*
+*& Report ZTR_CGKL_CTRL_STMST
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ZTR_CGKL_CTRL_STMST.
+
+* DO STMT
+
+*DO 5 TIMES .
+*
+* WRITE / 'CAPGEMINI KOLKATA'.
+*
+*  ENDDO.
+
+
+
+*--------------------
+*DO.
+*  WRITE / SY-INDEX.
+*  IF SY-INDEX EQ 9.
+**    EXIT.
+*STOP .
+*  ENDIF.
+*ENDDO.
+*
+*WRITE 'CAPGEMINI KOLKATA'.
+*------------------
+
+
+
+*CONTINUE
+*DO.
+*    IF SY-INDEX EQ 2.
+*    CONTINUE.
+*    ENDIF.
+*  WRITE / SY-INDEX.
+*    IF SY-INDEX EQ 9.
+*    EXIT.
+*    ENDIF.
+*
+*ENDDO.
+*
+*WRITE 'CAPGEMINI KOLKATA'.
+
+
+*------------------------
+*CHECK
+*DO.
+*  WRITE / SY-INDEX.
+*    IF SY-INDEX EQ 9.
+*    EXIT.
+*    ENDIF.
+*
+*    CHECK SY-INDEX EQ 3.
+*    WRITE / SY-INDEX.
+*
+*
+*ENDDO.
+
+WRITE 'CAPGEMINI KOLKATA'.
+
+*..............................
+*CASE
+
+*DATA P_VAL TYPE I VALUE 5.
+*PARAMETERS P_VAL TYPE I DEFAULT 2.
+*CASE P_VAL.
+*  WHEN 1.
+*    WRITE :'USER ENTERD THE VALUE' , P_VAL.
+*  WHEN 2.
+*    WRITE: 'USER ENTERD THE VALUE' , P_VAL.
+*  WHEN OTHERS.
+*    WRITE :'USER ENTERD THE WRONG VALUE' , P_VAL.
+*ENDCASE.
+
+*WRITE P_VAL.
+*
+
+*-----------------------
+
+*WHILE
+DATA A TYPE I VALUE 0.
+WHILE A < 10.
+  WRITE / A.
+  A = A + 1.
+ENDWHILE.
+
+WRITE A.

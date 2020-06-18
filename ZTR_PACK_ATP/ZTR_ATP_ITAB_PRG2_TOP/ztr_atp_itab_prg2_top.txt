@@ -1,0 +1,13 @@
+*&---------------------------------------------------------------------*
+*&  Include           ZTR_ATP_ITAB_PRG2_TOP
+*&---------------------------------------------------------------------*
+TABLES MARA.
+DATA: BEGIN OF IT_TAB OCCURS 0, " HEADER AND BODY SMAE NAMES
+      MATNR TYPE MATNR, " Material Number
+      MBRSH TYPE MBRSH, " Industry sector
+      MTART TYPE MTART, " Material type
+      MEINS TYPE MEINS, " Base Unit of Measure
+      BRGEW TYPE BRGEW, " Gross weight
+      NTGEW TYPE NTGEW, " Net weight
+
+     END OF IT_TAB.

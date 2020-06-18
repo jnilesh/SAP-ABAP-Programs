@@ -1,0 +1,4 @@
+ZTR_DTP_GL_MAT                METH_MAT                      E_MATTAB                      E
+ZTR_DTP_GL_MAT                METH_MAT                      I_MATNR1                      EIMP1
+ZTR_DTP_GL_MAT                METH_MAT                      I_MATNR2                      EIMP2
+ZTR_DTP_GL_MAT                METH_MAT                      MAT_NOT_FOUND                 EMAT NOT FOUND TO BE RAISED

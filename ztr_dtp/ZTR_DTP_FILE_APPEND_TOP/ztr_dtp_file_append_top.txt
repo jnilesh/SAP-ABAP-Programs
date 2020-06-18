@@ -1,0 +1,16 @@
+*&---------------------------------------------------------------------*
+*&  Include           ZTR_DTP_FILE_APPEND_TOP
+*&---------------------------------------------------------------------*
+
+TYPES: BEGIN OF TY_TAB,
+       MATNR TYPE MATNR,
+       MBRSH TYPE MBRSH,
+       MTART TYPE MTART,
+       MAKTX TYPE MAKTX,
+       MEINS TYPE MEINS,
+       MATKL TYPE MATKL,
+
+         END OF TY_TAB.
+
+DATA :IT_TAB TYPE STANDARD TABLE OF TY_TAB,
+      WA_TAB TYPE TY_TAB.

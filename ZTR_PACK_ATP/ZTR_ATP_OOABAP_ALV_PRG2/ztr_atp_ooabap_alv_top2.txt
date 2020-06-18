@@ -1,0 +1,27 @@
+*&---------------------------------------------------------------------*
+*&  Include           ZTR_ATP_OOABAP_ALV_TOP2
+*&---------------------------------------------------------------------*
+
+DATA LV_MATNR TYPE MATNR.
+
+TYPES: BEGIN OF TY_TAB,  " LOCAL STRS
+      MATNR TYPE MATNR, " Material Number
+      MBRSH TYPE MBRSH, " Industry sector
+      MTART TYPE MTART, " Material type
+      MEINS TYPE MEINS, " Base Unit of Measure
+      BRGEW TYPE BRGEW, " Gross weight
+      NTGEW TYPE NTGEW, " Net weight
+      WERKS TYPE WERKS_D, " PLANT
+      PSTAT TYPE PSTAT_D,
+     END OF TY_TAB.
+
+DATA :IT_TAB TYPE STANDARD TABLE OF TY_TAB,  " ITAB
+      WA_TAB TYPE TY_TAB. " WORK AREA
+
+DATA: I_CONTAINER TYPE REF TO CL_GUI_CUSTOM_CONTAINER,
+      I_ALV_GRID TYPE REF TO CL_GUI_ALV_GRID.
+
+DATA: WA_FCAT TYPE LVC_S_FCAT,
+      IT_FCAT TYPE LVC_T_FCAT.
+
+DATA TY_LAYOUT TYPE LVC_S_LAYO.

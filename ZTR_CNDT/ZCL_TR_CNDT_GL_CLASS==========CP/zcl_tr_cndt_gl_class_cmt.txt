@@ -1,0 +1,2 @@
+ZCL_TR_CNDT_GL_CLASS          I_ATT1                        EATT1
+ZCL_TR_CNDT_GL_CLASS          S_ATT2                        EATT2

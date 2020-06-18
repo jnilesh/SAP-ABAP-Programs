@@ -1,0 +1,78 @@
+*&---------------------------------------------------------------------*
+*& Report ZTR_CGKL_STRINGS
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ZTR_CGKL_STRINGS.
+
+*TRANSLATE
+
+*PARAMETERS P_STR1(10) TYPE C.
+*
+*TRANSLATE P_STR1 TO UPPER CASE.
+*
+*WRITE P_STR1.
+
+
+*CONCATENATE
+
+*PARAMETERS: P_STR1(10) TYPE C,
+*            P_STR2(10) TYPE C.
+*
+*DATA LV_VAR(20) TYPE C.
+*
+*CONCATENATE P_STR1 P_STR2 INTO LV_VAR SEPARATED BY '*'.
+*
+*WRITE LV_VAR.
+
+
+*SPLIT
+
+**
+*PARAMETERS: P_STR1(20) TYPE C.
+*PARAMETERS p_del TYPE c.
+*DATA:LV_VAR1(10) TYPE C,
+*     LV_VAR2(10) TYPE C.
+*
+*SPLIT P_STR1 AT p_del INTO LV_VAR1 LV_VAR2.
+*
+*WRITE : / LV_VAR1,
+*          LV_VAR2.
+
+*STRLEN
+
+*PARAMETERS: P_STR1(20) TYPE C.
+*
+*DATA LV_LEN TYPE I.
+*
+*LV_LEN = STRLEN( P_STR1 ).
+*
+*WRITE LV_LEN.
+*
+
+
+
+*OFFSETTING
+*
+*PARAMETERS: P_STR1(20) TYPE C.
+*
+*DATA LV_VAR(20) TYPE C.
+*
+*LV_VAR = P_STR1+3(4).   " capgemini
+*
+*WRITE LV_VAR.
+
+
+
+
+*REPLACE
+
+PARAMETERS: P_STR1(20) TYPE C.
+DO.
+  IF P_STR1 CA ','.
+    REPLACE ',' WITH '*' INTO P_STR1.
+  ELSE.
+    EXIT.
+    ENDIF.
+     ENDDO.
+WRITE P_STR1.

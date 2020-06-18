@@ -1,0 +1,11 @@
+*----------------------------------------------------------------------*
+***INCLUDE ZMMN_PLP_DISP_INTER_F007.
+*----------------------------------------------------------------------*
+
+INCLUDE ZMMN_PLP_DISP_MARA_F008. "DISP MARA FUNCTION
+
+INCLUDE ZMMN_PLP_MARC_F009.      "GET MARC TABLE FUNCTION
+
+INCLUDE ZMMN_PLP_MAKT_F010.      "GET MAKT TABLE FUNCTION
+
+INCLUDE ZMMN_PLP_TOPPAGE_F011.      "TOPPAGE FUNCTION FOR HEADING

@@ -1,0 +1,44 @@
+*----------------------------------------------------------------------*
+***INCLUDE Z_160680_ALV_INTER_ALV_DISPF01.
+*----------------------------------------------------------------------*
+*&---------------------------------------------------------------------*
+*&      Form  ALV_DISP
+*&---------------------------------------------------------------------*
+*       text
+*----------------------------------------------------------------------*
+*  -->  p1        text
+*  <--  p2        text
+*----------------------------------------------------------------------*
+FORM ALV_DISP .
+  CALL FUNCTION 'REUSE_ALV_GRID_DISPLAY'
+    EXPORTING
+      I_CALLBACK_PROGRAM      = SY-REPID
+      I_CALLBACK_USER_COMMAND = 'USER_COMM_FORM'
+      IS_LAYOUT               = IT_LAYOUT
+      IT_FIELDCAT             = IT_FCAT
+    TABLES
+      T_OUTTAB                = ITAB01.
+  IF SY-SUBRC <> 0.
+* Implement suitable error handling here
+  ENDIF.
+
+ENDFORM.
+
+
+
+FORM USER_COMM_FORM USING CLICK LIKE SY-UCOMM
+                          RS_SELFIELD TYPE SLIS_SELFIELD.
+  READ TABLE ITAB01 INTO WA_ITAB01 INDEX RS_SELFIELD-TABINDEX.
+  CASE CLICK.
+    WHEN '&IC1'.
+
+      PERFORM SELECT_DATA_SEC.
+
+      PERFORM ALV_FIELDS_SEC.
+
+      PERFORM ALV_DISP_SEC.
+
+
+
+  ENDCASE.
+ENDFORM.

@@ -1,0 +1,2 @@
+ZCL_TR_DTP_GLCLS              I_ATTR1                       00
+ZCL_TR_DTP_GLCLS              S_ATTR2                       00

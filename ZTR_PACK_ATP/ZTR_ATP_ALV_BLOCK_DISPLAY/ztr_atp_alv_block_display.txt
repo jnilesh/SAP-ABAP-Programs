@@ -1,0 +1,184 @@
+*&---------------------------------------------------------------------*
+*& Report ZTR_ATP_ALV_GRID_DISPLAY
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ZTR_ATP_ALV_BLOCK_DISPLAY.
+
+INCLUDE ZTR_ATP_ALV_BLOCK_TOP.
+
+SELECTION-SCREEN: BEGIN OF BLOCK B1 WITH FRAME TITLE TEXT-001.
+
+SELECT-OPTIONS S_MATNR FOR LV_MATNR OBLIGATORY NO-EXTENSION.
+
+SELECTION-SCREEN: END OF BLOCK B1.
+
+START-OF-SELECTION.
+
+PERFORM GET_DATA.
+
+PERFORM ALV_FIELDS.
+
+PERFORM ALV_DISP.
+
+*&---------------------------------------------------------------------*
+*&      Form  GET_DATA
+*&---------------------------------------------------------------------*
+FORM GET_DATA .
+
+SELECT MATNR
+       MBRSH
+       MTART
+       MEINS
+       BRGEW
+       NTGEW
+    INTO TABLE IT_TAB1
+    FROM MARA
+      WHERE MATNR IN S_MATNR.
+
+SELECT MATNR
+       WERKS
+    INTO TABLE IT_TAB2
+    FROM MARC
+    WHERE MATNR IN S_MATNR.
+
+
+  IF SY-SUBRC EQ 0.
+    WRITE:'Records are found in mara table', 'Total no of Recrds: ' ,SY-DBCNT,
+           / 'sy-subrc:', SY-SUBRC.
+    SKIP .
+  ELSE.
+    WRITE:'Records are not found in mara table', 'Total no of Recrds: ' ,SY-DBCNT,
+         / 'sy-subrc:', SY-SUBRC.
+  ENDIF.
+
+ENDFORM.
+*&---------------------------------------------------------------------*
+*&      Form  ALV_FIELDS
+*&---------------------------------------------------------------------*
+
+FORM ALV_FIELDS .
+* MATNR
+IT_FCAT-COL_POS = '1'.
+IT_FCAT-SELTEXT_L = 'MAT NO'.
+IT_FCAT-FIELDNAME = 'MATNR'.
+IT_FCAT-TABNAME = 'IT_TAB'.
+
+APPEND IT_FCAT.
+
+* MBRSH
+IT_FCAT-COL_POS = '2'.
+IT_FCAT-SELTEXT_L = 'IND SECTOR'.
+IT_FCAT-FIELDNAME = 'MBRSH'.
+IT_FCAT-TABNAME = 'IT_TAB'.
+IT_FCAT-EMPHASIZE = 'C301'.
+
+
+APPEND IT_FCAT.
+
+* MATART
+IT_FCAT-COL_POS = '3'.
+IT_FCAT-SELTEXT_L = 'MATERIAL TYPE'.
+IT_FCAT-FIELDNAME = 'MTART'.
+IT_FCAT-TABNAME = 'IT_TAB'.
+IT_FCAT-EMPHASIZE = 'C711'.
+APPEND IT_FCAT.
+
+* MEINS
+IT_FCAT-COL_POS = '4'.
+IT_FCAT-SELTEXT_L = 'MAT BASE UOM'.
+IT_FCAT-FIELDNAME = 'MEINS'.
+IT_FCAT-TABNAME = 'IT_TAB'.
+IT_FCAT-EMPHASIZE = 'C101'.
+APPEND IT_FCAT.
+
+* BRGEW
+IT_FCAT-COL_POS = '5'.
+IT_FCAT-SELTEXT_L = 'MAT GROSS WEIGHT'.
+IT_FCAT-FIELDNAME = 'BRGEW'.
+IT_FCAT-TABNAME = 'IT_TAB'.
+IT_FCAT-EMPHASIZE = 'C601'.
+APPEND IT_FCAT.
+
+
+* NTGEW
+IT_FCAT-COL_POS = '6'.
+IT_FCAT-SELTEXT_L = 'MAT NET WEIGHT'.
+IT_FCAT-FIELDNAME = 'NTGEW'.
+IT_FCAT-TABNAME = 'IT_TAB'.
+IT_FCAT-DO_SUM = 'X'.
+IT_FCAT-EMPHASIZE = 'C111'.
+APPEND IT_FCAT.
+
+*---------------------MARC---------------------
+* MATNR
+IT_FCAT2-COL_POS = '1'.
+IT_FCAT2-SELTEXT_L = 'MAT NO'.
+IT_FCAT2-FIELDNAME = 'MATNR'.
+IT_FCAT2-TABNAME = 'IT_TAB2'.
+
+APPEND IT_FCAT2.
+
+* WERKS
+IT_FCAT2-COL_POS = '2'.
+IT_FCAT2-SELTEXT_L = 'MAT PLANT'.
+IT_FCAT2-FIELDNAME = 'WERKS'.
+IT_FCAT2-TABNAME = 'IT_TAB2'.
+
+APPEND IT_FCAT2.
+
+
+ENDFORM.
+*&---------------------------------------------------------------------*
+*&      Form  ALV_DISP
+*&---------------------------------------------------------------------*
+FORM ALV_DISP .
+CALL FUNCTION 'REUSE_ALV_BLOCK_LIST_INIT'
+  EXPORTING
+    I_CALLBACK_PROGRAM             = SY-REPID
+          .
+
+CALL FUNCTION 'REUSE_ALV_BLOCK_LIST_APPEND'   " MARA BLOCK
+  EXPORTING
+    IS_LAYOUT                        = IT_LAYOUT
+    IT_FIELDCAT                      = IT_FCAT[]
+    I_TABNAME                        = 'IT_TAB1'
+    IT_EVENTS                        = IT_EVENT[]
+*   IT_SORT                          =
+*   I_TEXT                           = ' '
+  TABLES
+    T_OUTTAB                         = IT_TAB1[]
+* EXCEPTIONS
+*   PROGRAM_ERROR                    = 1
+*   MAXIMUM_OF_APPENDS_REACHED       = 2
+*   OTHERS                           = 3
+          .
+IF SY-SUBRC <> 0.
+* Implement suitable error handling here
+ENDIF.
+
+
+
+CALL FUNCTION 'REUSE_ALV_BLOCK_LIST_APPEND'  " MARC BLOCK
+  EXPORTING
+    IS_LAYOUT                        = IT_LAYOUT
+    IT_FIELDCAT                      = IT_FCAT2[]
+    I_TABNAME                        = 'IT_TAB2'
+    IT_EVENTS                        = IT_EVENT[]
+*   IT_SORT                          =
+*   I_TEXT                           = ' '
+  TABLES
+    T_OUTTAB                         = IT_TAB2[]
+* EXCEPTIONS
+*   PROGRAM_ERROR                    = 1
+*   MAXIMUM_OF_APPENDS_REACHED       = 2
+*   OTHERS                           = 3
+          .
+IF SY-SUBRC <> 0.
+* Implement suitable error handling here
+ENDIF.
+
+
+CALL FUNCTION 'REUSE_ALV_BLOCK_LIST_DISPLAY'.
+
+ENDFORM.

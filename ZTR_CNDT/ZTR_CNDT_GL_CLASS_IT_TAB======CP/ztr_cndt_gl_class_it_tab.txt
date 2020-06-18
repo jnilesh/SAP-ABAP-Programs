@@ -1,0 +1,25 @@
+class-pool .
+*"* class pool for class ZTR_CNDT_GL_CLASS_IT_TAB
+
+*"* local type definitions
+include ZTR_CNDT_GL_CLASS_IT_TAB======ccdef.
+
+*"* class ZTR_CNDT_GL_CLASS_IT_TAB definition
+*"* public declarations
+  include ZTR_CNDT_GL_CLASS_IT_TAB======cu.
+*"* protected declarations
+  include ZTR_CNDT_GL_CLASS_IT_TAB======co.
+*"* private declarations
+  include ZTR_CNDT_GL_CLASS_IT_TAB======ci.
+endclass. "ZTR_CNDT_GL_CLASS_IT_TAB definition
+
+*"* macro definitions
+include ZTR_CNDT_GL_CLASS_IT_TAB======ccmac.
+*"* local class implementation
+include ZTR_CNDT_GL_CLASS_IT_TAB======ccimp.
+
+class ZTR_CNDT_GL_CLASS_IT_TAB implementation.
+*"* method's implementations
+  include methods.
+endclass. "ZTR_CNDT_GL_CLASS_IT_TAB implementation
+

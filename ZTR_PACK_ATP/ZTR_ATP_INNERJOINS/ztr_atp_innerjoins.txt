@@ -1,0 +1,98 @@
+*&---------------------------------------------------------------------*
+*& Report ZTR_ATP_INNERJOINS
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ZTR_ATP_INNERJOINS NO STANDARD PAGE HEADING LINE-SIZE 250.
+
+INCLUDE ZTR_ATP_ITAB_JOINS.
+
+
+SELECTION-SCREEN: BEGIN OF BLOCK B1 WITH FRAME TITLE TEXT-001.
+
+SELECT-OPTIONS S_MATNR FOR LV_MATNR OBLIGATORY NO-EXTENSION.
+
+SELECTION-SCREEN: END OF BLOCK B1.
+
+
+PERFORM GET_DATA.
+
+PERFORM HEADER_DISP.
+
+PERFORM GET_DISPLAY.
+*WRITE 'HI'.
+*&---------------------------------------------------------------------*
+*&      Form  GET_DATA
+*&---------------------------------------------------------------------*
+FORM GET_DATA .
+  SELECT M~MATNR
+         T~MAKTX
+         M~MBRSH
+         M~MTART
+         M~MEINS
+         M~BRGEW
+         M~NTGEW
+
+         P~WERKS
+         P~PSTAT
+
+    INTO TABLE IT_TAB
+    FROM MARA AS M
+
+    INNER JOIN MARC AS P
+    ON M~MATNR EQ P~MATNR
+
+    INNER JOIN MAKT AS T
+    ON M~MATNR EQ T~MATNR
+
+
+    WHERE M~MATNR IN S_MATNR AND
+          T~SPRAS EQ 'EN'.
+
+
+  IF SY-SUBRC EQ 0.
+    WRITE:'Records are found in mara table', 'Total no of Recrds: ' ,SY-DBCNT,
+           / 'sy-subrc:', SY-SUBRC.
+    SKIP .
+*ULINE.
+  ELSE.
+    WRITE:'Records are not found in mara table', 'Total no of Recrds: ' ,SY-DBCNT,
+         / 'sy-subrc:', SY-SUBRC.
+  ENDIF.
+ENDFORM.
+*&---------------------------------------------------------------------*
+*&      Form  GET_DISPLAY
+*&---------------------------------------------------------------------*
+
+FORM GET_DISPLAY .
+  LOOP AT IT_TAB INTO WA_TAB. " B TO WA
+*    LOOP AT IT_TAB. " B TO H
+    WRITE :/ SY-TABIX,  " SY-TFILL
+            20 WA_TAB-MATNR ,  " FROM WORK AREA
+            30 WA_TAB-MBRSH ,
+            45 WA_TAB-MTART ,
+            60 WA_TAB-MEINS,
+            84 WA_TAB-BRGEW,
+            100 WA_TAB-NTGEW,
+            120 WA_TAB-WERKS,
+            130 WA_TAB-PSTAT,
+            140 WA_TAB-MAKTX.
+
+  ENDLOOP.
+ENDFORM.
+*&---------------------------------------------------------------------*
+*&      Form  HEADER_DISP
+*&---------------------------------------------------------------------*
+*       text
+*----------------------------------------------------------------------*
+FORM HEADER_DISP .
+  ULINE.
+  WRITE : 'TAB INDEX',
+          10 'MATERIAL NO',
+          20 'IND SECTOR',
+          25 'MAT TYPE',
+          30 'BASE UOM',
+          44 'MAT GROSS WEIGHT',
+          56 'MAT NET WEIGHT'.
+  ULINE.
+ENDFORM.

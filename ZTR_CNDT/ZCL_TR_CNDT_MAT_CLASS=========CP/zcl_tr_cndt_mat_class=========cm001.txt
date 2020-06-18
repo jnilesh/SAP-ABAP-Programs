@@ -1,0 +1,15 @@
+  method ZIF_TR_CNDT_MAT_CLASS~I_METH_MAT.
+
+
+    SELECT MATNR
+           MBRSH
+           MTART
+           MEINS
+           MATKL
+       FROM MARA
+        INTO TABLE E_TAB
+         WHERE MATNR BETWEEN I_MATNR1 AND I_MATNR2.
+
+
+
+  endmethod.

@@ -1,0 +1,2 @@
+  method METH1.
+  endmethod.

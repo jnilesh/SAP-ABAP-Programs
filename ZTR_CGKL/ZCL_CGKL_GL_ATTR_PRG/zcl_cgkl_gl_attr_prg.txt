@@ -1,0 +1,16 @@
+*&---------------------------------------------------------------------*
+*& Report ZCL_CGKL_GL_ATTR_PRG
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ZCL_CGKL_GL_ATTR_PRG.
+
+START-OF-SELECTION.
+
+DATA OBJ1 TYPE REF TO ZCL_CGKL_GL_ATTR.
+
+CREATE OBJECT OBJ1.
+
+WRITE  OBJ1->IST_ATTR1.
+SKIP.
+WRITE  ZCL_CGKL_GL_ATTR=>STA_ATTR2.

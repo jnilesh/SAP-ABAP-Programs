@@ -1,0 +1,34 @@
+*&---------------------------------------------------------------------*
+*&  Include           ZTR_DTP_ALV_BLOCK_DIS_TOP
+*&---------------------------------------------------------------------*
+
+DATA: LV_MATNR TYPE MATNR.
+
+TYPE-POOLS SLIS.
+DATA IT_FCAT TYPE SLIS_T_FIELDCAT_ALV WITH HEADER LINE.  " ALV ITAB1
+DATA IT_FCAT2 TYPE SLIS_T_FIELDCAT_ALV WITH HEADER LINE.  " ALV ITAB2
+
+DATA IT_EVENT TYPE SLIS_T_EVENT WITH HEADER LINE.
+DATA IT_LAYOUT TYPE SLIS_LAYOUT_ALV.
+
+
+TYPES: BEGIN OF TY_TAB,  " LOCAL STRS
+       MATNR TYPE MATNR, " Material Number   v type dtl
+       MBRSH TYPE MBRSH, " Industry sector
+       MTART TYPE MTART, " Material Type
+       MEINS TYPE MEINS, " Base Unit of Measure
+       BRGEW TYPE BRGEW, " Gross Weight
+       NTGEW TYPE NTGEW, " Net Weight
+        END OF TY_TAB.
+
+DATA :IT_TAB TYPE STANDARD TABLE OF TY_TAB, " ITAB
+      WA_TAB TYPE TY_TAB.  " WORK ARE
+
+* marc
+TYPES: BEGIN OF TY_TAB2,  " LOCAL STRS
+       MATNR TYPE MATNR, " Material Number   v type dtl
+       WERKS TYPE WERKS_D, " PLANT
+        END OF TY_TAB2.
+
+DATA :IT_TAB2 TYPE STANDARD TABLE OF TY_TAB2, " ITAB
+      WA_TAB2 TYPE TY_TAB2.  " WORK ARE

@@ -1,0 +1,102 @@
+*&---------------------------------------------------------------------*
+*& Report ZTR_CNDT_ADOBE_FORM2_PRG
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ZTR_CNDT_ADOBE_FORM2_PRG.
+
+
+INCLUDE ZTR_CNDT_ADOBE_FORM2_TOP.
+
+TABLES KNA1.
+PARAMETERS P_KUNNR TYPE KNA1-KUNNR.
+
+
+START-OF-SELECTION.
+
+wa_outputparams-DEVICE = 'PRINTER'.
+wa_outputparams-DEST  = 'LP01'.
+wa_outputparams-NODIALOG = 'X'.
+wa_outputparams-PREVIEW  = 'X'.
+
+CALL FUNCTION 'FP_JOB_OPEN'
+  CHANGING
+    ie_outputparams       = wa_outputparams
+* EXCEPTIONS
+*   CANCEL                = 1
+*   USAGE_ERROR           = 2
+*   SYSTEM_ERROR          = 3
+*   INTERNAL_ERROR        = 4
+*   OTHERS                = 5
+          .
+IF sy-subrc <> 0.
+* Implement suitable error handling here
+ENDIF.
+
+
+
+CALL FUNCTION 'FP_FUNCTION_MODULE_NAME'
+  EXPORTING
+    i_name                     = 'ZTR_CNDT_ADOBE_FORM2'
+ IMPORTING
+   E_FUNCNAME                 = LV_FM
+*   E_INTERFACE_TYPE           =
+*   EV_FUNCNAME_INBOUND        =
+          .
+wa_docparams-langu = 'E'.
+wa_docparams-country = 'IN'.
+
+
+PERFORM GET_CUST_DATA.
+*&---------------------------------------------------------------------*
+*&      Form  GET_CUST_DATA
+*&---------------------------------------------------------------------*
+FORM get_cust_data .
+
+SELECT SINGLE KUNNR
+       NAME1
+       ORT01
+       LAND1
+       PSTLZ
+  INTO (LV_KUNNR, LV_NAME1,LV_ORT01, LV_LAND1, LV_PSTLZ)
+  FROM KNA1
+  WHERE KUNNR EQ P_KUNNR.
+
+CALL FUNCTION LV_FM
+  EXPORTING
+*   /1BCDWB/DOCPARAMS        =
+    kunnr                    = LV_KUNNR
+    name1                    = LV_NAME1
+    ort01                    = LV_ORT01
+    land1                    = LV_LAND1
+    pstlz                    = LV_PSTLZ
+* IMPORTING
+*   /1BCDWB/FORMOUTPUT       =
+* EXCEPTIONS
+*   USAGE_ERROR              = 1
+*   SYSTEM_ERROR             = 2
+*   INTERNAL_ERROR           = 3
+*   OTHERS                   = 4
+          .
+IF sy-subrc <> 0.
+* Implement suitable error handling here
+ENDIF.
+
+CALL FUNCTION 'FP_JOB_CLOSE'
+* IMPORTING
+*   E_RESULT             =
+* EXCEPTIONS
+*   USAGE_ERROR          = 1
+*   SYSTEM_ERROR         = 2
+*   INTERNAL_ERROR       = 3
+*   OTHERS               = 4
+          .
+IF sy-subrc <> 0.
+* Implement suitable error handling here
+ENDIF.
+
+
+
+
+
+ENDFORM.

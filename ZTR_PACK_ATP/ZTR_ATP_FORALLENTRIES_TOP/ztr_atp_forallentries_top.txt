@@ -1,0 +1,41 @@
+*&---------------------------------------------------------------------*
+*&  Include           ZTR_ATP_FORALLENTRIES_TOP
+*&---------------------------------------------------------------------*
+DATA: LV_MATNR TYPE MATNR.
+
+TYPES: BEGIN OF TY_TAB1,  " LOCAL STRS1
+       MATNR TYPE MATNR, " Material Number
+       MBRSH TYPE MBRSH, " Industry sector
+       MTART TYPE MTART, " Material Type
+       MEINS TYPE MEINS, " Base Unit of Measure
+       BRGEW TYPE BRGEW, " Gross Weight
+       NTGEW TYPE NTGEW, " Net Weight
+
+        END OF TY_TAB1.
+
+DATA :IT_TAB1 TYPE STANDARD TABLE OF TY_TAB1, " IT_TAB1
+      WA_TAB1 TYPE TY_TAB1.  " WORK ARE 1
+
+
+TYPES: BEGIN OF TY_TAB2,  " LOCAL STRS2
+       MATNR TYPE MATNR, " Material Number
+       WERKS TYPE WERKS_D," Plant
+        END OF TY_TAB2.
+
+DATA :IT_TAB2 TYPE STANDARD TABLE OF TY_TAB2, " IT_TAB2
+      WA_TAB2 TYPE TY_TAB2.  " WORK ARE 2
+
+
+TYPES: BEGIN OF TY_FINAL,  " LOCAL STRS 3
+       MATNR TYPE MATNR, " Material Number   v type dtl
+       MBRSH TYPE MBRSH, " Industry sector
+       MTART TYPE MTART, " Material Type
+       MEINS TYPE MEINS, " Base Unit of Measure
+       BRGEW TYPE BRGEW, " Gross Weight
+       NTGEW TYPE NTGEW, " Net Weight
+
+       WERKS TYPE WERKS_D," plant
+        END OF TY_FINAL.
+
+DATA :IT_FINAL TYPE STANDARD TABLE OF TY_FINAL, " IT_FINAL
+      WA_FINAL TYPE TY_FINAL. " WORK ARE FINAL

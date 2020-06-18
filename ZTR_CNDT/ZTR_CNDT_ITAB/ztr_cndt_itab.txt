@@ -1,0 +1,40 @@
+*&---------------------------------------------------------------------*
+*& Report ZTR_CNDT_ITAB
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ZTR_CNDT_ITAB.
+
+INCLUDE ZTR_CNDT_PROG2_TAB_TOP.
+
+*PARAMETERS P_MATNR TYPE MATNR.
+SELECT-OPTIONS S_MATNR FOR LV_MATNR.
+PARAMETERS P_MTART TYPE MTART.
+
+
+
+START-OF-SELECTION.
+BREAK-POINT.
+SELECT MATNR
+       MBRSH
+       MTART
+       MEINS
+       MATKL
+     FROM MARA
+*     INTO IT_TAB  " INTO HEADER
+      INTO TABLE IT_TAB  " INTO ITAB BODY
+
+   WHERE MATNR IN S_MATNR and
+        MTART EQ P_MTART.
+*
+*APPEND IT_TAB TO IT_TAB.   " H TO B
+*ENDSELECT.
+
+LOOP AT IT_TAB INTO IT_TAB.  " B TO H
+
+     WRITE :/ IT_TAB-MATNR,  " H-F
+              IT_TAB-MBRSH,
+              IT_TAB-MTART,
+              IT_TAB-MEINS,
+              IT_TAB-MATKL.
+ENDLOOP.

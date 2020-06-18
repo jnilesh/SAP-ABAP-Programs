@@ -1,0 +1,24 @@
+REPORT ZAT_OOAP_DEMO00.
+
+CLASS ZCLASS_01 DEFINITION.
+
+  PUBLIC SECTION.
+  DATA: lv_iv type i value 100.  "instance variable
+  CLASS-DATA: lv_sv type i value 20. "Static variable
+
+  ENDCLASS.
+
+  CLASS ZCLASS_01 IMPLEMENTATION.
+
+    ENDCLASS.
+
+    START-OF-SELECTION.
+    DATA: obj TYPE REF TO ZCLASS_01. "reference variable
+    CREATE OBJECT obj.
+
+    WRITE :'this is instance variable', obj->lv_iv.
+    WRITE :/'this is static variable', obj->lv_sv.
+
+*    ****************
+*WRITE :'this is instance variable',ZCLASS_01=>lv_iv.
+    WRITE :/'this is static variable', ZCLASS_01=>lv_sv.

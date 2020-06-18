@@ -1,0 +1,8 @@
+class ZCL_TR_BNGL_MATMASTER_INT definition
+  public
+  final
+  create public .
+
+public section.
+
+  interfaces ZIF_TR_BNGL_MATMASTER .

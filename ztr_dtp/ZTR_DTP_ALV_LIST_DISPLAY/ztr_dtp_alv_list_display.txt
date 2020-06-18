@@ -1,0 +1,141 @@
+REPORT ztr_dtp_alv_list_display.
+
+INCLUDE ztr_dtp_alv_list_display_top.
+
+SELECT-OPTIONS: s_matnr FOR lv_matnr.
+
+
+START-OF-SELECTION.
+
+  PERFORM get_mat_data.
+
+  PERFORM fieldcat_prep.
+
+  PERFORM GET_ALV_DISP.
+*&---------------------------------------------------------------------*
+*&      Form  GET_MAT_DATA
+*&---------------------------------------------------------------------*
+FORM get_mat_data .
+
+  SELECT matnr
+         mbrsh
+         mtart
+         meins
+         brgew
+         ntgew
+            INTO TABLE it_tab
+       FROM mara
+       WHERE matnr IN s_matnr.
+
+
+ENDFORM.
+*&---------------------------------------------------------------------*
+*&      Form  FIELDCAT_PREP
+*&---------------------------------------------------------------------*
+FORM fieldcat_prep .
+
+* MATNR
+IT_FIELDCAT-COL_POS = '1'.
+IT_FIELDCAT-SELTEXT_L =  'MAT NUMBER'.
+IT_FIELDCAT-FIELDNAME  = 'MATNR'.
+IT_FIELDCAT-TABNAME =  'IT_TAB'.
+APPEND IT_FIELDCAT.
+
+* MBRSH
+IT_FIELDCAT-COL_POS = '2'.
+IT_FIELDCAT-SELTEXT_L =  'MAT IND SECTOR'.
+IT_FIELDCAT-FIELDNAME  = 'MBRSH'.
+IT_FIELDCAT-TABNAME =  'IT_TAB'.
+APPEND IT_FIELDCAT.
+
+
+* MTART
+IT_FIELDCAT-COL_POS = '3'.
+IT_FIELDCAT-SELTEXT_L =  'MAT TYPE'.
+IT_FIELDCAT-FIELDNAME  = 'MTART'.
+IT_FIELDCAT-TABNAME =  'IT_TAB'.
+APPEND IT_FIELDCAT.
+
+* MEINS
+
+IT_FIELDCAT-COL_POS = '4'.
+IT_FIELDCAT-SELTEXT_L =  'MAT BASE UOM'.
+IT_FIELDCAT-FIELDNAME  = 'MEINS'.
+IT_FIELDCAT-TABNAME =  'IT_TAB'.
+APPEND IT_FIELDCAT.
+
+
+* BRGEW
+
+IT_FIELDCAT-COL_POS = '5'.
+IT_FIELDCAT-SELTEXT_L =  'MAT GROSS WEIGHT'.
+IT_FIELDCAT-FIELDNAME  = 'BRGEW'.
+IT_FIELDCAT-TABNAME =  'IT_TAB'.
+APPEND IT_FIELDCAT.
+
+
+* NTGEW
+
+IT_FIELDCAT-COL_POS = '6'.
+IT_FIELDCAT-SELTEXT_L =  'MAT NET WEIGHT'.
+IT_FIELDCAT-FIELDNAME  = 'NTGEW'.
+IT_FIELDCAT-TABNAME =  'IT_TAB'.
+APPEND IT_FIELDCAT.
+
+
+
+
+
+ENDFORM.
+*&---------------------------------------------------------------------*
+*&      Form  GET_ALV_DISP
+*&---------------------------------------------------------------------*
+FORM get_alv_disp .
+
+
+CALL FUNCTION 'REUSE_ALV_LIST_DISPLAY'
+ EXPORTING
+*   I_INTERFACE_CHECK              = ' '
+*   I_BYPASSING_BUFFER             =
+*   I_BUFFER_ACTIVE                = ' '
+   I_CALLBACK_PROGRAM             = 'ZTR_DTP_ALV_LIST_DISPLAY'
+*   I_CALLBACK_PF_STATUS_SET       = ' '
+*   I_CALLBACK_USER_COMMAND        = ' '
+*   I_STRUCTURE_NAME               =
+*   IS_LAYOUT                      =
+   IT_FIELDCAT                    = IT_FIELDCAT[]
+*   IT_EXCLUDING                   =
+*   IT_SPECIAL_GROUPS              =
+*   IT_SORT                        =
+*   IT_FILTER                      =
+*   IS_SEL_HIDE                    =
+*   I_DEFAULT                      = 'X'
+*   I_SAVE                         = ' '
+*   IS_VARIANT                     =
+*   IT_EVENTS                      =
+*   IT_EVENT_EXIT                  =
+*   IS_PRINT                       =
+*   IS_REPREP_ID                   =
+*   I_SCREEN_START_COLUMN          = 0
+*   I_SCREEN_START_LINE            = 0
+*   I_SCREEN_END_COLUMN            = 0
+*   I_SCREEN_END_LINE              = 0
+*   IR_SALV_LIST_ADAPTER           =
+*   IT_EXCEPT_QINFO                =
+*   I_SUPPRESS_EMPTY_DATA          = ABAP_FALSE
+* IMPORTING
+*   E_EXIT_CAUSED_BY_CALLER        =
+*   ES_EXIT_CAUSED_BY_USER         =
+  TABLES
+    t_outtab                       = IT_TAB
+* EXCEPTIONS
+*   PROGRAM_ERROR                  = 1
+*   OTHERS                         = 2
+          .
+IF sy-subrc <> 0.
+* Implement suitable error handling here
+ENDIF.
+
+
+
+ENDFORM.

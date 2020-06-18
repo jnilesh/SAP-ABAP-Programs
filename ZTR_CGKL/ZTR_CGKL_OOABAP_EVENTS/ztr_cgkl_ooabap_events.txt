@@ -1,0 +1,202 @@
+*&---------------------------------------------------------------------*
+*& Report ZTR_CGKP_LB3_OOABAP_EVENTS
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ZTR_CGKL_OOABAP_EVENTS.
+
+**************events with handler method in the same class************
+*
+*class c1 definition.
+*public section.
+**(1) creating event: e1
+*events : e1.
+*** (2) creating an event handling method.
+** this method can belong to same or different class
+*methods : m1 for EVENT e1 of c1.
+**method to raise the event
+*methods : t1.
+*endclass.
+*
+*class c1 implementation.
+**  method : m1 will be called when the event is raised
+*  method :m1.
+*  write : /5 'i am the event handler method'.
+*  ENDMETHOD.
+**  method : t1 will raise the event
+*  method : t1.
+*    write : /5 'i am t1 , going to raise event e1'.
+*    raise event e1.
+*    ENDMETHOD.
+*    ENDCLASS.
+*
+*    START-OF-SELECTION.
+*    data : oref type ref to c1.
+*    create OBJECT : oref.
+**    registering the event handler method.
+*    SET HANDLER OREF->m1 for oref.
+**    calling the event which will raise the event.
+*    call method oref->t1.
+
+********************************************************************************
+*EVENT WITH EVENT HANDLER METHOD IN DIFFERENT CLASS
+*
+*CLASS C1 DEFINITION.
+*  PUBLIC SECTION.
+**CREATING EVENT : E1
+*  EVENTS: E1.
+**TRIGGERING METHOD : T1
+*  METHODS: T1.
+*  ENDCLASS.
+*
+*CLASS C2 DEFINITION.
+*  PUBLIC SECTION.
+**CREATING AN EVENT HANDLING METHOD.
+* METHODS: M1 FOR EVENT E1 OF C1.
+* ENDCLASS.
+*
+* CLASS C1 IMPLEMENTATION.
+**METHOD: T1 WILL RAISE THE EVENT
+*   METHOD: T1.
+*     WRITE: /5 ' IAM T1, GOING TO RAISE EVENT E1'.
+*     RAISE EVENT E1.
+*     ENDMETHOD.
+*   ENDCLASS.
+*
+*   CLASS C2 IMPLEMENTATION.
+**METHOD: M1 WILL BE CALLED WHEN THE EVENT IS RAISED.
+*     METHOD: M1.
+*       WRITE: /5 'IAM THE EVENT HANDLER METHOD IN C2'.
+*       ENDMETHOD.
+*   ENDCLASS.
+*
+*   START-OF-SELECTION.
+*   DATA: OREF1 TYPE REF TO C1,
+*         OREF2 TYPE REF TO C2.
+*   CREATE OBJECT: OREF1, OREF2.
+**REGISTERING THE EVENT HANDLER METHOD
+*   SET HANDLER OREF2->M1 FOR OREF1.
+**CALLING THE EVENT WHICH WILL RAISE THE EVENT.
+*   CALL METHOD OREF1->T1.
+
+
+
+*********************
+*class c1 definition.
+*  public section.
+**creating event e1
+*  class-EVENTS : e1.
+**creating event handling method
+*  METHODS : m1 for event e1 of c1.
+**method to raise the event
+*  CLASS-METHODS :t1.
+*  ENDCLASS.
+*  class c1 IMPLEMENTATION.
+**    METHOD : t1 will raise the event
+* METHOD : t1.
+*   write :/5 'i am t1, going to raise event e1'.
+*   RAISE EVENT E1.
+*   ENDMETHOD.
+**method : m1 will be called when the event is raised
+*   METHOD  : m1.
+*     WRITE :/5 'I AM THE EVENT HANDLER METHOD M1 IN C1'.
+*     ENDMETHOD.
+*     ENDCLASS.
+*
+*
+*  START-OF-SELECTION.
+*  data : OREF1 TYPE REF TO C1.
+*  CREATE OBJECT : OREF1.
+*
+**REGISTERING THE EVENT HANDLER METHOD
+*
+*  SET HANDLER OREF1->M1.
+*
+** CALLING THE EVENT WHICH WILL RAISE THE EVENT
+*  CALL METHOD OREF1->T1.
+**
+********************************************************************
+
+*events with export parameters
+
+*class c1 DEFINITION.
+*  PUBLIC SECTION.
+*  events : e1 exporting value(num1) type i
+*                         value(num2) type i.
+*
+*  methods : m1 for event e1 of c1
+*             importing num1
+*                       num2.
+*  methods : t1.
+*  endclass.
+*  class c1 implementation.
+*    method : m1.
+*      WRITE :/5 'first input',num1,
+*      /5 'second input',num2.
+*      ENDMETHOD.
+*      METHOD t1.
+*        RAISE EVENT e1 exporting num1 = 2
+*                                 num2 = 3.
+*        ENDMETHOD.
+*        ENDCLASS.
+*        START-OF-SELECTION.
+*        data : oref type REF TO c1.
+*        CREATE object oref.
+*        set handler oref->m1 for oref.
+*        call method oref->t1.
+*************************************************************
+
+*MORE THAN ONE EVENT HANDLER METHOD
+*CAN EXIST FOR SAME EVENT
+
+CLASS C1 DEFINITION.
+  PUBLIC SECTION.
+*  CREATING EVENT : E1
+  EVENTS : E1.
+*  CREATING AN EVENT HANDLING METHOD
+  METHODS : M1 FOR EVENT E1 OF C1.
+*  METHOD TO RAISE THE EVENT
+  METHODS : T1.
+  ENDCLASS.
+
+  CLASS C2 DEFINITION.
+    PUBLIC SECTION.
+*    CREATING AN EVENT HANDLING METHOD
+    METHODS : M2 FOR EVENT E1 OF C1.
+    ENDCLASS.
+
+    CLASS C1 IMPLEMENTATION.
+*      METHOD : T1 WILL RAISE THE EVENT
+METHOD : T1.
+  WRITE : /5 'I AM  T1, GOING TO RAISE EVENT E1'.
+  RAISE EVENT E1.
+  ENDMETHOD.
+
+*  METHOD : M1 WILL BE CALLED WHEN THE EVENT IS RAISED.
+  METHOD : M1.
+    WRITE : /5 'I AM THE EVENT HANDLER METHOD M1 IN C1'.
+    ENDMETHOD.
+    ENDCLASS.
+
+    CLASS C2 IMPLEMENTATION.
+*      METHOD : M2 WILL BE CALLED WHEN THE EVENT IS RAISED
+      METHOD : M2.
+        WRITE : /5 ' I AM THE EVENT HANDLER METHOD M2 IN C2'.
+        ENDMETHOD.
+   ENDCLASS   .
+    START-OF-SELECTION.
+
+   DATA : OREF1 TYPE REF TO C1 ,
+         OREF2 TYPE REF TO C2.
+
+    CREATE OBJECT : OREF1 , OREF2 .
+*    REGISTERING THE EVENT HANDLER METHOD
+    SET HANDLER OREF1->M1 FOR OREF1.
+*    CALLING THE EVENTS WHICH WILL RAISE THE EVENT.
+      CALL METHOD OREF1->T1.
+*      DE-REGISTERING THE EARLIER EVENT HANDLER METHOD.
+*      SET HANDLER OREF1->M1 FOR OREF1 ACTIVATION SPACE.
+*      REGISTERING THE NEW EVENT HANDLER METHOD
+      SET HANDLER OREF2->M2 FOR OREF1.
+*      CALLING THE EVENT WHICH WILL RAISE THE EVENT.
+       CALL METHOD OREF1->T1.

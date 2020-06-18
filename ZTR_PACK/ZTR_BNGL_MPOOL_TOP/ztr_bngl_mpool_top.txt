@@ -1,0 +1,20 @@
+*&---------------------------------------------------------------------*
+*& Include Z104329MODULEPOOL6TOP                             Module Pool      Z104329MODULEPOOL6
+*&
+*&---------------------------------------------------------------------*
+PROGRAM Z104329MODULEPOOL6.
+CONTROLS TC1 TYPE TABLEVIEW USING SCREEN 0100.
+
+TABLES Z104329DEPT.
+DATA ITDEPT TYPE TABLE OF Z104329DEPT.
+
+TYPES: BEGIN OF TY_DEPT,
+   DEPTNO TYPE Z104329DEPT-DEPTNO,
+   DNAME TYPE Z104329DEPT-DNAME,
+  LOC   TYPE Z104329DEPT-LOC,
+  END OF TY_DEPT.
+
+DATA :IT_TAB TYPE STANDARD TABLE OF TY_DEPT, "  ITAB
+      WA_TAB TYPE TY_DEPT.  " WORKAREA
+
+DATA SEL TYPE C.

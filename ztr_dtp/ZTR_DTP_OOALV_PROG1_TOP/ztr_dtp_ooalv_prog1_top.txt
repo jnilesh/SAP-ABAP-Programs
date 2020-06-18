@@ -1,0 +1,16 @@
+*&---------------------------------------------------------------------*
+*&  Include           ZTR_DTP_OOALV_PROG1_TOP
+*&---------------------------------------------------------------------*
+TABLES VBAK.
+
+DATA LV_VBELN TYPE VBELN_VA.
+
+
+DATA :IT_TAB TYPE TABLE OF VBAK,
+      WA_TAB TYPE VBAK.
+
+*DATA :WA_FCAT TYPE LVC_S_FCAT,
+*      IT_FCAT TYPE LVC_T_FCAT.
+
+DATA : I_GRID TYPE REF TO CL_GUI_ALV_GRID,
+       I_CONTAINER TYPE REF TO CL_GUI_CUSTOM_CONTAINER.

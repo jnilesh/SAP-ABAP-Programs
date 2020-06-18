@@ -1,0 +1,29 @@
+*&---------------------------------------------------------------------*
+*&  Include           ZTR_DTP_ALV_HIERSEQ_TOP
+*&---------------------------------------------------------------------*
+DATA: IT_FCAT TYPE SLIS_T_FIELDCAT_ALV WITH HEADER LINE,
+      IT_LAYOUT TYPE SLIS_LAYOUT_ALV,
+      IT_KEYINFO TYPE SLIS_KEYINFO_ALV,
+      LV_VBELN TYPE VBELN_VA.
+
+TYPES: BEGIN OF TY_TAB1,  " VBAK
+       CH(1),
+       VBELN TYPE VBELN_VA, " Sales Document
+       ERDAT TYPE ERDAT, " Date on Which Record Was Created
+       ERZET TYPE ERZET, " Entry time
+
+       END OF TY_TAB1.
+
+ DATA :IT_TAB1 TYPE STANDARD TABLE OF TY_tAB1,
+       WA_TAB1 TYPE TY_TAB1.
+
+TYPES: BEGIN OF TY_TAB2,  " VBAP
+
+       VBELN TYPE VBELN_VA, " Sales Document
+       POSNR TYPE POSNR_VA, " Sales Document Item
+       MATNR TYPE MATNR, "  Material Number
+
+       END OF TY_TAB2.
+
+ DATA :IT_TAB2 TYPE STANDARD TABLE OF TY_tAB2,
+       WA_TAB2 TYPE TY_TAB2.

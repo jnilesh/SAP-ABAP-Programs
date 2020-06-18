@@ -1,0 +1,24 @@
+*&---------------------------------------------------------------------*
+*& Report ZTR_ATP_ICONS
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ZTR_ATP_ICONS.
+
+*INCLUDE <ICON>.
+*WRITE: 'ALARAM', ICON_ALARM AS ICON.
+
+
+
+PARAMETERS: A TYPE C AS CHECKBOX DEFAULT 'X',
+            B TYPE C AS CHECKBOX .
+
+
+PARAMETERS: R1 RADIOBUTTON GROUP GRP1,
+            R2 RADIOBUTTON GROUP GRP1 DEFAULT 'X',
+            R3 RADIOBUTTON GROUP GRP1.
+
+SELECTION-SCREEN BEGIN OF LINE.
+PARAMETERS AB(20) TYPE C LOWER CASE.
+PARAMETERS Ac(20) TYPE C LOWER CASE.
+SELECTION-SCREEN end OF LINE.

@@ -1,0 +1,87 @@
+*&---------------------------------------------------------------------*
+*& Module Pool       ZTR_DTP_MP_DROPDOWN
+*&
+*&---------------------------------------------------------------------*
+*&
+*&
+*&---------------------------------------------------------------------*
+
+
+INCLUDE ZTR_DTP_MP_TOP                          .    " global Data
+
+* INCLUDE ZTR_DTP_MP_O01                          .  " PBO-Modules
+* INCLUDE ZTR_DTP_MP_I01                          .  " PAI-Modules
+* INCLUDE ZTR_DTP_MP_F01                          .  " FORM-Routines
+
+*&---------------------------------------------------------------------*
+*&      Module  STATUS_0101  OUTPUT
+*&---------------------------------------------------------------------*
+*       text
+*----------------------------------------------------------------------*
+MODULE STATUS_0101 OUTPUT.
+  SET PF-STATUS SPACE.
+*  SET TITLEBAR 'xxx'.
+CLEAR ZTR_DTP_DISTRICT-DIST_NAME.
+
+  SELECT STATE_NAME
+    FROM ZTR_DTP_STATE
+    INTO TABLE IT_STATE.
+
+  LOOP AT IT_STATE INTO WA_STATE.
+    WA_LISTBOX-KEY = WA_STATE-STATE_NAME.
+    WA_LISTBOX-TEXT = WA_STATE-STATE_NAME.
+    APPEND WA_LISTBOX TO IT_LISTBOX.
+  ENDLOOP.
+
+  LD_FIELD = 'ZTR_DTP_STATE-STATE_NAME'.
+*  STATENAME = LD_FIELD1.
+  CALL FUNCTION 'VRM_SET_VALUES'
+    EXPORTING
+      ID     = LD_FIELD
+      VALUES = IT_LISTBOX.
+
+  CLEAR:LD_FIELD, WA_LISTBOX ,IT_LISTBOX[].
+ENDMODULE.
+*&---------------------------------------------------------------------*
+*&      Module  USER_COMMAND_0101  INPUT
+*&---------------------------------------------------------------------*
+*       text
+*----------------------------------------------------------------------*
+MODULE USER_COMMAND_0101 INPUT.
+
+  PERFORM SELECT_DISTRICT.
+
+  CASE OK_CODE.
+    WHEN 'SUBMIT'.
+      MESSAGE 'YOUR RESPONSE IS SUBMITTED' TYPE 'S'.
+    WHEN 'BACK'.
+      LEAVE PROGRAM.
+  ENDCASE.
+ENDMODULE.
+*&---------------------------------------------------------------------*
+*&      Form  SELECT_DISTRICT
+*&---------------------------------------------------------------------*
+*       text
+*----------------------------------------------------------------------*
+*  -->  p1        text
+*  <--  p2        text
+*----------------------------------------------------------------------*
+FORM SELECT_DISTRICT .
+  SELECT SINGLE STATE_ID
+          FROM ZTR_DTP_STATE
+          INTO (STATEID) WHERE STATE_NAME = ZTR_DTP_STATE-STATE_NAME.
+
+  SELECT DIST_NAME FROM ZTR_DTP_DISTRICT INTO TABLE IT_DISTRICT WHERE STATE_ID = STATEID.
+
+  LOOP AT IT_DISTRICT INTO WA_DISTRICT.
+    WA_LISTBOX-KEY = WA_DISTRICT-DIST_NAME.
+    WA_LISTBOX-TEXT = WA_DISTRICT-DIST_NAME.
+    APPEND WA_LISTBOX TO IT_LISTBOX.
+  ENDLOOP.
+
+  LD_FIELD = 'ZTR_DTP_DISTRICT-DIST_NAME'.
+  CALL FUNCTION 'VRM_SET_VALUES'
+    EXPORTING
+      ID     = LD_FIELD
+      VALUES = IT_LISTBOX.
+ENDFORM.

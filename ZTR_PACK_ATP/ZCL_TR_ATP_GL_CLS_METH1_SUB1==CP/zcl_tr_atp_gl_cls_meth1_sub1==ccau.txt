@@ -1,0 +1,25 @@
+class-pool .
+*"* class pool for class ZCL_TR_ATP_GL_CLS_METH1_SUB1
+
+*"* local type definitions
+include ZCL_TR_ATP_GL_CLS_METH1_SUB1==ccdef.
+
+*"* class ZCL_TR_ATP_GL_CLS_METH1_SUB1 definition
+*"* public declarations
+  include ZCL_TR_ATP_GL_CLS_METH1_SUB1==cu.
+*"* protected declarations
+  include ZCL_TR_ATP_GL_CLS_METH1_SUB1==co.
+*"* private declarations
+  include ZCL_TR_ATP_GL_CLS_METH1_SUB1==ci.
+endclass. "ZCL_TR_ATP_GL_CLS_METH1_SUB1 definition
+
+*"* macro definitions
+include ZCL_TR_ATP_GL_CLS_METH1_SUB1==ccmac.
+*"* local class implementation
+include ZCL_TR_ATP_GL_CLS_METH1_SUB1==ccimp.
+
+class ZCL_TR_ATP_GL_CLS_METH1_SUB1 implementation.
+*"* method's implementations
+  include methods.
+endclass. "ZCL_TR_ATP_GL_CLS_METH1_SUB1 implementation
+

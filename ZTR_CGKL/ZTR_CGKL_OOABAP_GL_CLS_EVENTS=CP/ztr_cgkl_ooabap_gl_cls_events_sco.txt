@@ -1,0 +1,3 @@
+ZTR_CGKL_OOABAP_GL_CLS_EVENTS GET_MATERIAL                  IT_TAB                        100
+ZTR_CGKL_OOABAP_GL_CLS_EVENTS GET_MATERIAL                  I_MATNR1                      100
+ZTR_CGKL_OOABAP_GL_CLS_EVENTS GET_MATERIAL                  I_MATNR2                      100

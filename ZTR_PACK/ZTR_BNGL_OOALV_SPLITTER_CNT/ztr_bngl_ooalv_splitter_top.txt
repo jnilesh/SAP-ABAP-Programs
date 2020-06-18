@@ -1,0 +1,15 @@
+*&---------------------------------------------------------------------*
+*&  Include            ZTR_BNGL_OOALV_SPLITTER_TOP
+*&---------------------------------------------------------------------*
+
+TABLES: MARA.
+
+DATA : IT_MARA TYPE TABLE OF MARA,
+       IT_MARC TYPE TABLE OF MARC.
+
+DATA : CUSTOM TYPE REF TO CL_GUI_CUSTOM_CONTAINER,
+       SPLIT1 TYPE REF TO CL_GUI_EASY_SPLITTER_CONTAINER,
+       SPLIT2 TYPE REF TO CL_GUI_EASY_SPLITTER_CONTAINER,
+       GRID1 TYPE REF TO CL_GUI_ALV_GRID,
+       GRID2 TYPE REF TO CL_GUI_ALV_GRID,
+       GRID3 TYPE REF TO CL_GUI_ALV_GRID.

@@ -1,0 +1,72 @@
+*&---------------------------------------------------------------------*
+*& Module Pool       Z168199_DD_DEMO
+*&
+*&---------------------------------------------------------------------*
+*&
+*&
+*&---------------------------------------------------------------------*
+PROGRAM ZTR_CNDT_IMAGE_GIF9.
+
+
+*&---------------------------------------------------------------------*
+*&      Module  STATUS_0100  OUTPUT
+*&---------------------------------------------------------------------*
+*       text
+*----------------------------------------------------------------------*
+MODULE STATUS_0100 OUTPUT.
+*  SET PF-STATUS 'xxxxxxxx'.
+*  SET TITLEBAR 'xxx'.
+
+  data lv_doc TYPE REF TO cl_dd_document.
+
+CREATE OBJECT LV_DOC
+*  EXPORTING
+*    STYLE  =
+*    BACKGROUND_COLOR = 10
+*    BDS_STYLESHEET =
+*    NO_MARGINS =
+    .
+
+CALL METHOD LV_DOC->ADD_TEXT
+  EXPORTING
+    TEXT          = 'WELCOME'
+*    TEXT_TABLE    =
+*    FIX_LINES     =
+*    SAP_STYLE     =
+    SAP_COLOR     = '3'
+    SAP_FONTSIZE  = lv_doc->LARGE
+*    SAP_FONTSTYLE =
+*    SAP_EMPHASIS  =
+*    STYLE_CLASS   =
+*    A11Y_TOOLTIP  =
+*  CHANGING
+*    DOCUMENT      =
+    .
+
+CALL METHOD LV_DOC->ADD_PICTURE
+  EXPORTING
+    PICTURE_ID       = 'Z168199_DD_DEMO1' "document name that we created in 'OAER' with gif file
+    WIDTH            = '200'
+*    ALTERNATIVE_TEXT =
+*    TABINDEX         =
+    .
+
+
+CALL METHOD LV_DOC->MERGE_DOCUMENT
+    .
+
+CALL METHOD LV_DOC->DISPLAY_DOCUMENT
+  EXPORTING
+*    REUSE_CONTROL      =
+*    REUSE_REGISTRATION =
+    CONTAINER          = 'CUST'
+*    PARENT             =
+*  EXCEPTIONS
+*    HTML_DISPLAY_ERROR = 1
+*    OTHERS             = 2
+        .
+IF SY-SUBRC <> 0.
+* Implement suitable error handling here
+ENDIF.
+
+ENDMODULE.

@@ -1,0 +1,36 @@
+*&---------------------------------------------------------------------*
+*& Report ZTR_CNDT_PROG3
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ZTR_CNDT_PROG3.
+
+INCLUDE ZTR_CNDT_PROG2_TOP3.
+
+
+*PARAMETERS P_MATNR TYPE MATNR.
+SELECT-OPTIONS S_MATNR FOR LV_MATNR.
+PARAMETERS P_MTART TYPE MTART.
+
+
+
+START-OF-SELECTION.
+
+SELECT MATNR
+       MBRSH
+       MTART
+       MEINS
+       MATKL
+     FROM MARA
+     INTO (LV_MATNR, LV_MBRSH, LV_MTART, LV_MEINS,  LV_MATKL)
+   WHERE MATNR IN S_MATNR and
+        MTART EQ P_MTART.
+
+
+     WRITE :/ LV_MATNR,
+              LV_MBRSH,
+              LV_MTART,
+              LV_MEINS,
+              LV_MATKL.
+
+  ENDSELECT.

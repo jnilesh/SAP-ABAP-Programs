@@ -1,0 +1,8 @@
+*&---------------------------------------------------------------------*
+*&  Include  ZTR_CGKL_HEADER_INCL
+*&---------------------------------------------------------------------*
+
+
+ULINE.
+WRITE :/ 'USER NAME: ', SY-UNAME,  'CURRENT PROGRAM NAME: ', SY-REPID, 'DATE:', SY-DATUM , 'TIME:', SY-UZEIT.
+ULINE.

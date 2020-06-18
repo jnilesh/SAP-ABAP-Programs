@@ -1,0 +1,22 @@
+*&---------------------------------------------------------------------*
+*&  Include           ZTR_DTP_ALV_POPUP_DISPLAY_TOP
+
+*&---------------------------------------------------------------------*
+TYPE-POOLS SLIS.
+
+DATA: LV_MATNR TYPE MATNR.
+
+TYPES: BEGIN OF TY_TAB,  " LOCAL STRS
+       MATNR TYPE MATNR  , " Material Number
+       MBRSH TYPE MBRSH, " Industry sector
+       MTART TYPE MTART, " Material Type
+       MEINS TYPE MEINS, " Base Unit of Measure
+       BRGEW TYPE BRGEW, " Gross Weight
+       NTGEW TYPE NTGEW, " Net Weight
+
+     END OF TY_TAB.
+DATA :IT_TAB TYPE STANDARD TABLE OF TY_TAB, " ITAB
+      WA_TAB TYPE TY_TAB.  " WORK ARE
+
+
+DATA IT_FIELDCAT TYPE SLIS_T_FIELDCAT_ALV WITH HEADER LINE.

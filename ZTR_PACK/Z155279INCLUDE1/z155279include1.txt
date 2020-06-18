@@ -1,0 +1,14 @@
+*&---------------------------------------------------------------------*
+*&  Include           Z155279INCLUDE1
+*&---------------------------------------------------------------------*
+TYPES : BEGIN OF TY_TAB,  " LOCAL STRS  " MARA
+          MATNR TYPE MATNR , " Material Number
+          MBRSH TYPE MBRSH, " Industry sector
+          MTART TYPE MTART, " Material Group
+          MEINS TYPE MEINS, " Base Unit of Measure
+        END OF TY_TAB.
+
+DATA :IT_TAB TYPE STANDARD TABLE OF TY_TAB, "  ITAB
+      WA_TAB TYPE TY_TAB.  " WORKAREA
+
+DATA LV_MATNR TYPE MARA-MATNR.

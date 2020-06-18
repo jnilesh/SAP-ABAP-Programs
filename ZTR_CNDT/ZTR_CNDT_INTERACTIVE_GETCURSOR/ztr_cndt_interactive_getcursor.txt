@@ -1,0 +1,135 @@
+*&---------------------------------------------------------------------*
+*& Report ZTR_CNDT_INTERACTIVE_GETCURSOR
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ZTR_CNDT_INTERACTIVE_GETCURSOR.
+*
+*DATA : VAR1(10) TYPE C VALUE 'FIELD1',
+*       VAR2(10) TYPE C VALUE 'FIELD2',
+*       VAR3(10) TYPE C VALUE 'FIELD3',
+*       FNAME(10) TYPE C.
+*
+*START-OF-SELECTION.
+*  FORMAT COLOR 7.
+*  WRITE :/ 'BASIC LIST'.
+*  FORMAT HOTSPOT ON.
+*
+*  WRITE : / VAR1, VAR2, VAR3.
+*
+*AT LINE-SELECTION.
+*GET CURSOR FIELD FNAME.
+*  IF FNAME = 'VAR1'.
+*    WRITE FNAME.
+*    WRITE VAR1.
+*    WRITE : / 'USER INTERACTED ON FIELD1'.
+*  ELSEIF FNAME = 'VAR2'.
+*    WRITE : / 'USER INTERACTED ON FIELD2'.
+*  ELSEIF FNAME = 'VAR3'.
+*    WRITE : / 'USER INTERACTED ON FIELD 3'.
+*  ENDIF.
+
+*------------------------------------------------------------------------------------
+*
+**
+*TYPES : BEGIN OF TY_VBAK,
+*  VBELN TYPE VBAK-VBELN,  " 5000
+*  KUNNR TYPE VBAK-KUNNR,  " 1234
+*  ERDAT TYPE VBAK-ERDAT,
+*  END OF TY_VBAK.
+*
+*DATA: IT_VBAK TYPE TABLE OF TY_VBAK,
+*      WA_VBAK TYPE TY_VBAK.
+*
+*START-OF-SELECTION.
+*SELECT VBELN
+*  KUNNR
+*  ERDAT
+*  INTO TABLE IT_VBAK
+*  FROM VBAK
+*  UP TO 10 ROWS
+*  ORDER BY VBELN.
+*
+*END-OF-SELECTION.
+*LOOP AT IT_VBAK INTO WA_VBAK.
+*FORMAT HOTSPOT ON.
+*WRITE : / WA_VBAK-VBELN,
+*          WA_VBAK-KUNNR.
+*FORMAT HOTSPOT OFF.
+*WRITE WA_VBAK-ERDAT.
+*ENDLOOP.
+*
+*TOP-OF-PAGE.
+*WRITE : / 'SALESDOCNO',
+*    'CUSTOMERNO',
+*    'DATE'.
+*AT LINE-SELECTION.
+*DATA: FNAM(15), FVAL(15).
+*
+*GET CURSOR FIELD FNAM VALUE FVAL.
+*IF FNAM = 'WA_VBAK-VBELN'.
+*  SET PARAMETER ID 'AUN' FIELD FVAL.
+*  CALL TRANSACTION 'VA02' AND SKIP FIRST SCREEN.
+*
+*ELSEIF FNAM = 'WA_VBAK-KUNNR'.
+*  SET PARAMETER ID 'KUN' FIELD FVAL.
+*  CALL TRANSACTION 'XD02' AND SKIP FIRST SCREEN.
+*ENDIF.
+****------------------------------
+
+
+TYPES : BEGIN OF TY_MARA, " LOCL STRS
+       MATNR TYPE MATNR,  " Material Number
+       MBRSH TYPE MBRSH,  " Industry sector
+       MTART TYPE MTART,  " Material type
+       MEINS TYPE MEINS,  " Base Unit of Measure
+       BRGEW TYPE BRGEW,  " Gross weight
+       NTGEW TYPE NTGEW,  " Net weight
+       END OF TY_MARA.
+
+DATA: IT_MARA TYPE STANDARD TABLE OF TY_MARA,  " ITAB
+      WA_MARA TYPE TY_MARA. " WORK AREA
+
+DATA LV_MATNR TYPE MATNR.
+
+INITIALIZATION.
+CLEAR LV_MATNR.
+
+SELECT-OPTIONS s_matnr FOR LV_MATNR .
+START-OF-SELECTION.
+
+  SELECT matnr
+         mbrsh
+         mtart
+         meins
+         brgew
+         ntgew
+    INTO TABLE it_mara
+    FROM mara
+    WHERE matnr IN s_matnr.
+
+  LOOP AT it_mara INTO wa_mara.
+    WRITE : / wa_mara-matnr ,
+            wa_mara-mbrsh,
+            wa_mara-mtart,
+            wa_mara-meins,
+            wa_mara-brgew,
+            wa_mara-ntgew.
+  ENDLOOP.
+
+TOP-OF-PAGE.
+WRITE : / 'SALESDOCNO',
+    'CUSTOMERNO',
+    'DATE'.
+AT LINE-SELECTION.
+DATA: FNAM(15), FVAL(15).
+
+GET CURSOR FIELD FNAM VALUE FVAL.  " 26
+IF FNAM = 'WA_MARA-MATNR'.    " mat00010
+  SET PARAMETER ID 'MAT' FIELD FVAL.
+  CALL TRANSACTION 'MM02' AND SKIP FIRST SCREEN.
+
+ELSEIF FNAM = 'WA_MARA-MATNR'.
+  SET PARAMETER ID 'MAT' FIELD FVAL.
+  CALL TRANSACTION 'MM03' AND SKIP FIRST SCREEN.
+ENDIF.

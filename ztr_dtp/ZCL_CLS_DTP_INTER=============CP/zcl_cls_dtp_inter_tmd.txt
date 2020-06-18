@@ -1,0 +1,2 @@
+ZCL_CLS_DTP_INTER             00000                                                             0
+ZCL_CLS_DTP_INTER             00001ZIF_CLS_DTP_INTER~METH_MAT                                   0

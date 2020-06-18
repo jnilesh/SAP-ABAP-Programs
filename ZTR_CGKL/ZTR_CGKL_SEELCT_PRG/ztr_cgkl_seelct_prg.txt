@@ -1,0 +1,41 @@
+*&---------------------------------------------------------------------*
+*& Report ZTR_CGKL_SEELCT_PRG
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ZTR_CGKL_SEELCT_PRG.
+TABLES KNA1.
+
+DATA : LV_KUNNR TYPE KUNNR, "  Customer Number " lv type dtl
+       LV_NAME1 TYPE NAME1_GP, " Name 1
+       LV_NAME2 TYPE NAME2_GP, " Name 2
+       LV_ORT01 TYPE ORT01_GP, " City
+       LV_LAND1 TYPE LAND1_GP.  " CountryKey1
+
+SELECT-OPTIONS S_KUNNR FOR KNA1-KUNNR.
+PARAMETERS P_LAND1 TYPE KNA1-LAND1.
+
+WRITE: / 'CUT NO',
+       13 'CUST NAME1',
+       50 'CUST NAME2',
+       90 'CITY',
+       120 'COUNTRY'.
+ULINE.
+
+
+
+SELECT  KUNNR
+       NAME1
+       NAME2
+       ORT01
+       LAND1
+     FROM KNA1
+  BYPASSING BUFFER
+     INTO (LV_KUNNR, LV_NAME1, LV_NAME2, LV_ORT01, LV_LAND1)
+   WHERE KUNNR in s_KUNNR AND
+         LAND1 EQ P_LAND1.
+
+WRITE : / LV_KUNNR, 13  LV_NAME1, 50 LV_NAME2,
+         90 LV_ORT01, 120 LV_LAND1.
+
+  ENDSELECT.

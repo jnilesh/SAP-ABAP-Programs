@@ -1,0 +1,56 @@
+*&---------------------------------------------------------------------*
+*&  Include            ZTR_ATP_OOALV_SPLITTER_TOP
+*&---------------------------------------------------------------------*
+
+DATA LV_MATNR TYPE MATNR.
+DATA : IT_FCAT1 TYPE LVC_T_FCAT,  " FCAT FOR MARA TABLE
+       WA_FCAT1 TYPE LVC_S_FCAT.
+
+DATA : IT_FCAT2 TYPE LVC_T_FCAT, " FCAT FOR MARC TABLE
+       WA_FCAT2 TYPE LVC_S_FCAT.
+
+DATA : IT_FCAT3 TYPE LVC_T_FCAT, " FCAT FOR MARD TABLE
+       WA_FCAT3 TYPE LVC_S_FCAT.
+
+
+DATA TY_LAYOUT TYPE LVC_S_LAYO.
+
+
+TYPES: BEGIN OF TY_TAB1,  " LOCAL STRS1
+         MATNR TYPE MATNR, " Material Number
+         MBRSH TYPE MBRSH, " Industry sector
+         MTART TYPE MTART, " Material Type
+         MEINS TYPE MEINS, " Base Unit of Measure
+         BRGEW TYPE BRGEW, " Gross Weight
+         NTGEW TYPE NTGEW, " Net Weight
+       END OF TY_TAB1.
+
+DATA :IT_TAB1 TYPE STANDARD TABLE OF TY_TAB1, " IT_TAB1
+      WA_TAB1 TYPE TY_TAB1.  " WORK ARE 1
+
+TYPES: BEGIN OF TY_TAB2,  " LOCAL STRS2
+         MATNR TYPE MATNR, " Material Number
+         WERKS TYPE WERKS_D, " Plant\
+         PSTAT TYPE PSTAT_D, " Maintenance status
+         EKGRP TYPE EKGRP, " Purchasing group
+       END OF TY_TAB2.
+
+DATA :IT_TAB2 TYPE STANDARD TABLE OF TY_TAB2, " IT_TAB2
+      WA_TAB2 TYPE TY_TAB2.  " WORK ARE 2
+
+TYPES: BEGIN OF TY_TAB3,  " LOCAL STRS3
+         MATNR TYPE MATNR, " Material Number
+         WERKS TYPE WERKS_D, " Plant
+         LGORT TYPE LGORT_D, " Storage location
+
+       END OF TY_TAB3.
+
+DATA :IT_TAB3 TYPE STANDARD TABLE OF TY_TAB3, " IT_TAB3
+      WA_TAB3 TYPE TY_TAB3.  " WORK ARE 3
+
+DATA : CUSTOM TYPE REF TO CL_GUI_CUSTOM_CONTAINER,
+       SPLIT1 TYPE REF TO CL_GUI_EASY_SPLITTER_CONTAINER,
+       SPLIT2 TYPE REF TO CL_GUI_EASY_SPLITTER_CONTAINER,
+       GRID1 TYPE REF TO CL_GUI_ALV_GRID,
+       GRID2 TYPE REF TO CL_GUI_ALV_GRID,
+       GRID3 TYPE REF TO CL_GUI_ALV_GRID.

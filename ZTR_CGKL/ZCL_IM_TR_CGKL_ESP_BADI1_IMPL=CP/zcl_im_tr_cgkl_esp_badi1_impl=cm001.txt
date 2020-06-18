@@ -1,0 +1,13 @@
+  method ZIF_EX_TR_CGKL_ESP_BADI1~METH_CUST_BADI.
+
+
+    SELECT KUNNR
+           NAME1
+           ORT01
+           LAND1
+      FROM KNA1
+      INTO TABLE IT_TAB
+      WHERE KUNNR BETWEEN I_KUNNR1 AND I_KUNNR2.
+
+
+  endmethod.

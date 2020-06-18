@@ -1,0 +1,11 @@
+*&---------------------------------------------------------------------*
+*&  Include           ZTR_BNGL_OOALV_PROG1_TOP
+*&---------------------------------------------------------------------*
+
+DATA LV_MATNR TYPE MATNR.
+
+DATA IT_TAB TYPE TABLE OF MARA.
+DATA WA_TAB TYPE MARA.
+
+DATA I_CONTAINER TYPE REF TO CL_GUI_CUSTOM_CONTAINER.
+DATA I_ALVGRID TYPE REF TO CL_GUI_ALV_GRID.

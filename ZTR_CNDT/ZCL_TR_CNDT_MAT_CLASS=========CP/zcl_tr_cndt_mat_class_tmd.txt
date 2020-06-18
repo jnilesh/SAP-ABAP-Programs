@@ -1,0 +1,3 @@
+ZCL_TR_CNDT_MAT_CLASS         00000                                                             0
+ZCL_TR_CNDT_MAT_CLASS         00001ZIF_TR_CNDT_MAT_CLASS~I_METH_MAT                             0
+ZCL_TR_CNDT_MAT_CLASS         00002CL_METH_MAT                                                  0

@@ -1,0 +1,36 @@
+*&---------------------------------------------------------------------*
+*&  Include   ZTR_ATP_CLASSICAL_TOP
+*&---------------------------------------------------------------------*
+
+DATA LV_MATNR TYPE MATNR.
+DATA LV_COUNT TYPE I.
+
+TYPES: BEGIN OF TY_TAB1,  " LOCAL STRS MARA
+      MATNR TYPE MATNR, " Material Number
+      MBRSH TYPE MBRSH, " Industry sector
+      MTART TYPE MTART, " Material type
+      MEINS TYPE MEINS, " Base Unit of Measure
+      BRGEW TYPE BRGEW, " Gross weight
+      NTGEW TYPE NTGEW, " Net weight
+     END OF TY_TAB1.
+
+DATA :IT_TAB1 TYPE STANDARD TABLE OF TY_TAB1,  " ITAB
+      WA_TAB1 TYPE TY_TAB1. " WORK AREA
+
+
+TYPES: BEGIN OF TY_TAB2,  " LOCAL STRS  MARC
+      MATNR TYPE MATNR, " Material Number
+      WERKS TYPE WERKS_D, " PLATN
+     END OF TY_TAB2.
+
+DATA :IT_TAB2 TYPE STANDARD TABLE OF TY_TAB2,
+      WA_TAB2 TYPE TY_TAB2. " WORK1 AREA
+
+
+TYPES: BEGIN OF TY_TAB3,  " LOCAL STRS MAKT
+      MATNR TYPE MATNR, " Material Number
+      MAKTX TYPE MAKTX, " MAT DESCRIPTIONS
+     END OF TY_TAB3.
+
+DATA :IT_TAB3 TYPE STANDARD TABLE OF TY_TAB3,
+      WA_TAB3 TYPE TY_TAB3. " WORK1 AREA

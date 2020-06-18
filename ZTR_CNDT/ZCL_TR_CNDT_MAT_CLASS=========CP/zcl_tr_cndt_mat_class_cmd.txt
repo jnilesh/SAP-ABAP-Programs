@@ -1,0 +1,1 @@
+ZCL_TR_CNDT_MAT_CLASS         CL_METH_MAT                   1  010001 0000TRAINEE01   20190802            000000000       0 0                                                                                                                                     000000000000                                                            

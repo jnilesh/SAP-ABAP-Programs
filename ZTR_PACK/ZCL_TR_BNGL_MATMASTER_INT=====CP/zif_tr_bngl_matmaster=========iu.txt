@@ -1,0 +1,11 @@
+interface ZIF_TR_BNGL_MATMASTER
+  public .
+
+
+  methods MAT_MAT
+    importing
+      !I_MATNR1 type MATNR
+      !I_MATNR2 type MATNR
+    exporting
+      !E_TAB type TABLE .
+endinterface.

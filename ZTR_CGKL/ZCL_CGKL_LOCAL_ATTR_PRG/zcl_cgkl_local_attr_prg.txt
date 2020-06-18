@@ -1,0 +1,27 @@
+*&---------------------------------------------------------------------*
+*& Report ZCL_CGKL_LOCAL_ATTR_PRG
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ZCL_CGKL_LOCAL_ATTR_PRG.
+
+CLASS CL_LCL_ATTR DEFINITION.
+
+PUBLIC SECTION.
+DATA I_VAR1 TYPE I VALUE 300. " INST
+
+CLASS-DATA S_VAR2 TYPE I VALUE 400. " CLASS VAR
+
+
+ENDCLASS.
+
+
+START-OF-SELECTION.
+
+DATA OBJ1 TYPE REF TO CL_LCL_ATTR.
+
+CREATE OBJECT OBJ1.
+
+WRITE  OBJ1->I_VAR1.
+SKIP.
+WRITE  CL_LCL_ATTR=>S_VAR2.

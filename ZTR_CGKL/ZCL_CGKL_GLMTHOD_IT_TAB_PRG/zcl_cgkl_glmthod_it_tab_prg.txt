@@ -1,0 +1,44 @@
+*&---------------------------------------------------------------------*
+*& Report ZCL_CGKL_GLMTHOD_IT_TAB_PRG
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ZCL_CGKL_GLMTHOD_IT_TAB_PRG.
+
+
+INCLUDE ZCL_CGKL_METH_TOP.
+
+SELECT-OPTIONS S_MATNR FOR LV_MATNR.
+
+START-OF-SELECTION.
+
+DATA I_OBJ1 TYPE REF TO ZCL_CGKL_GLMTHOD_IT_TAB.
+
+CREATE OBJECT i_obj1.
+
+CALL METHOD i_obj1->matmast_meth
+  EXPORTING
+    i_matnr1      = S_MATNR-LOW
+    i_matnr2      = S_MATNR-HIGH
+  IMPORTING
+    e_mat_tab     = IT_TAB
+  EXCEPTIONS
+    mat_not_found = 4
+    others        = 2
+        .
+IF sy-subrc NE 4.
+MESSAGE E126(00).
+ENDIF.
+
+
+
+  LOOP AT IT_TAB INTO WA_TAB. " B TO W
+
+    WRITE :/  WA_TAB-MATNR,
+             WA_TAB-MBRSH,
+             WA_TAB-MTART,
+             WA_TAB-MEINS,
+             WA_TAB-BRGEW,
+             WA_TAB-NTGEW.
+
+    ENDLOOP.

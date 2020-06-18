@@ -1,0 +1,72 @@
+*&---------------------------------------------------------------------*
+*& Report ZTR_ATP_CTRL_STMS
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ZTR_ATP_CTRL_STMS.
+
+
+*DO 5 TIMES.
+*
+*  WRITE / 'CAPGEMINI'.
+*
+*ENDDO.
+
+
+**WHILE
+
+*DATA M TYPE I VALUE 0.
+*
+*WHILE M < 10.
+*WRITE / M.
+*M = M + 1.
+*ENDWHILE.
+
+*  EXIT AND STOP
+*DO.
+*  WRITE SY-INDEX.
+*  IF SY-INDEX EQ 10.
+***  EXIT.
+*STOP.
+*    ENDIF.
+***WRITE 'CAPGEMINI'.
+*  ENDDO.
+*WRITE: /'CAPGEMINI'.
+
+
+*---------------
+
+*DO.
+*    IF SY-INDEX EQ 2.
+*    CONTINUE.
+*  ENDIF.
+*WRITE SY-INDEX.
+*  IF SY-INDEX EQ 10.
+*    EXIT.
+*  ENDIF.
+*ENDDO.
+*WRITE 'CAPGEMINI'.
+
+*CHECK
+*DO.
+*    WRITE SY-INDEX.
+*  IF SY-INDEX EQ 10.
+*    EXIT.
+*  ENDIF.
+*   CHECK SY-INDEX EQ 2.
+*       WRITE SY-INDEX.
+*ENDDO.
+*WRITE 'CAPGEMINI'.
+
+
+*CASE
+
+PARAMETERS P1 TYPE I DEFAULT 2.
+CASE P1.
+  WHEN '1'.
+    WRITE: 'FIRST BLOCK STMT' , P1.
+  WHEN '2'.
+    WRITE: 'SECOND BLOCK STMT' , P1.
+  WHEN OTHERS.
+    WRITE: 'DEFAULT BLOCK STMT' , P1.
+ENDCASE.

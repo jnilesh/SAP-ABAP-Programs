@@ -1,0 +1,4 @@
+ZCL_TR_BNGL_MATMASTER_CONST   00000                                                             0
+ZCL_TR_BNGL_MATMASTER_CONST   00001METH_MAT                                                     0
+ZCL_TR_BNGL_MATMASTER_CONST   00002CONSTRUCTOR                                                  0
+ZCL_TR_BNGL_MATMASTER_CONST   00003CLASS_CONSTRUCTOR                                            0

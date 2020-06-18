@@ -1,0 +1,11 @@
+%_CSDYDO
+CL_DD_AREA====================CU
+CL_DD_DOCUMENT================CU
+CL_DD_FORM_AREA===============CT
+CL_DD_LINK_ELEMENT============CT
+CL_DD_TABLE_AREA==============CT
+CL_DD_TABLE_ELEMENT===========CT
+CL_GUI_CONTAINER==============CT
+CL_GUI_CUSTOM_CONTAINER=======CT
+CL_GUI_HTML_VIEWER============CT
+SBDST=========================TT

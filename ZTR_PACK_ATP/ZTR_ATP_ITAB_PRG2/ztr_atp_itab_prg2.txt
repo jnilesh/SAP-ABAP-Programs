@@ -1,0 +1,37 @@
+*&---------------------------------------------------------------------*
+*& Report ZTR_ATP_ITAB_PRG2
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ZTR_ATP_ITAB_PRG2.
+
+INCLUDE ZTR_ATP_ITAB_PRG2_TOP.
+
+SELECT-OPTIONS S_MATNR FOR MARA-MATNR.
+
+SELECT MATNR
+       MBRSH
+       MTART
+       MEINS
+       BRGEW
+       NTGEW
+     INTO IT_TAB " HEADER
+*  INTO TABLE IT_TAB " IT_TAB BODY
+    FROM MARA
+  WHERE MATNR IN S_MATNR.
+
+  APPEND IT_TAB TO IT_TAB. " H TO B
+  CLEAr it_tab.
+  ENDSELECT.
+
+
+*  LOOP AT IT_TAB INTO IT_TAB. " B TO H
+    LOOP AT IT_TAB. " B TO H
+    WRITE :/ IT_TAB-MATNR,  " FROM HEADER
+             IT_TAB-MBRSH,
+             IT_TAB-MTART,
+             IT_TAB-MEINS,
+             IT_TAB-BRGEW,
+             IT_TAB-NTGEW.
+
+    ENDLOOP.

@@ -1,0 +1,154 @@
+*&---------------------------------------------------------------------*
+*& Report ZTR_CNDT_AT_SELECTION_OUTPUT
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ztr_cndt_at_selection_output.
+
+
+*
+PARAMETERS P_ENABLE AS CHECKBOX USER-COMMAND UC.
+PARAMETERS: INPUT(5) TYPE C MODIF ID IN1 . "Based on modif id we will perform dynamic operations
+
+AT SELECTION-SCREEN OUTPUT.
+
+  LOOP AT SCREEN.
+    IF P_ENABLE = 'X'  . " If check box is selected
+      IF SCREEN-GROUP1 = 'IN1' .
+        SCREEN-ACTIVE = 1.
+        MODIFY SCREEN.
+      ENDIF.
+    ELSE.
+      IF SCREEN-GROUP1 = 'IN1' .
+        SCREEN-ACTIVE = 0.
+        MODIFY SCREEN.
+      ENDIF.
+    ENDIF.
+  ENDLOOP.
+
+
+
+*  # 2.
+*DATA : BEGIN OF it_plant OCCURS 0,
+*        matnr LIKE mara-matnr,
+*        werks LIKE marc-werks,
+*        pstat LIKE marc-pstat,
+*        ekgrp LIKE marc-ekgrp,
+*       END OF it_plant.
+*
+*DATA : BEGIN OF it_pono OCCURS 0,
+*        ebeln LIKE ekko-ebeln,
+*        ebelp LIKE ekpo-ebelp,
+*        matnr LIKE ekpo-matnr,
+*        werks LIKE ekpo-werks,
+*        lgort LIKE ekpo-lgort,
+*       END OF it_pono.
+*TABLES ekko.
+*********END OF DATA DECLARATIONS*********
+********SELECTION SCREEN DESIGN **********
+*SELECTION-SCREEN BEGIN OF BLOCK b1 WITH FRAME TITLE TEXT-001.
+*PARAMETERs : p_werks LIKE marc-werks MODIF ID s1.
+*SELECT-OPTIONS : s_ebeln FOR ekko-ebeln NO INTERVALS MODIF ID s2.
+*SELECTION-SCREEN END OF BLOCK b1.
+*SELECTION-SCREEN BEGIN OF BLOCK b2 WITH FRAME TITLE TEXT-004.
+*SELECTION-SCREEN BEGIN OF LINE.
+*PARAMETERS : r1 RADIOBUTTON GROUP g1 DEFAULT 'X'.
+*SELECTION-SCREEN COMMENT 5(20) TEXT-002 FOR FIELD r1.
+*SELECTION-SCREEN END OF LINE.
+*SELECTION-SCREEN BEGIN OF LINE.
+*PARAMETERS : r2 RADIOBUTTON GROUP g1.
+*SELECTION-SCREEN COMMENT 5(20) TEXT-003 FOR FIELD r2.
+*SELECTION-SCREEN END OF LINE.
+*SELECTION-SCREEN END OF BLOCK b2.
+*******END OF SELECTION SCREEN DESIGN****************
+**********INITIALIZATION OF SELECTION SCREEN ELEMENTS.*****
+*INITIALIZATION.
+*  p_werks = '1000'.
+*  s_ebeln-low = '4500016926'.
+**  s_ebeln-option = 'EQ'.
+**  s_ebeln-sign = 'I'.
+*  APPEND s_ebeln.
+*  CLEAR s_ebeln.
+*************END OF INITIALIZATION***********************
+************SCREEN MODIFICATIONS*******************
+*AT SELECTION-SCREEN OUTPUT.
+*  LOOP AT SCREEN.
+*    IF r1 EQ 'X' AND screen-group1 EQ 'S1'.
+*      screen-input = '0'.
+*      if screen-group1 = 'S2'.
+*        screen-input = '1'.
+*      endif.
+*      MODIFY SCREEN.
+*   ELSEIF r2 EQ 'X' AND screen-group1 EQ 'S2'.
+*      screen-input = 0.
+*      if screen-group1 = 'S1'.
+*        screen-input = '1'.
+*      endif.
+*      MODIFY SCREEN.
+*    ENDIF.
+*  ENDLOOP.
+*********END OF SCREEN MODIFICATIONS*****************
+***************SCREEN VALIDATIONS ****************
+**AT SELECTION-SCREEN.
+**  SELECT SINGLE *
+**           FROM ekko
+**           INTO ekko
+**           WHERE ebeln IN s_ebeln.
+**  IF sy-subrc <> 0.
+**    SET CURSOR FIELD 'S_EBELN-LOW'.
+**    MESSAGE e999 WITH text-005.
+**  ENDIF.
+*********end of screen validation*****************
+*START-OF-SELECTION.
+**set pf-status '100'.
+*  IF r1 EQ 'X'.
+*    SELECT matnr
+*           werks
+*           pstat
+*           ekgrp
+*       FROM marc
+*       INTO TABLE it_plant
+*       WHERE werks = p_werks.
+*    LOOP AT it_plant.
+*      WRITE : sy-vline , 2 it_plant-matnr COLOR COL_KEY,
+*             21 sy-vline , 22  it_plant-werks COLOR COL_KEY,
+*             27 sy-vline ,28 it_plant-pstat COLOR COL_NORMAL,
+*             43 sy-vline ,44 it_plant-ekgrp COLOR COL_NORMAL.
+*    ENDLOOP.
+*  ENDIF.
+*  IF r2 EQ 'X'.
+*    SELECT ebeln ebelp matnr werks lgort
+*           FROM ekpo
+*           INTO TABLE it_pono
+*           WHERE ebeln IN s_ebeln.
+*    LOOP AT it_pono.
+*      WRITE : sy-vline , 2 it_pono-ebeln COLOR COL_KEY,
+*             12 sy-vline , 13 it_pono-ebelp COLOR COL_KEY,
+*             18 sy-vline , 19 it_pono-matnr COLOR COL_NORMAL,
+*             37 sy-vline , 38 it_pono-werks COLOR COL_NORMAL,
+*             44 sy-vline , 45 it_pono-lgort COLOR COL_NORMAL, 49 sy-vline..
+*    ENDLOOP.
+*  ENDIF.
+*
+*TOP-OF-PAGE.
+*  IF r1 EQ 'X'.
+**ULINE AT /1(48).
+*    WRITE : sy-vline ,2 'MATERIAL NUMBER',
+*            21 sy-vline , 22 'PLANT',
+*            27 sy-vline , 28 'STATUS',
+*            43 sy-vline , 44 'GRUP', 48 sy-vline.
+*    ULINE AT /1(48).
+*  ENDIF.
+*  IF r2 EQ 'X'.
+*    WRITE : sy-vline , 2 'PO NUMBER',
+*           12 sy-vline, 13 'ITEM',
+*           18 sy-vline,19 'MATERIAL NUMBER',
+*           37 sy-vline, 38 'PLANT',
+*           44 sy-vline, 45 'GRUP',
+*           49 sy-vline.
+*    ULINE AT /1(50).
+*  ENDIF.
+*
+*END-OF-PAGE.
+*  ULINE AT /1(50).
+*  WRITE :/10 'PAGE NUMBER', sy-pagno.

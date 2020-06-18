@@ -1,0 +1,11 @@
+*&---------------------------------------------------------------------*
+*&  Include           ZTR_BNGL_ALV_GRID_TOP
+*&---------------------------------------------------------------------*
+
+DATA LV_MATNR TYPE MATNR.
+
+TYPE-POOLS : SLIS.
+
+DATA IT_FIELDCAT TYPE SLIS_T_FIELDCAT_ALV WITH HEADER LINE.
+
+DATA :IT_TAB TYPE MARA OCCURS 0 WITH HEADER LINE.

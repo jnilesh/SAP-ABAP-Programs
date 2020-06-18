@@ -1,0 +1,23 @@
+*&---------------------------------------------------------------------*
+*& Module Pool       ZTR_ATP_MPOOL_TABSTRIP
+*&
+*&---------------------------------------------------------------------*
+*&
+*&
+*&---------------------------------------------------------------------*
+
+
+INCLUDE ZTR_ATP_MPOOL_TABSTRIPTOP               .    " global Data
+
+* INCLUDE ZTR_ATP_MPOOL_TABSTRIPO01               .  " PBO-Modules
+* INCLUDE ZTR_ATP_MPOOL_TABSTRIPI01               .  " PAI-Modules
+* INCLUDE ZTR_ATP_MPOOL_TABSTRIPF01               .  " FORM-Routines
+
+
+INCLUDE ztr_atp_mpool_tabstrip_stato01.
+
+INCLUDE ztr_atp_mpool_tabstrip_useri01.
+
+INCLUDE ztr_atp_mpool_tabstrip_useri02.
+
+INCLUDE ztr_atp_mpool_tabstrip_useri03.

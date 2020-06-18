@@ -1,0 +1,28 @@
+*&---------------------------------------------------------------------*
+*& Report ZTR_ATP_RFC99_PROG
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ZTR_ATP_RFC99_PROG.
+
+
+INCLUDE ZTR_ATP_RFC99_TOP.
+SELECT-OPTIONS S_MATNR FOR LV_MATNR.
+
+DATA IT_TAB2 TYPE MARA OCCURS 0 WITH HEADER LINE.
+
+CALL FUNCTION 'ZTR_ATP_RFC99' "DESTINATION 'LNDCLNT200_test' " SM59 NAME
+ EXPORTING
+   I_MATNR1       = S_MATNR-LOW
+   I_MATNR2       = S_MATNR-HIGH
+  TABLES
+    IT_TAB         = IT_TAB2
+          .
+
+LOOP AT IT_TAB2 INTO IT_TAB2.
+  WRITE: / IT_TAB2-MANDT,
+          IT_TAB2-MATNR,
+          IT_TAB2-MBRSH,
+          IT_TAB2-MTART.
+
+  ENDLOOP.

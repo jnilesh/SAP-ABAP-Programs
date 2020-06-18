@@ -1,0 +1,200 @@
+class CL_DD_AREA definition
+  public
+  create public .
+
+public section.
+
+  constants COL_BACKGROUND_LEVEL1 type I value 36. "#EC NOTEXT
+  constants COL_BACKGROUND_LEVEL2 type I value 35. "#EC NOTEXT
+  constants COL_TEXTAREA type I value 31. "#EC NOTEXT
+  constants COL_TREE_LEVEL1 type I value 60. "#EC NOTEXT
+  constants COL_TREE_LEVEL2 type I value 61. "#EC NOTEXT
+  constants COL_TREE_LEVEL3 type I value 62. "#EC NOTEXT
+  constants COL_TREE_LEVEL4 type I value 63. "#EC NOTEXT
+  type-pools SDYDO .
+  constants CURSOR type SDYDO_ATTRIBUTE value '<!%_CURSOR!>'. "#EC NOTEXT
+  constants EMPHASIS type SDYDO_ATTRIBUTE value 'EMPHASIS'. "#EC NOTEXT
+  constants EXTRA_LARGE type SDYDO_ATTRIBUTE value 'EXTRA_LARGE'. "#EC NOTEXT
+  constants HEADING type SDYDO_ATTRIBUTE value 'HEADING'. "#EC NOTEXT
+  constants KEY type SDYDO_ATTRIBUTE value 'KEY'. "#EC NOTEXT
+  constants LARGE type SDYDO_ATTRIBUTE value 'LARGE'. "#EC NOTEXT
+  constants LIST_BACKGROUND type SDYDO_ATTRIBUTE value 'LIST_BACKGROUND'. "#EC NOTEXT
+  constants LIST_BACKGROUND_INT type SDYDO_ATTRIBUTE value 'LIST_BACKGROUND_INT'. "#EC NOTEXT
+  constants LIST_BACKGROUND_INV type SDYDO_ATTRIBUTE value 'LIST_BACKGROUND_INV'. "#EC NOTEXT
+  constants LIST_GROUP type SDYDO_ATTRIBUTE value 'LIST_GROUP'. "#EC NOTEXT
+  constants LIST_GROUP_INT type SDYDO_ATTRIBUTE value 'LIST_GROUP_INT'. "#EC NOTEXT
+  constants LIST_GROUP_INV type SDYDO_ATTRIBUTE value 'LIST_GROUP_INV'. "#EC NOTEXT
+  constants LIST_HEADING type SDYDO_ATTRIBUTE value 'LIST_HEADING'. "#EC NOTEXT
+  constants LIST_HEADING_INT type SDYDO_ATTRIBUTE value 'LIST_HEADING_INT'. "#EC NOTEXT
+  constants LIST_HEADING_INV type SDYDO_ATTRIBUTE value 'LIST_HEADING_INV'. "#EC NOTEXT
+  constants LIST_KEY type SDYDO_ATTRIBUTE value 'LIST_KEY'. "#EC NOTEXT
+  constants LIST_KEY_INT type SDYDO_ATTRIBUTE value 'LIST_KEY_INT'. "#EC NOTEXT
+  constants LIST_KEY_INV type SDYDO_ATTRIBUTE value 'LIST_KEY_INV'. "#EC NOTEXT
+  constants LIST_NEGATIVE type SDYDO_ATTRIBUTE value 'LIST_NEGATIVE'. "#EC NOTEXT
+  constants LIST_NEGATIVE_INT type SDYDO_ATTRIBUTE value 'LIST_NEGATIVE_INT'. "#EC NOTEXT
+  constants LIST_NEGATIVE_INV type SDYDO_ATTRIBUTE value 'LIST_NEGATIVE_INV'. "#EC NOTEXT
+  constants LIST_NORMAL type SDYDO_ATTRIBUTE value 'LIST_NORMAL'. "#EC NOTEXT
+  constants LIST_NORMAL_INT type SDYDO_ATTRIBUTE value 'LIST_NORMAL_INT'. "#EC NOTEXT
+  constants LIST_NORMAL_INV type SDYDO_ATTRIBUTE value 'LIST_NORMAL_INV'. "#EC NOTEXT
+  constants LIST_POSITIVE type SDYDO_ATTRIBUTE value 'LIST_POSITIVE'. "#EC NOTEXT
+  constants LIST_POSITIVE_INT type SDYDO_ATTRIBUTE value 'LIST_POSITIVE_INT'. "#EC NOTEXT
+  constants LIST_POSITIVE_INV type SDYDO_ATTRIBUTE value 'LIST_POSITIVE_INV'. "#EC NOTEXT
+  constants LIST_TOTAL type SDYDO_ATTRIBUTE value 'LIST_TOTAL'. "#EC NOTEXT
+  constants LIST_TOTAL_INT type SDYDO_ATTRIBUTE value 'LIST_TOTAL_INT'. "#EC NOTEXT
+  constants LIST_TOTAL_INV type SDYDO_ATTRIBUTE value 'LIST_TOTAL_INV'. "#EC NOTEXT
+  constants MEDIUM type SDYDO_ATTRIBUTE value 'MEDIUM'. "#EC NOTEXT
+  constants SMALL type SDYDO_ATTRIBUTE value 'SMALL'. "#EC NOTEXT
+  constants STRONG type SDYDO_ATTRIBUTE value 'STRONG'. "#EC NOTEXT
+  constants SUCCESS type SDYDO_ATTRIBUTE value 'SUCCESS'. "#EC NOTEXT
+  constants WARNING type SDYDO_ATTRIBUTE value 'WARNING'. "#EC NOTEXT
+  constants TABLE_HEADING type SDYDO_ATTRIBUTE value 'TABLE_HEADING'. "#EC NOTEXT
+  class-data ACT_GUI_PROPERTIES type SDYDO_ACT_GUI_PROPERTIES .
+  class-data ACT_COLORS type SDYDO_COL_VALUE_TAB .
+  class-data ACT_LIST_COLORS type SDYDO_COL_VALUE_TAB .
+  data BDS_STYLESHEET type SDYDO_KEY .
+  data CHANGED type SDYDO_FLAG value 'X'. "#EC NOTEXT .  . " .
+  data CLASSIC_LIST type SDYDO_FLAG .
+  data ELEMENT_COUNT type I read-only .
+  data HTML_TABLE type SDYDO_HTML_TABLE .
+  data IS_DOCUMENT type SDYDO_FLAG read-only .
+  data IS_TABLEAREA type SDYDO_FLAG .
+  data IS_LINE_WITH_LAYOUT type SDYDO_FLAG .
+  data ID type SDYDO_ELEMENT_NAME read-only .
+  data SCRIPTED type SDYDO_FLAG .
+  data TABLE_OF_ELEMENTS type SDYDO_OBJECT_TABLE .
+  data TABLE_OF_PICTURES type SDYDO_PICTURE_TABLE .
+  constants SERIF type SDYDO_ATTRIBUTE value 'SERIF'. "#EC NOTEXT
+  constants SANS_SERIF type SDYDO_ATTRIBUTE value 'SANS_SERIF'. "#EC NOTEXT
+  constants STANDARD type SDYDO_ATTRIBUTE value 'STANDARD'. "#EC NOTEXT
+  data A11Y_TURNED type SDYDO_FLAG .
+
+  methods ADD_AREA_SWITCH
+    importing
+      !SWITCH_BUTTON_LABEL type STRING optional
+      !SWITCH_BUTTON_SAP_ICON type ICONNAME optional
+    changing
+      !AREA type ref to CL_DD_AREA .
+  methods ADD_FORM
+    exporting
+      !FORMAREA type ref to CL_DD_FORM_AREA
+      !MAIN_URL type STRING
+      !ALV_OFFLINE_INFO type STRING .
+  methods ADD_GAP
+    importing
+      !WIDTH type I optional
+      !WIDTH_LIKE type SDYDO_TEXT_ELEMENT optional .
+  methods ADD_HIDDEN_AREA
+    changing
+      !AREA type ref to CL_DD_AREA .
+  methods ADD_ICON
+    importing
+      !SAP_ICON type ICONNAME
+      !SAP_SIZE type SDYDO_ATTRIBUTE optional
+      !SAP_STYLE type SDYDO_ATTRIBUTE optional
+      !SAP_COLOR type SDYDO_ATTRIBUTE optional
+      !ALTERNATIVE_TEXT type STRING optional
+      !TABINDEX type I optional .
+  methods ADD_LINK
+    importing
+      !NAME type SDYDO_ELEMENT_NAME optional
+      !URL type STRING optional
+      !TOOLTIP type STRING optional
+      !TEXT type SDYDO_TEXT_ELEMENT optional
+      !DESTINATION_IN_DOC_SET type STRING optional
+      !DESTINATION_IN_DOC_POS type STRING optional
+      !TABINDEX type I optional
+      !HOTKEY type SDYDO_C1 optional
+    exporting
+      !LINK type ref to CL_DD_LINK_ELEMENT .
+  methods ADD_PICTURE
+    importing
+      value(PICTURE_ID) type SDYDO_KEY
+      !WIDTH type STRING optional
+      !ALTERNATIVE_TEXT type STRING optional
+      !TABINDEX type I optional .
+  methods ADD_STATIC_HTML
+    importing
+      !TABLE_WITH_HTML type SDYDO_HTML_TABLE optional
+      !STRING_WITH_HTML type STRING optional
+      !HTML_FROM_DYNAMIC_DOCUMENT type SDYDO_FLAG optional
+      !BDS_PICTURES type SDYDO_PICTURE_TABLE optional .
+  methods ADD_TABLE
+    importing
+      !NO_OF_COLUMNS type I
+      !WITH_HEADING type SDYDO_FLAG optional
+      !CELL_BACKGROUND_TRANSPARENT type SDYDO_FLAG default 'X'
+      !BORDER type SDYDO_VALUE default '1'
+      !WIDTH type SDYDO_VALUE optional
+      !WITH_A11Y_MARKS type SDYDO_FLAG optional
+      !A11Y_LABEL type STRING optional
+    exporting
+      !TABLE type ref to CL_DD_TABLE_ELEMENT
+      !TABLEAREA type ref to CL_DD_TABLE_AREA
+    exceptions
+      TABLE_ALREADY_USED .
+  methods ADD_TEXT
+    importing
+      !TEXT type SDYDO_TEXT_ELEMENT optional
+      !TEXT_TABLE type SDYDO_TEXT_TABLE optional
+      !FIX_LINES type SDYDO_FLAG optional
+      !SAP_STYLE type SDYDO_ATTRIBUTE optional
+      !SAP_COLOR type SDYDO_ATTRIBUTE optional
+      !SAP_FONTSIZE type SDYDO_ATTRIBUTE optional
+      !SAP_FONTSTYLE type SDYDO_ATTRIBUTE optional
+      !SAP_EMPHASIS type SDYDO_ATTRIBUTE optional
+      !STYLE_CLASS type SDYDO_ATTRIBUTE optional
+      !A11Y_TOOLTIP type STRING optional
+    changing
+      !DOCUMENT type ref to CL_DD_DOCUMENT optional .
+  methods ADD_TEXT_AS_HEADING
+    importing
+      !TEXT type SDYDO_TEXT_ELEMENT
+      !SAP_COLOR type SDYDO_ATTRIBUTE optional
+      !SAP_FONTSTYLE type SDYDO_ATTRIBUTE optional
+      !HEADING_LEVEL type I default 3
+      !A11Y_TOOLTIP type STRING optional
+    changing
+      !DOCUMENT type ref to CL_DD_DOCUMENT optional .
+  methods CONSTRUCTOR
+    importing
+      !ID type SDYDO_ELEMENT_NAME
+      !GUI_PROPERTIES type SDYDO_ACT_GUI_PROPERTIES optional
+      !A11Y_TURNED type SDYDO_FLAG optional .
+  methods HTML_INSERT
+    importing
+      !CONTENTS type STRING
+    changing
+      !POSITION type I .
+  methods LINE_WITH_LAYOUT
+    importing
+      !START type SDYDO_FLAG optional
+      !END type SDYDO_FLAG optional
+      !NO_LEADING_BREAK type SDYDO_FLAG default ' ' .
+  methods NEW_LINE
+    importing
+      !REPEAT type I optional .
+  methods NO_LINEBREAK
+    importing
+      !START type SDYDO_FLAG optional
+      !END type SDYDO_FLAG optional .
+  methods SET_AREA_STYLE
+    importing
+      !BACKGROUND_COLOR type I optional
+      !SAP_STYLE type SDYDO_ATTRIBUTE optional
+      !SAP_COLOR type SDYDO_ATTRIBUTE optional
+      !SAP_FONTSIZE type SDYDO_ATTRIBUTE optional
+      !SAP_FONTSTYLE type SDYDO_ATTRIBUTE optional
+      !SAP_EMPHASIS type SDYDO_ATTRIBUTE optional
+      !STYLE_CLASS type SDYDO_ATTRIBUTE optional .
+  methods SET_ATTRIBUTES
+    importing
+      !COLOR type SDYDO_ATTRIBUTE
+      !SIZE type SDYDO_ATTRIBUTE
+      !STYLE type SDYDO_ATTRIBUTE
+      !EMPHASIS type SDYDO_ATTRIBUTE optional
+    exporting
+      !BUFFER type STRING .
+  methods UNDERLINE .
+  type-pools CNDP .
+  type-pools CNTL .
+  type-pools SBDST .

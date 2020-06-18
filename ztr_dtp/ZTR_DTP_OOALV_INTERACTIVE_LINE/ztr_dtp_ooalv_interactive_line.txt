@@ -1,0 +1,140 @@
+REPORT ZTR_DTP_OOALV_INTERACTIVE_LINE.
+
+
+INCLUDE ZTR_DTP_OOALV_INT_LINE_TOP.
+
+SELECT-OPTIONS S_MATNR FOR LV_MATNR OBLIGATORY.
+
+CLASS LCL_CLASS DEFINITION.
+  PUBLIC SECTION.
+    METHODS : HANDLE_DOUBLE_CLICK FOR EVENT
+                  DOUBLE_CLICK OF CL_GUI_ALV_GRID
+      IMPORTING E_ROW.
+
+ENDCLASS.
+
+CLASS LCL_CLASS IMPLEMENTATION.
+  METHOD  HANDLE_DOUBLE_CLICK.
+    READ TABLE IT_MARA INTO WA_MARA INDEX E_ROW-INDEX.
+    SELECT * INTO TABLE IT_MAKT FROM MAKT
+                  WHERE MATNR = WA_MARA-MATNR AND
+    SPRAS EQ 'E'.
+
+    IF IT_MAKT IS INITIAL.
+      MESSAGE 'Material not found' TYPE 'I'.
+    ELSE.
+      CALL SCREEN 200.
+    ENDIF.
+  ENDMETHOD.
+ENDCLASS.
+
+START-OF-SELECTION.
+  CALL SCREEN 100.
+
+*&---------------------------------------------------------------------*
+*&      Module  STATUS_0100  OUTPUT
+*&---------------------------------------------------------------------*
+MODULE STATUS_0100 OUTPUT.
+  SET PF-STATUS 'ZTR_PFS1'.
+ENDMODULE.
+
+*&---------------------------------------------------------------------*
+*&      Module  DISP_MAT  OUTPUT
+*&---------------------------------------------------------------------*
+MODULE DISP_MATERIAL OUTPUT.
+  CREATE OBJECT I_CONTAINER
+    EXPORTING
+      CONTAINER_NAME = 'ALV_CNT1'.
+  IF SY-SUBRC <> 0.
+* MESSAGE ID SY-MSGID TYPE SY-MSGTY NUMBER SY-MSGNO
+*            WITH SY-MSGV1 SY-MSGV2 SY-MSGV3 SY-MSGV4.
+  ENDIF.
+
+  CREATE OBJECT I_GRID
+    EXPORTING
+      I_PARENT = I_CONTAINER.
+  IF SY-SUBRC <> 0.
+* MESSAGE ID SY-MSGID TYPE SY-MSGTY NUMBER SY-MSGNO
+*            WITH SY-MSGV1 SY-MSGV2 SY-MSGV3 SY-MSGV4.
+  ENDIF.
+
+  DATA IT_FCAT TYPE LVC_T_FCAT.
+  CALL FUNCTION 'LVC_FIELDCATALOG_MERGE'
+    EXPORTING
+      I_STRUCTURE_NAME = 'MARA'
+    CHANGING
+      CT_FIELDCAT      = IT_FCAT.
+
+  DATA I_HANDLER TYPE REF TO LCL_CLASS.
+  CREATE OBJECT I_HANDLER.
+  SET HANDLER I_HANDLER->HANDLE_DOUBLE_CLICK FOR I_GRID.
+
+  CALL METHOD I_GRID->SET_TABLE_FOR_FIRST_DISPLAY
+    CHANGING
+      IT_OUTTAB       = IT_MARA
+      IT_FIELDCATALOG = IT_FCAT.
+
+ENDMODULE.
+*&---------------------------------------------------------------------*
+*&      Module  GET_MAT  OUTPUT
+*&---------------------------------------------------------------------*
+MODULE GET_MATERIAL OUTPUT.
+  SELECT * FROM MARA
+     INTO TABLE IT_MARA
+     WHERE MATNR IN S_MATNR.
+ENDMODULE.
+*&---------------------------------------------------------------------*
+*&      Module  USER_COMMAND_0100  INPUT
+*&---------------------------------------------------------------------*
+MODULE USER_COMMAND_0100 INPUT.
+  CASE SY-UCOMM.
+    WHEN 'BACK'.
+      LEAVE TO SCREEN 0.
+  ENDCASE.
+ENDMODULE.
+*&---------------------------------------------------------------------*
+*&      Module  DISP_MATDETAILS  OUTPUT
+*&---------------------------------------------------------------------*
+MODULE DISP_MATDETAILS OUTPUT.
+  IF  I_CONTAINER2 IS INITIAL.
+    CREATE OBJECT I_CONTAINER2
+      EXPORTING
+        CONTAINER_NAME = 'ALV_CNT2'.
+    IF SY-SUBRC <> 0.
+* MESSAGE ID SY-MSGID TYPE SY-MSGTY NUMBER SY-MSGNO
+*            WITH SY-MSGV1 SY-MSGV2 SY-MSGV3 SY-MSGV4.
+    ENDIF.
+  ENDIF.
+
+  IF I_GRID2 IS INITIAL.
+    CREATE OBJECT I_GRID2
+      EXPORTING
+        I_PARENT = I_CONTAINER2.
+    IF SY-SUBRC <> 0.
+* MESSAGE ID SY-MSGID TYPE SY-MSGTY NUMBER SY-MSGNO
+*            WITH SY-MSGV1 SY-MSGV2 SY-MSGV3 SY-MSGV4.
+    ENDIF.
+  ENDIF.
+
+  CALL METHOD I_GRID2->SET_TABLE_FOR_FIRST_DISPLAY
+    EXPORTING
+      I_STRUCTURE_NAME = 'MAKT'
+    CHANGING
+      IT_OUTTAB        = IT_MAKT.
+
+ENDMODULE.
+*&---------------------------------------------------------------------*
+*&      Module  STATUS_0200  OUTPUT
+*&---------------------------------------------------------------------*
+MODULE STATUS_0200 OUTPUT.
+  SET PF-STATUS 'ZTR_PFS1'.
+ENDMODULE.
+*&---------------------------------------------------------------------*
+*&      Module  USER_COMMAND_0200  INPUT
+*&---------------------------------------------------------------------*
+MODULE USER_COMMAND_0200 INPUT.
+  CASE SY-UCOMM.
+    WHEN 'BACK'.
+      LEAVE TO SCREEN 0.
+  ENDCASE.
+ENDMODULE.

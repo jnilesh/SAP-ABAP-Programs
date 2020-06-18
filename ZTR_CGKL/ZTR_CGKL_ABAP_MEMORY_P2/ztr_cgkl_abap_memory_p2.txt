@@ -1,0 +1,50 @@
+*&---------------------------------------------------------------------*
+*& Report ZTR_CGKL_ABAP_MEMORY_P2
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ZTR_CGKL_ABAP_MEMORY_P2.
+
+TYPES : BEGIN OF TY_TAB, " LOCL STRS
+       MATNR TYPE MATNR,  " Material Number
+       MBRSH TYPE MBRSH,  " Industry sector
+       MTART TYPE MTART,  " Material type
+       MEINS TYPE MEINS,  " Base Unit of Measure
+       BRGEW TYPE BRGEW,  " Gross weight
+       NTGEW TYPE NTGEW,  " Net weight
+       END OF TY_TAB.
+
+DATA: IT_TAB TYPE STANDARD TABLE OF TY_TAB,  " ITAB
+      WA_TAB TYPE TY_TAB. " WORK AREA
+
+*PARAMETERS P_MATNR TYPE MARA-MATNR.
+
+
+DATA P_MATNR TYPE MARA-MATNR.
+
+
+IMPORT P_MATNR FROM MEMORY ID 'CAPGEM'.
+
+*FREE MEMORY ID 'CAPGEM'.
+
+START-OF-SELECTION.
+
+SELECT matnr
+         mbrsh
+         mtart
+         meins
+         brgew
+         ntgew
+  INTO TABLE it_tab
+    FROM mara
+    WHERE matnr EQ P_MATNR.
+
+
+  LOOP AT it_tab INTO wa_tab.  " BODY TO HEADER
+    WRITE : / wa_tab-matnr,
+              wa_tab-mbrsh,
+              wa_tab-mtart,
+              wa_tab-meins,
+              wa_tab-brgew,
+              wa_tab-ntgew.
+  ENDLOOP.

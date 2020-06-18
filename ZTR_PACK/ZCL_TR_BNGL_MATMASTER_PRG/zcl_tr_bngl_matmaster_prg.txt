@@ -1,0 +1,32 @@
+*&---------------------------------------------------------------------*
+*& Report ZCL_TR_BNGL_MATMASTER_PRG
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ZCL_TR_BNGL_MATMASTER_PRG.
+
+INCLUDE ZCL_TR_BNGL_MAT_TOP.
+
+SELECT-OPTIONS S_MATNR FOR LV_MATNR.
+
+START-OF-SELECTION.
+DATA I_OBJ1 TYPE REF TO ZCL_TR_BNGL_MATMASTER.
+
+CREATE OBJECT I_OBJ1.
+
+
+CALL METHOD I_OBJ1->METH_MAT
+  EXPORTING
+    I_MATNR1      = S_MATNR-LOW
+    I_MATNR2      = S_MATNR-HIGH
+  IMPORTING
+    E_TAB         = IT_TAB
+  EXCEPTIONS
+    MAT_NOT_FOUND = 1
+    OTHERS        = 2
+        .
+IF SY-SUBRC <> 0.
+* Implement suitable error handling here
+ENDIF.
+
+CL_DEMO_OUTPUT=>DISPLAY_DATA( IT_TAB ).

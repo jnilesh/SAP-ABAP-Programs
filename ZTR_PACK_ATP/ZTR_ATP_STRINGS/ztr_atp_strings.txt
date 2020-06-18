@@ -1,0 +1,58 @@
+*&---------------------------------------------------------------------*
+*& Report ZTR_ATP_STRINGS
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ZTR_ATP_STRINGS.
+
+*TRANSLATE
+*
+*PARAMETERS P1(20).
+*
+*TRANSLATE P1 TO LOWER CASE.
+*
+*WRITE P1.
+
+*CONCATENATE
+*PARAMETERS: P1(10),
+*            P2(10).
+*DATA P3(20).
+*
+*CONCATENATE P1 P2 INTO P3 SEPARATED BY '*'.
+*
+*WRITE : / P3.
+
+
+*STRLEN
+*PARAMETERS: P1(10).
+*DATA LEN TYPE I.
+*LEN = STRLEN( P1 ).
+*WRITE LEN.
+
+*SPLIT.
+*
+*PARAMETERS: P1(20).
+*DATA :P2(10),
+*      P3(10).
+*SPLIT P1 AT ',' INTO P2 P3.
+*
+*WRITE : P2, P3.
+
+
+*REPLACE
+*PARAMETERS: P1(10).
+*DO.
+*  IF P1 CA ','.
+* REPLACE ',' WITH '*' INTO P1.
+* ELSE.
+*   EXIT.
+*   ENDIF.
+*    ENDDO.
+*WRITE P1.
+
+*OFFSETTNG
+
+PARAMETERS: P1(10).
+DATA ABC(30) TYPE C.
+ABC = P1+2.
+WRITE ABC.

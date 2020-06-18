@@ -1,0 +1,4 @@
+ZCL_TR_BNGL_GL_CLASS1         I_V1                          EFIRST V1
+ZCL_TR_BNGL_GL_CLASS1         LION                          E
+ZCL_TR_BNGL_GL_CLASS1         S_V2                          ESECOND V2
+ZCL_TR_BNGL_GL_CLASS1         TIGER                         E

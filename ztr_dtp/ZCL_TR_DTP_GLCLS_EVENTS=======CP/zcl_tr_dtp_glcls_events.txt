@@ -1,0 +1,25 @@
+class-pool .
+*"* class pool for class ZCL_TR_DTP_GLCLS_EVENTS
+
+*"* local type definitions
+include ZCL_TR_DTP_GLCLS_EVENTS=======ccdef.
+
+*"* class ZCL_TR_DTP_GLCLS_EVENTS definition
+*"* public declarations
+  include ZCL_TR_DTP_GLCLS_EVENTS=======cu.
+*"* protected declarations
+  include ZCL_TR_DTP_GLCLS_EVENTS=======co.
+*"* private declarations
+  include ZCL_TR_DTP_GLCLS_EVENTS=======ci.
+endclass. "ZCL_TR_DTP_GLCLS_EVENTS definition
+
+*"* macro definitions
+include ZCL_TR_DTP_GLCLS_EVENTS=======ccmac.
+*"* local class implementation
+include ZCL_TR_DTP_GLCLS_EVENTS=======ccimp.
+
+class ZCL_TR_DTP_GLCLS_EVENTS implementation.
+*"* method's implementations
+  include methods.
+endclass. "ZCL_TR_DTP_GLCLS_EVENTS implementation
+

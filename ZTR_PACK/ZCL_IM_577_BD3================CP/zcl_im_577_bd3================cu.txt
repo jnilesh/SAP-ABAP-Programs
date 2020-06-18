@@ -1,0 +1,8 @@
+class ZCL_IM_577_BD3 definition
+  public
+  final
+  create public .
+
+public section.
+
+  interfaces IF_EX_BADI_MATERIAL_CHECK .

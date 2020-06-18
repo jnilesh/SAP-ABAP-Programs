@@ -1,0 +1,93 @@
+*&---------------------------------------------------------------------*
+*& Report ZTR_BNGL_ADOBE_FORM2_PROG
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ZTR_BNGL_ADOBE_FORM2_PROG.
+
+
+INCLUDE ZTR_BNGL_ADOBE_FORM2_PROG_TOP.
+
+
+PARAMETERS P_EBELN TYPE ebeln.
+
+
+START-OF-SELECTION.
+
+
+*
+WA_OUTPUTPARAMS-DEVICE = 'PRINTER'.
+WA_OUTPUTPARAMS-DEST  = 'LP01'.
+WA_OUTPUTPARAMS-NODIALOG = 'X'.
+WA_OUTPUTPARAMS-PREVIEW = 'X'.
+
+CALL FUNCTION 'FP_JOB_OPEN'
+  CHANGING
+    ie_outputparams       = WA_OUTPUTPARAMS
+* EXCEPTIONS
+*   CANCEL                = 1
+*   USAGE_ERROR           = 2
+*   SYSTEM_ERROR          = 3
+*   INTERNAL_ERROR        = 4
+*   OTHERS                = 5
+          .
+IF sy-subrc <> 0.
+* Implement suitable error handling here
+ENDIF.
+
+
+CALL FUNCTION 'FP_FUNCTION_MODULE_NAME'
+  EXPORTING
+    i_name                     = 'ZTR_BNGL_ADOBE_FORM2'
+ IMPORTING
+   E_FUNCNAME                 = gv_fm_name
+*   E_INTERFACE_TYPE           =
+*   EV_FUNCNAME_INBOUND        =
+          .
+
+wa_docparams-langu = 'EN'.
+wa_docparams-country = 'IN'.
+
+SELECT  EBELN
+        EBELP
+        MATNR
+        BUKRS
+        WERKS
+  FROM EKPO
+    INTO (GV_EBELN, GV_EBELP, GV_MATNR, GV_BUKRS, GV_WERKS)
+  WHERE EBELN EQ P_EBELN.
+ENDSELECT.
+
+
+CALL FUNCTION gv_fm_name
+  EXPORTING
+   /1BCDWB/DOCPARAMS        = wa_docparams
+    ebeln                    = GV_EBELN
+    ebelp                    = GV_EBELP
+    matnr                    = GV_MATNR
+    bukrs                    = GV_BUKRS
+    werks                    = GV_WERKS
+* IMPORTING
+*   /1BCDWB/FORMOUTPUT       =
+* EXCEPTIONS
+*   USAGE_ERROR              = 1
+*   SYSTEM_ERROR             = 2
+*   INTERNAL_ERROR           = 3
+*   OTHERS                   = 4
+          .
+IF sy-subrc <> 0.
+* Implement suitable error handling here
+ENDIF.
+*
+CALL FUNCTION 'FP_JOB_CLOSE'
+* IMPORTING
+*   E_RESULT             =
+* EXCEPTIONS
+*   USAGE_ERROR          = 1
+*   SYSTEM_ERROR         = 2
+*   INTERNAL_ERROR       = 3
+*   OTHERS               = 4
+          .
+IF sy-subrc <> 0.
+* Implement suitable error handling here
+ENDIF.

@@ -1,0 +1,85 @@
+*&---------------------------------------------------------------------*
+*& Modulpool  ztr_cndt_mpool_update
+*&
+*&---------------------------------------------------------------------*
+PROGRAM ztr_cndt_mpool_update MESSAGE-ID 00.
+
+INCLUDE ZTR_CNDT_MPOOL_UPDATE_TOP.
+
+
+*&---------------------------------------------------------------------*
+*&      Module  STATUS_0100  OUTPUT
+*&---------------------------------------------------------------------*
+*       text
+*----------------------------------------------------------------------*
+MODULE status_0100 OUTPUT.
+  SET PF-STATUS 'ZTR_CNDT_MPOOL'.
+*  SET TITLEBAR 'xxx'.
+
+ENDMODULE.
+*&---------------------------------------------------------------------*
+*&      Module  USER_COMMAND_0100  INPUT
+*&---------------------------------------------------------------------*
+*       text
+*----------------------------------------------------------------------*
+MODULE user_command_0100 INPUT.
+* INSERT.
+    CASE sy-ucomm.
+      WHEN 'INSERT'.
+        MOVE ZTR_CNDT_EMP TO wa_tab.
+        APPEND wa_tab TO it_tab.
+        INSERT INTO ZTR_CNDT_EMP VALUES wa_tab.
+        IF sy-subrc EQ 0.
+
+MESSAGE i001(0) WITH 'EMPLOYEE TABLE HAS BEEN INSERTED SUCCESSFULLY'.
+          ELSE.
+MESSAGE e001(0) WITH 'EMPLOYEE HAS NOT UPDATED'.
+            ENDIF.
+* UPDATE
+            WHEN 'UPDATE'.
+            MOVE ZTR_CNDT_EMP TO wa_tab.
+            APPEND wa_tab TO it_tab.
+            UPDATE ZTR_CNDT_EMP FROM TABLE it_tab.
+
+            IF sy-subrc EQ 0.
+       MESSAGE i001(0) WITH 'EMPLOYEE TABLE HAS BEEN UPDATED SUCCESSFULLY'.
+          ELSE.
+            MESSAGE w001(0) WITH 'EMPLOYEE HAS NOT UPDATED'.
+            ENDIF.
+*DELETE.
+            WHEN 'DELETE'.
+             MOVE ZTR_CNDT_EMP TO wa_tab.
+        APPEND wa_tab TO it_tab.
+        DELETE FROM ZTR_CNDT_EMP WHERE empno = wa_tab-empno.
+        IF sy-subrc EQ 0.
+            MESSAGE i001(0) WITH 'EMPLOYEE TABLE HAS BEEN DELETED SUCCESSFULLY'.
+          ELSE.
+            MESSAGE w001(0) WITH 'EMPLOYEE HAS NOT DELETED'.
+            ENDIF.
+       WHEN 'EXIT'.
+         LEAVE PROGRAM.
+         ENDCASE.
+
+
+ENDMODULE.
+
+*&---------------------------------------------------------------------*
+*&      Module  HIDE_BUTTONS  OUTPUT
+*&---------------------------------------------------------------------*
+*       text
+*----------------------------------------------------------------------*
+MODULE hide_buttons OUTPUT.
+  LOOP AT SCREEN.
+CASE sy-ucomm.
+   WHEN 'INSERT'.  " G1
+     IF screen-group1 EQ 'G2' OR SCREEN-GROUP1 EQ 'G3'.
+    screen-input = '0'.
+*         SCREEN-ACTIVE = '0'.
+            MODIFY SCREEN.
+*            LEAVE TO SCREEN 100.
+         ENDIF.
+      ENDCASE.
+      ENDLOOP.
+
+
+ENDMODULE.

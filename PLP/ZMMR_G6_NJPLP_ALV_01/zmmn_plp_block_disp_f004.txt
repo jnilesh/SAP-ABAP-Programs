@@ -1,0 +1,51 @@
+*----------------------------------------------------------------------*
+***INCLUDE ZMMN_PLP_BLOCK_DISP_F004.
+*----------------------------------------------------------------------*
+
+
+FORM F004_BLOCK_DISP .
+
+IF not it_join is INITIAL.
+
+  CALL FUNCTION 'REUSE_ALV_BLOCK_LIST_INIT'
+    EXPORTING
+      i_callback_program = sy-repid.
+
+
+  CALL FUNCTION 'REUSE_ALV_BLOCK_LIST_APPEND'
+    EXPORTING
+      is_layout   = it_layout
+      it_fieldcat = it_fcat[]
+      i_tabname   = TEXT-004
+      it_events   = it_event[]
+      it_sort     = it_sort
+    TABLES
+      t_outtab    = it_join
+   EXCEPTIONS
+   PROGRAM_ERROR                    = 1
+   MAXIMUM_OF_APPENDS_REACHED       = 2
+   OTHERS                           = 3 .
+
+  IF sy-subrc <> 0.
+* IMPLEMENT SUITABLE ERROR HANDLING HERE
+    MESSAGE e007 .
+
+  ENDIF.
+
+
+  CALL FUNCTION 'REUSE_ALV_BLOCK_LIST_DISPLAY'
+    EXCEPTIONS
+      program_error = 1
+      OTHERS        = 2.
+
+
+  IF sy-subrc <> 0.
+* IMPLEMENT SUITABLE ERROR HANDLING HERE
+    MESSAGE e005.
+  ENDIF.
+
+
+  CLEAR it_join.
+ENDIF.
+
+ENDFORM.

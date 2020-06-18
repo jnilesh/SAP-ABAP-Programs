@@ -1,0 +1,88 @@
+REPORT ZTR_DTP_FM_FORM2_PRG.
+
+INCLUDE ZTR_DTP_FM_FORM2_TOP.
+
+PARAMETERS P_KUNNR TYPE KUNNR.
+
+START-OF-SELECTION.
+
+wa_outputparams-DEVICE = 'PRINTER'.
+wa_outputparams-DEST  = 'LP01'.
+wa_outputparams-NODIALOG = 'X'.
+wa_outputparams-PREVIEW  = 'X'.
+
+
+
+CALL FUNCTION 'FP_JOB_OPEN'
+  CHANGING
+    IE_OUTPUTPARAMS       = wa_outputparams
+* EXCEPTIONS
+*   CANCEL                = 1
+*   USAGE_ERROR           = 2
+*   SYSTEM_ERROR          = 3
+*   INTERNAL_ERROR        = 4
+*   OTHERS                = 5
+          .
+IF SY-SUBRC <> 0.
+* Implement suitable error handling here
+ENDIF.
+
+
+CALL FUNCTION 'FP_FUNCTION_MODULE_NAME'
+  EXPORTING
+    I_NAME                     = 'ZTR_DTP_FM_FORM2'
+ IMPORTING
+   E_FUNCNAME                 =  FM_NAME
+*   E_INTERFACE_TYPE           =
+*   EV_FUNCNAME_INBOUND        =
+          .
+
+
+wa_docparams-langu = 'E'.
+wa_docparams-country = 'IN'.
+
+
+SELECT SINGLE KUNNR
+       NAME1
+       ORT01
+       LAND1
+   INTO (LV_KUNNR, LV_NAME1, LV_ORT01, LV_LAND1)
+  FROM KNA1
+  WHERE KUNNR EQ P_KUNNR.
+
+
+
+
+CALL FUNCTION FM_NAME
+  EXPORTING
+   /1BCDWB/DOCPARAMS        = wa_docparams
+    LV_KUNNR                 = LV_KUNNR
+    LV_NAME1                 = LV_NAME1
+    LV_ORT01                 = LV_ORT01
+    LV_LAND1                 = LV_LAND1
+* IMPORTING
+*   /1BCDWB/FORMOUTPUT       =
+* EXCEPTIONS
+*   USAGE_ERROR              = 1
+*   SYSTEM_ERROR             = 2
+*   INTERNAL_ERROR           = 3
+*   OTHERS                   = 4
+          .
+IF SY-SUBRC <> 0.
+* Implement suitable error handling here
+ENDIF.
+
+
+
+CALL FUNCTION 'FP_JOB_CLOSE'
+* IMPORTING
+*   E_RESULT             =
+* EXCEPTIONS
+*   USAGE_ERROR          = 1
+*   SYSTEM_ERROR         = 2
+*   INTERNAL_ERROR       = 3
+*   OTHERS               = 4
+          .
+IF SY-SUBRC <> 0.
+* Implement suitable error handling here
+ENDIF.

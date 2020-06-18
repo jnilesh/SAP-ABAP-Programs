@@ -1,0 +1,48 @@
+*&---------------------------------------------------------------------*
+*& Report ZTR_CNDT_IMAGE_UPLOAD
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ztr_cndt_image_upload.
+
+PARAMETERS p_file TYPE ibipparms-path.
+PARAMETERS p_name TYPE stxbitmaps-tdname.
+
+DATA lv_docid TYPE stxbitmaps-docid.
+DATA lv_res TYPE stxbitmaps-resolution.
+
+AT SELECTION-SCREEN ON VALUE-REQUEST FOR p_file.
+  CALL FUNCTION 'F4_FILENAME'
+*   EXPORTING
+*     PROGRAM_NAME        = SYST-CPROG
+*     DYNPRO_NUMBER       = SYST-DYNNR
+*     FIELD_NAME          = 'P_FILE'
+    IMPORTING
+      file_name = p_file.
+
+AT SELECTION-SCREEN.
+  IF p_file IS INITIAL.
+    MESSAGE 'Please provide file path' TYPE 'E'.
+  ELSEIF p_name IS INITIAL.
+    MESSAGE 'Pleas provide file name' TYPE 'E'.
+  ENDIF.
+
+START-OF-SELECTION.
+  PERFORM import_bitmap_bds
+                        IN PROGRAM saplstxbitmaps
+                                  USING  p_file
+                                         p_name
+                                         'GRAPHICS'    "Object
+                                         'BMAP'       "ID
+                                         'BCOL'       "color
+                                         'BMP'       "Extension
+                                         ''
+                                         space
+                                         'X'
+                                         space
+                                  CHANGING lv_docid
+                                           lv_res.
+  IF sy-subrc = 0.
+    MESSAGE 'Image uploaded sucessfully' TYPE 'I'.
+    CALL TRANSACTION 'SE78'.
+  ENDIF.

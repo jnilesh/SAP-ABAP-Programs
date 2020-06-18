@@ -1,0 +1,4 @@
+  method I_METH1.
+
+  WRITE: 'Calling global class IN METHOD 01 OBJECT'.
+  endmethod.

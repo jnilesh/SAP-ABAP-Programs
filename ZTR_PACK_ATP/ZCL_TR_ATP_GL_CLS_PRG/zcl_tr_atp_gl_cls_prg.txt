@@ -1,0 +1,15 @@
+*&---------------------------------------------------------------------*
+*& Report ZCL_TR_ATP_GL_CLS_PRG
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ZCL_TR_ATP_GL_CLS_PRG.
+
+START-OF-SELECTION.
+
+DATA OBJ1 TYPE REF TO ZCL_TR_ATP_GL_CLS.
+
+CREATE OBJECT OBJ1.
+
+WRITE: / OBJ1->I_ATTR,
+         ZCL_TR_ATP_GL_CLS=>S_ATTR.

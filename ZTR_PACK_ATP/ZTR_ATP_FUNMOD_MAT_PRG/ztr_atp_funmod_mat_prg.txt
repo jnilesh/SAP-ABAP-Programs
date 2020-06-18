@@ -1,0 +1,28 @@
+*&---------------------------------------------------------------------*
+*& Report ZTR_ATP_FUNMOD_MAT_PRG
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ZTR_ATP_FUNMOD_MAT_PRG.
+DATA LV_MATNR TYPE MATNR.
+
+DATA IT_TAB2 TYPE MARA OCCURS 0 WITH HEADER LINE.
+
+SELECT-OPTIONS S_MATNR FOR LV_MATNR.
+
+CALL FUNCTION 'ZTR_ATP_FUNMOD_MAT'
+ EXPORTING
+   I_MATNR1       = S_MATNR-LOW
+   I_MATNR2       = S_MATNR-HIGH
+  TABLES
+    it_tab         = IT_TAB2
+          .
+
+LOOP AT IT_TAB2 INTO IT_TAB2.
+
+  WRITE : / IT_TAB2-MATNR,
+            IT_TAB2-MBRSH,
+            IT_TAB2-MTART,
+            IT_TAB2-MEINS.
+
+  ENDLOOP.

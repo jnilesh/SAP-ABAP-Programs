@@ -1,0 +1,376 @@
+
+
+*&---------------------------------------------------------------------*
+REPORT ZTR_BNGL_OOABAP_INHERITANCE.
+
+************************************************************************************************
+*SUBCLASS CAN ACCESS PUBLIC/PROTECTED COMPONENTS OF SUPERCLASS
+************************************************************************************************
+
+CLASS c1 DEFINITION.
+  PUBLIC SECTION.
+    METHODS : meth1.
+    DATA : num TYPE i VALUE 6.
+  PROTECTED SECTION.
+    DATA : num2 TYPE i VALUE 7.
+    METHODS meth2.
+ENDCLASS.
+
+CLASS c1 IMPLEMENTATION.
+  METHOD : meth1.
+    WRITE :/5 num.
+  ENDMETHOD.
+
+  METHOD : meth2.
+    WRITE:/5 ' I AM METH2 '.
+  ENDMETHOD.
+ENDCLASS.
+
+CLASS c2 DEFINITION INHERITING FROM c1.
+  PUBLIC SECTION.
+    METHODS : m1.
+ENDCLASS.
+CLASS c2 IMPLEMENTATION.
+  METHOD m1.
+    CALL METHOD : meth1 , meth2.
+
+*  METHOD meth.
+*
+*      endmethod.
+    WRITE:/5 num2.
+    WRITE:/5 ' I AM in m1 meth '.
+  ENDMETHOD.
+ENDCLASS.
+
+START-OF-SELECTION.
+  DATA : oref TYPE REF TO c2.
+  CREATE OBJECT oref.
+  CALL METHOD oref->m1.
+
+
+************************************************************************************************
+*SUBCLASS CAN RE-IMPLEMENT
+*INHERITED METHODS FROM SUPERCLASS
+************************************************************************************************
+
+*CLASS C1 DEFINITION.
+*  PUBLIC SECTION.
+*  METHODS : METH1.
+*  PROTECTED SECTION.
+*  METHODS METH2.
+*  ENDCLASS.
+*
+*  CLASS C1 IMPLEMENTATION.
+*    METHOD : METH1.
+*      WRITE:/5 ' I AM METH1 IN CLASS C1 '.
+*      CALL METHOD METH2.
+*      ENDMETHOD.
+*
+*  METHOD : METH2.
+*    WRITE:/5 ' I AM METH2 IN CLASS C1 '.
+*    ENDMETHOD.
+*    ENDCLASS.
+*
+*    CLASS C2 DEFINITION INHERITING FROM C1.
+*      PUBLIC SECTION.
+*      METHODS : METH1 REDEFINITION.
+*      PROTECTED SECTION.
+*      METHODS : METH2 REDEFINITION.
+*      ENDCLASS.
+*
+*      CLASS C2 IMPLEMENTATION.
+*        METHOD METH1.
+*          WRITE:/5 ' I AM METH1 IN CLASS C2 '.
+*          CALL METHOD METH2.
+*          ENDMETHOD.
+*          METHOD : METH2.
+*            WRITE:/5 ' I AM METH2 IN CLASS C2 '.
+*            ENDMETHOD.
+*          ENDCLASS.
+*
+*       START-OF-SELECTION.
+*          DATA : OREF1 TYPE REF TO C1,
+*                 OREF2 TYPE REF TO C2.
+*
+*          CREATE OBJECT : OREF1,OREF2.
+*          CALL METHOD : OREF1->METH1,
+*                        OREF2->METH1.
+
+************************************************************************************************
+"OBJECTS CANNOT BE CREATED FROM AN ABSTRACT CLASS
+************************************************************************************************
+
+*CLASS C1 DEFINITION ABSTRACT.
+*  PUBLIC SECTION.
+*  ENDCLASS.
+*
+**  CLASS C1 IMPLEMENTATION.
+**    METHOD : METH1.
+**      ENDCLASS.
+*
+*      CLASS C2 DEFINITION INHERITING FROM C1.
+*        ENDCLASS.
+*
+*        CLASS C2 IMPLEMENTATION.
+*
+*          ENDCLASS.
+*
+*     START-OF-SELECTION.
+*          DATA : OREF1 TYPE REF TO C1,
+*                OREF2 TYPE REF TO C2.
+*          CREATE OBJECT OREF2.
+
+************************************************************************************************
+*ABSTRACT METHODS CANNOT BE IMPLEMENTED IN ABSTRACT CLASS
+************************************************************************************************
+*
+*CLASS C1 DEFINITION ABSTRACT.
+*  PUBLIC SECTION.
+*  METHODS : METH1 ABSTRACT.
+*  ENDCLASS.
+*
+*  CLASS C1 IMPLEMENTATION.
+**METHOD meth1.
+**
+**  ENDMETHOD.
+*    ENDCLASS.
+*
+*    CLASS C2 DEFINITION INHERITING FROM C1.
+*      PUBLIC SECTION.
+*      METHODS : METH1." REDEFINITION.
+*      ENDCLASS.
+*
+*      CLASS C2 IMPLEMENTATION.
+*        METHOD : METH1.
+*          WRITE:/5 'I AM METHOD: METH1 '.
+*          ENDMETHOD.
+*          ENDCLASS.
+*
+*START-OF-SELECTION.
+*DATA : OREF2 TYPE REF TO C2.
+*  CREATE OBJECT OREF2.
+*call METHOD OREF2->meth1.
+
+************************************************************************************************
+*FINAL CLASSES CANNOT HAVE ANY SUBCLASS
+************************************************************************************************
+*
+*CLASS C1 DEFINITION FINAL.
+*  ENDCLASS.
+*
+*CLASS C1 IMPLEMENTATION.
+*  ENDCLASS.
+*
+*CLASS C2 DEFINITION INHERITING FROM C1.
+*    ENDCLASS.
+*
+*CLASS C2 IMPLEMENTATION.
+*      ENDCLASS.
+*
+* START-OF-SELECTION.
+*      DATA : OREF2 TYPE REF TO C2.
+*      CREATE OBJECT OREF2.
+
+************************************************************************************************
+*FINAL METHODS CANNOT BE REDEFINED IN THE SUBCLASSES
+************************************************************************************************
+
+*CLASS C1 DEFINITION.
+*  PUBLIC SECTION.
+*  METHODS : METH1 FINAL.
+*  ENDCLASS.
+*
+*  CLASS C1 IMPLEMENTATION.
+*    METHOD METH1.
+*      WRITE:/5 ' I AM METHOD METH1 '.
+*      ENDMETHOD.
+*      ENDCLASS.
+*
+*      CLASS C2 DEFINITION INHERITING FROM C1.
+*        PUBLIC SECTION.
+*        METHODS : METH1 REDEFINITION.
+*      ENDCLASS.
+*
+*      CLASS C2 IMPLEMENTATION.
+*        METHOD : METH1.
+*          WRITE:/5 ' I AM METH1, MODIFIED IN CLASS C2 '.
+*          ENDMETHOD.
+*          ENDCLASS.
+*
+*      START-OF-SELECTION.
+*          DATA : OREF2 TYPE REF TO C2.
+*          CREATE OBJECT OREF2.
+
+************************************************************************************************
+*STATIC ATTRIBUTES EXIST ONLY ONCE PER INHERITANCE TREE
+************************************************************************************************
+*CLASS C1 DEFINITION.
+*  PUBLIC SECTION.
+*  CLASS-DATA : NUM TYPE I.  " STAT ATTR
+*ENDCLASS.
+*
+*CLASS C1 IMPLEMENTATION.
+*
+*ENDCLASS.
+*
+*CLASS C2 DEFINITION INHERITING FROM C1.
+*
+*
+*ENDCLASS.
+*
+*CLASS C2 IMPLEMENTATION.
+*ENDCLASS.
+*
+*CLASS C3 DEFINITION INHERITING FROM C1.
+*ENDCLASS.
+*
+*START-OF-SELECTION.
+*C1=>NUM = 10.
+*WRITE:/5 C3=>NUM.
+
+************************************************************************************************
+*CONSTRUCTORS OF SUPERCLASS FLOWS DOWN THE CHAIN
+************************************************************************************************
+
+*CLASS C1 DEFINITION.
+*  PUBLIC SECTION.
+*  METHODS : CONSTRUCTOR.
+*  ENDCLASS.
+*
+*CLASS C1 IMPLEMENTATION.
+*  METHOD CONSTRUCTOR.
+*    WRITE :/5 ' I AM C1 '.
+*    SKIP.
+*    ENDMETHOD.
+*ENDCLASS.
+*
+*CLASS C2 DEFINITION INHERITING FROM C1.
+*
+*ENDCLASS.
+*
+*CLASS C2 IMPLEMENTATION.
+*
+*ENDCLASS.
+*
+*START-OF-SELECTION.
+*  DATA : OBJ TYPE REF TO C2.
+*  CREATE OBJECT : OBJ.
+
+
+************************************************************************************************
+*SUBCLASS CAN HAVE ENHANCED CONSTRUCTOR THAN ITS SUPERCLASS
+************************************************************************************************
+*
+*CLASS GRANDFATHER DEFINITION.
+*  PUBLIC SECTION.
+*  METHODS : CONSTRUCTOR.
+*  ENDCLASS.
+*
+*CLASS GRANDFATHER IMPLEMENTATION.
+*  METHOD CONSTRUCTOR.
+*    WRITE:/5 ' I AM GRANDFATHER '.
+*    SKIP.
+*  ENDMETHOD.
+*ENDCLASS.
+*
+*CLASS FATHER DEFINITION INHERITING FROM GRANDFATHER.
+*  PUBLIC SECTION.
+*  METHODS : CONSTRUCTOR.
+*ENDCLASS.
+*
+*CLASS FATHER IMPLEMENTATION.
+*  METHOD CONSTRUCTOR.
+*    CALL METHOD SUPER->CONSTRUCTOR.
+*    WRITE:/5 ' I AM FATHER '.
+*    SKIP.
+*    ENDMETHOD.
+*    ENDCLASS.
+*
+*CLASS SON DEFINITION INHERITING FROM FATHER.
+*  PUBLIC SECTION.
+*  METHODS : CONSTRUCTOR.
+*  ENDCLASS.
+*
+*CLASS SON IMPLEMENTATION.
+*  METHOD CONSTRUCTOR.
+*    CALL METHOD SUPER->CONSTRUCTOR.
+*    WRITE:/5 ' I AM SON '.
+*    SKIP.
+*  ENDMETHOD.
+*  ENDCLASS.
+*
+*  START-OF-SELECTION.
+*  DATA: MYSON TYPE REF TO SON.
+*  CREATE OBJECT : MYSON.
+
+************************************************************************************************
+*STATIC CONSTRUCTOR OF A CLASS IS CALLED ONLY ONCE PER PROGRAM.
+************************************************************************************************
+
+*CLASS FATHER DEFINITION.
+*  PUBLIC SECTION.
+*  CLASS-METHODS CLASS_CONSTRUCTOR.
+*ENDCLASS.
+*
+*CLASS FATHER IMPLEMENTATION.
+*  METHOD CLASS_CONSTRUCTOR.
+*    WRITE: /5 'I AM FATHER'.
+*  ENDMETHOD.
+* ENDCLASS.
+*
+* CLASS SON DEFINITION INHERITING FROM FATHER.
+*   PUBLIC SECTION.
+*   CLASS-METHODS CLASS_CONSTRUCTOR.
+* ENDCLASS.
+*
+* CLASS SON IMPLEMENTATION.
+*   METHOD CLASS_CONSTRUCTOR.
+*     WRITE: /5 'I AM SON'.
+*     SKIP.
+*   ENDMETHOD.
+*  ENDCLASS.
+*
+*  START-OF-SELECTION.
+*  DATA MYSON TYPE REF TO SON.
+*  CREATE OBJECT MYSON.
+*  WRITE: /5 'HI'.
+*  DATA: MYFATHER TYPE REF TO FATHER.
+*  CREATE OBJECT MYFATHER.
+
+************************************************************************************************
+*STATIC TYPE DYNAMIC TYPE OF VARIABLE.
+************************************************************************************************
+*CLASS c1 DEFINITION.
+*  PUBLIC SECTION.
+*    METHODS : m1.
+*ENDCLASS.
+*
+*CLASS c1 IMPLEMENTATION.
+*  METHOD m1.
+*    WRITE:/5 'I AM M1 OF C1'.
+*  ENDMETHOD.
+*ENDCLASS.
+*
+*CLASS c2 DEFINITION INHERITING FROM c1.
+*  PUBLIC SECTION.
+*    METHODS : m1 REDEFINITION.
+*ENDCLASS.
+*
+*CLASS c2 IMPLEMENTATION.
+*  METHOD m1.
+*    WRITE:/5 'I AM M1 OF C2'.
+*  ENDMETHOD.
+*ENDCLASS.
+*
+*START-OF-SELECTION.
+*  DATA: oref1   TYPE REF TO c1,
+*        oref11  TYPE REF TO c1,
+*        oref111 TYPE REF TO c1,
+*        oref2   TYPE REF TO c2.
+*  CREATE OBJECT : oref1, oref11 TYPE c2,
+*                  oref111, oref2.
+*  oref111 = oref2.
+*  CALL METHOD : oref1->m1,
+*                oref11->m1,
+*                oref111->m1,
+*                oref2->m1.

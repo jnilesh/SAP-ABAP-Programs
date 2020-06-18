@@ -1,0 +1,107 @@
+
+
+INCLUDE ZTR_BNGL_MPOOL_TOP.
+*INCLUDE Z104329MODULEPOOL7TOP.
+*INCLUDE Z104329MODULEPOOL6TOP                   .    " global Data
+
+* INCLUDE Z104329MODULEPOOL6O01                   .  " PBO-Modules
+* INCLUDE Z104329MODULEPOOL6I01                   .  " PAI-Modules
+* INCLUDE Z104329MODULEPOOL6F01                   .  " FORM-Routines
+
+*&---------------------------------------------------------------------*
+*&      Module  USER_COMMAND_0100  INPUT
+*&---------------------------------------------------------------------*
+*       text
+*----------------------------------------------------------------------*
+MODULE USER_COMMAND_0100 INPUT.
+CASE SY-UCOMM.
+  WHEN 'EXIT'.
+     LEAVE PROGRAM.
+  WHEN 'DELETE'.
+    PERFORM DELETEPARA.
+WHEN 'UPDATE'.
+    PERFORM UPDATEPARA.
+  WHEN 'SAVE'.
+     PERFORM SAVEPARA.
+  WHEN 'DISP'.
+      PERFORM DISPLAYPARA.
+ENDCASE.
+
+ENDMODULE.
+*&---------------------------------------------------------------------*
+*&      Module  FILL_DEPTTC  OUTPUT
+*&---------------------------------------------------------------------*
+*       text
+*----------------------------------------------------------------------*
+MODULE FILL_TC OUTPUT.
+  MOVE-CORRESPONDING WA_TAB TO Z104329DEPT.
+ENDMODULE.
+*&---------------------------------------------------------------------*
+*&      Module  FILL_INTTABLE  OUTPUT
+*&---------------------------------------------------------------------*
+*       text
+*----------------------------------------------------------------------*
+MODULE FILL_INTTABLE OUTPUT.
+  SELECT DEPTNO DNAME LOC  FROM Z104329DEPT
+    INTO TABLE IT_TAB.
+      REFRESH CONTROL 'TC1' FROM SCREEN '0100'.
+ENDMODULE.
+
+
+FORM SAVEPARA.
+  INSERT Z104329DEPT FROM Z104329DEPT.
+  MESSAGE I001(Z104329MSGCLASS) WITH 'SY-SUBRC'  SY-SUBRC.
+ENDFORM.
+
+
+FORM DISPLAYPARA.
+"  MODULE fill_inttable. "cannot invoke module here
+  SELECT DEPTNO DNAME LOC  FROM Z104329DEPT INTO TABLE IT_TAB.
+      REFRESH CONTROL 'TC1' FROM SCREEN '0100'.
+"   MOVE-CORRESPONDING WA_TAB TO Z104329DEPT.
+
+ENDFORM.
+
+FORM DELETEPARA.
+  MESSAGE I001(Z104329MSGCLASS) WITH 'IN DELETEPARA' SEL.
+IF SEL = 'X'.
+MESSAGE I001(Z104329MSGCLASS) WITH 'IN IF' SEL.
+* WA_TAB-DEPTNO = Z104329DEPT-DEPTNO.
+* WA_TAB-DNAME = Z104329DEPT-DNAME.
+* WA_TAB-LOC = Z104329DEPT-LOC.
+* DELETE Z104329DEPT FROM WA_TAB.
+
+  DELETE FROM Z104329DEPT WHERE DEPTNO = Z104329DEPT-DEPTNO.
+  MESSAGE I001(Z104329MSGCLASS) WITH 'SY-SUBRC'  SY-SUBRC.
+ENDIF.
+REFRESH CONTROL 'TC1' FROM SCREEN '0100'.
+ENDFORM.
+
+FORM UPDATEPARA.
+IF SEL = 'X'.
+*    WA_TAB-DNAME = Z104329DEPT-DNAME.
+*    WA_TAB-LOC = Z104329DEPT-LOC.
+**   UPDATE Z104329DEPT FROM WA_TAB.
+
+    UPDATE Z104329DEPT SET DNAME =  Z104329DEPT-DNAME
+                           LOC   =  Z104329DEPT-LOC
+          WHERE DEPTNO =   Z104329DEPT-DEPTNO.
+    MESSAGE I001(Z104329MSGCLASS) WITH 'SY-SUBRC'  SY-SUBRC.
+ENDIF.
+ENDFORM.
+*&---------------------------------------------------------------------*
+*&      Module  STATUS_0100  OUTPUT
+*&---------------------------------------------------------------------*
+*       text
+*----------------------------------------------------------------------*
+MODULE STATUS_0100 OUTPUT.
+
+IF SY-UCOMM = 'INSERT'  .
+  SELECT * FROM Z104329DEPT INTO TABLE ITDEPT.
+ APPEND INITIAL LINE TO ITDEPT.
+ TC1-LINES = LINES( ITDEPT ).
+ENDIF.
+
+
+
+ENDMODULE.

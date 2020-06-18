@@ -1,0 +1,4 @@
+  method STA_METH2.
+
+    WRITE ' CALLING GLOBAL CLASS STA_METH2 CODE'.
+  endmethod.

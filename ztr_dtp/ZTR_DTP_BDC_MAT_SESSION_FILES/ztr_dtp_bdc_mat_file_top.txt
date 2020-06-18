@@ -1,0 +1,20 @@
+*&---------------------------------------------------------------------*
+*&  Include           ZTR_DTP_BDC_MAT_FILE_TOP
+*&---------------------------------------------------------------------*
+
+TYPES: BEGIN OF TY_TAB,
+        MATNR TYPE MATNR,
+          MBRSH TYPE MBRSH,
+          MTART TYPE MTART,
+          MAKTX TYPE MAKTX,
+          MEINS TYPE MEINS,
+          MATKL TYPE MATKL,
+*          BRGEW TYPE BRGEW,
+*          GEWEI TYPE GEWEI,
+*          NTGEW TYPE NTGEW,
+       END OF TY_TAB.
+
+DATA :IT_TAB TYPE STANDARD TABLE OF TY_TAB,
+      WA_TAB TYPE TY_TAB.
+
+DATA IT_BDCDATA TYPE BDCDATA OCCURS 0 WITH HEADER LINE.

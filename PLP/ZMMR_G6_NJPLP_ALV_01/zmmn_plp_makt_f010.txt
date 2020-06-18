@@ -1,0 +1,45 @@
+*&---------------------------------------------------------------------*
+*&  Include           ZMM_MAKT_F010
+*&---------------------------------------------------------------------*
+FORM f010_get_makt USING p_command LIKE sy-ucomm
+                     p_selfield TYPE slis_selfield.
+
+  READ TABLE it_marc INTO wa_marc INDEX  p_selfield-tabindex.
+
+  CASE p_command.
+    WHEN '&IC1'.
+      SELECT  matnr
+              spras
+              maktx
+        FROM z187511_makt INTO TABLE it_makt
+   WHERE matnr EQ wa_marc-matnr.
+
+      IF sy-subrc <> 0.
+        MESSAGE e011.
+      ENDIF.
+
+      IF NOT it_makt IS INITIAL.
+
+        CALL FUNCTION 'REUSE_ALV_GRID_DISPLAY'
+          EXPORTING
+            i_callback_program     = sy-repid
+            i_structure_name       = 'Z187511_MAKT'
+            is_layout              = it_layout
+            i_callback_top_of_page = 'TOPPAGE'
+            it_sort                = it_sort
+          TABLES
+            t_outtab               = it_makt
+          EXCEPTIONS
+            program_error          = 1
+            OTHERS                 = 2.
+
+        IF sy-subrc <> 0.
+
+* IMPLEMENT SUITABLE ERROR HANDLING HERE
+          MESSAGE e004.
+        ENDIF.
+      ELSE.
+        MESSAGE i009 DISPLAY LIKE 'E'.
+      ENDIF.
+  ENDCASE.
+ENDFORM.

@@ -1,0 +1,171 @@
+*&---------------------------------------------------------------------*
+*& Report ZTR_ATP_ALV_POPUP_DISPLAY
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ZTR_ATP_ALV_POPUP_DISPLAY.
+
+INCLUDE ZTR_ATP_ALV_POP_DISP_TOP.
+
+
+SELECTION-SCREEN: BEGIN OF BLOCK B1 WITH FRAME TITLE TEXT-001.
+
+SELECT-OPTIONS S_MATNR FOR LV_MATNR OBLIGATORY NO-EXTENSION.
+
+SELECTION-SCREEN: END OF BLOCK B1.
+
+START-OF-SELECTION.
+
+PERFORM GET_DATA.
+
+PERFORM ALV_FIELDS.
+
+PERFORM ALV_DISP.
+
+*&---------------------------------------------------------------------*
+*&      Form  GET_DATA
+*&---------------------------------------------------------------------*
+FORM GET_DATA .
+
+SELECT M~MATNR
+         M~MBRSH
+         M~MTART
+         M~MEINS
+         M~BRGEW
+         M~NTGEW
+
+         P~WERKS
+         P~PSTAT
+    INTO TABLE IT_TAB
+    FROM MARA AS M
+
+    INNER JOIN MARC AS P
+    ON M~MATNR EQ P~MATNR
+    WHERE M~MATNR IN S_MATNR.
+
+  IF SY-SUBRC EQ 0.
+    WRITE:'Records are found in mara table', 'Total no of Recrds: ' ,SY-DBCNT,
+           / 'sy-subrc:', SY-SUBRC.
+    SKIP .
+  ELSE.
+    WRITE:'Records are not found in mara table', 'Total no of Recrds: ' ,SY-DBCNT,
+         / 'sy-subrc:', SY-SUBRC.
+  ENDIF.
+
+ENDFORM.
+*&---------------------------------------------------------------------*
+*&      Form  ALV_FIELDS
+*&---------------------------------------------------------------------*
+
+FORM ALV_FIELDS .
+* MATNR
+IT_FCAT-COL_POS = '1'.
+IT_FCAT-SELTEXT_L = 'MAT NO'.
+IT_FCAT-FIELDNAME = 'MATNR'.
+IT_FCAT-TABNAME = 'IT_TAB'.
+
+APPEND IT_FCAT.
+
+* MBRSH
+IT_FCAT-COL_POS = '2'.
+IT_FCAT-SELTEXT_L = 'IND SECTOR'.
+IT_FCAT-FIELDNAME = 'MBRSH'.
+IT_FCAT-TABNAME = 'IT_TAB'.
+*IT_FCAT-EMPHASIZE = 'C301'.
+
+
+APPEND IT_FCAT.
+
+* MATART
+IT_FCAT-COL_POS = '3'.
+IT_FCAT-SELTEXT_L = 'MATERIAL TYPE'.
+IT_FCAT-FIELDNAME = 'MTART'.
+IT_FCAT-TABNAME = 'IT_TAB'.
+*IT_FCAT-EMPHASIZE = 'C711'.
+APPEND IT_FCAT.
+
+* MEINS
+IT_FCAT-COL_POS = '4'.
+IT_FCAT-SELTEXT_L = 'MAT BASE UOM'.
+IT_FCAT-FIELDNAME = 'MEINS'.
+IT_FCAT-TABNAME = 'IT_TAB'.
+*IT_FCAT-EMPHASIZE = 'C101'.
+APPEND IT_FCAT.
+
+* BRGEW
+IT_FCAT-COL_POS = '5'.
+IT_FCAT-SELTEXT_L = 'MAT GROSS WEIGHT'.
+IT_FCAT-FIELDNAME = 'BRGEW'.
+IT_FCAT-TABNAME = 'IT_TAB'.
+*IT_FCAT-EMPHASIZE = 'C601'.
+APPEND IT_FCAT.
+
+
+* NTGEW
+IT_FCAT-COL_POS = '6'.
+IT_FCAT-SELTEXT_L = 'MAT NET WEIGHT'.
+IT_FCAT-FIELDNAME = 'NTGEW'.
+IT_FCAT-TABNAME = 'IT_TAB'.
+IT_FCAT-DO_SUM = 'X'.
+*IT_FCAT-EMPHASIZE = 'C111'.
+APPEND IT_FCAT.
+
+
+* WERRKS
+IT_FCAT-COL_POS = '7'.
+IT_FCAT-SELTEXT_L = 'MAT PLANT'.
+IT_FCAT-FIELDNAME = 'WERKS'.
+IT_FCAT-TABNAME = 'IT_TAB'.
+*IT_FCAT-EMPHASIZE = 'C301'.
+APPEND IT_FCAT.
+
+* PSTAT
+IT_FCAT-COL_POS = '8'.
+IT_FCAT-SELTEXT_L = 'MAT PLANT STATUS'.
+IT_FCAT-FIELDNAME = 'PSTAT'.
+IT_FCAT-TABNAME = 'IT_TAB'.
+IT_FCAT-EMPHASIZE = 'C801'.
+APPEND IT_FCAT.
+
+ENDFORM.
+*&---------------------------------------------------------------------*
+*&      Form  ALV_DISP
+*&---------------------------------------------------------------------*
+FORM ALV_DISP .
+CALL FUNCTION 'REUSE_ALV_POPUP_TO_SELECT'
+  EXPORTING
+   I_TITLE                       = 'ALV MAT MAST INFO'
+*   I_SELECTION                   = 'X'
+*   I_ALLOW_NO_SELECTION          =
+   I_ZEBRA                       = 'X'
+   I_SCREEN_START_COLUMN         = 10
+   I_SCREEN_START_LINE           = 20
+   I_SCREEN_END_COLUMN           = 100
+   I_SCREEN_END_LINE             = 30
+*   I_CHECKBOX_FIELDNAME          =
+*   I_LINEMARK_FIELDNAME          =
+*   I_SCROLL_TO_SEL_LINE          = 'X'
+    I_TABNAME                     = 'IT_TAB'
+*   I_STRUCTURE_NAME              =
+   IT_FIELDCAT                   = IT_FCAT[]
+*   IT_EXCLUDING                  =
+*   I_CALLBACK_PROGRAM            =
+*   I_CALLBACK_USER_COMMAND       =
+*   IS_PRIVATE                    =
+* IMPORTING
+*   ES_SELFIELD                   =
+*   E_EXIT                        =
+  TABLES
+    T_OUTTAB                      = IT_TAB
+* EXCEPTIONS
+*   PROGRAM_ERROR                 = 1
+*   OTHERS                        = 2
+          .
+IF SY-SUBRC <> 0.
+* Implement suitable error handling here
+ENDIF.
+
+
+
+
+ENDFORM.

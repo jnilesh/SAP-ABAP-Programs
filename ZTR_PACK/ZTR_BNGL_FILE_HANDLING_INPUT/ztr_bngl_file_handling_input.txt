@@ -1,0 +1,61 @@
+*&---------------------------------------------------------------------*
+*& Report ZTR_BNGL_FILE_HANDLING_INPUT
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ZTR_BNGL_FILE_HANDLING_INPUT.
+
+INCLUDE ZTR_BNGL_FILE_INPUT_TOP.
+
+*
+*PARAMETERS P_FILE TYPE RLGRAP-FILENAME.
+*
+*AT SELECTION-SCREEN ON VALUE-REQUEST FOR P_FILE.
+*CALL FUNCTION 'F4_FILENAME'
+* EXPORTING
+*   PROGRAM_NAME        = SYST-CPROG
+*   DYNPRO_NUMBER       = SYST-DYNNR
+**   FIELD_NAME          = ' '
+* IMPORTING
+*   FILE_NAME           = P_FILE
+*          .
+*
+*  START-OF-SELECTION.
+*
+*  DATA P_FILE_STR TYPE STRING.
+*  P_FILE_STR = P_FILE.
+
+
+OPEN DATASET 'CAPBNGL' FOR INPUT IN TEXT MODE ENCODING DEFAULT.
+
+DO.
+  READ DATASET 'CAPBNGL' INTO WA_TAB.
+  IF SY-SUBRC EQ 0.
+  APPEND WA_TAB TO IT_TAB.
+  CLEAR WA_TAB.
+  ELSE.
+    EXIT.
+    ENDIF.
+
+  ENDDO.
+CLOSE  DATASET 'CAPBNGL'.
+
+*DELETE DATASET 'CAPBNGL'.
+
+CALL FUNCTION 'GUI_DOWNLOAD'
+  EXPORTING
+*   BIN_FILESIZE                    =
+    FILENAME                        = 'C:\Users\Administrator\Desktop\F2.TXT'
+   FILETYPE                        = 'ASC'
+*   APPEND                          = ' '
+   WRITE_FIELD_SEPARATOR           = 'X'
+  TABLES
+    DATA_TAB                        = IT_tAB
+          .
+IF SY-SUBRC <> 0.
+* Implement suitable error handling here
+ENDIF.
+
+
+
+CL_DEMO_OUTPUT=>DISPLAY_DATA( IT_TAB ).

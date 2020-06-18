@@ -1,0 +1,110 @@
+*&---------------------------------------------------------------------*
+*& Report ZTR_CNDT_PARALLEL_CURSOR
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ztr_cndt_parallel_cursor.
+
+
+*Program without parallel cursor
+*
+*TYPES: BEGIN OF TY_MARA,  " MARA
+*        MATNR TYPE MATNR,
+*        MTART TYPE MTART,
+*        MBRSH TYPE MBRSH,
+*        MATKL TYPE MATKL,
+*        MEINS TYPE MEINS,
+*      END OF TY_MARA.
+*DATA : IT_MARA TYPE TABLE OF TY_MARA,
+*       WA_MARA TYPE TY_MARA.
+*TYPES: BEGIN OF TY_MVKE,   " MVKE
+*        MATNR TYPE MATNR,
+*        VKORG TYPE VKORG,
+*        VTWEG TYPE VTWEG,
+*      END OF TY_MVKE.
+*DATA : IT_MVKE TYPE TABLE OF TY_MVKE,
+*       WA_MVKE TYPE TY_MVKE.
+*SELECT
+*  MATNR
+*  MTART
+*  MBRSH
+*  MATKL
+*  MEINS FROM MARA
+*  INTO TABLE IT_MARA UP TO 500 ROWS.
+*SORT IT_MARA.
+*DELETE ADJACENT DUPLICATES FROM IT_MARA COMPARING ALL FIELDS.
+*
+*
+*SELECT MATNR
+*       VKORG
+*       VTWEG
+*  INTO TABLE IT_MVKE
+*  FROM MVKE
+*       FOR ALL ENTRIES IN IT_MARA
+*  WHERE MATNR = IT_MARA-MATNR.
+*
+*LOOP AT IT_MARA INTO WA_MARA.
+*  LOOP AT IT_MVKE INTO WA_MVKE WHERE MATNR = WA_MARA-MATNR.
+*    WRITE:/ WA_MARA-MATNR,
+*            WA_MARA-MTART,
+*            WA_MARA-MATKL,
+*            WA_MVKE-VKORG,
+*            WA_MVKE-VTWEG.
+*  ENDLOOP.
+*ENDLOOP.
+
+
+*Program with parallel cursor.
+
+
+TYPES: BEGIN OF ty_mara,  " MARA
+         matnr TYPE matnr,
+         mtart TYPE mtart,
+         mbrsh TYPE mbrsh,
+         matkl TYPE matkl,
+         meins TYPE meins,
+       END OF ty_mara.
+DATA : it_mara TYPE TABLE OF ty_mara,
+       wa_mara TYPE ty_mara.
+TYPES: BEGIN OF ty_mvke,   " MVKE
+         matnr TYPE matnr,
+         vkorg TYPE vkorg,
+         vtweg TYPE vtweg,
+       END OF ty_mvke.
+DATA : it_mvke TYPE TABLE OF ty_mvke,
+       wa_mvke TYPE ty_mvke.
+
+SELECT
+  matnr
+  mtart
+  mbrsh
+  matkl
+  meins FROM mara
+  INTO TABLE it_mara UP TO 500 ROWS.
+SORT it_mara.
+DELETE ADJACENT DUPLICATES FROM it_mara COMPARING ALL FIELDS.
+SELECT matnr
+       vkorg
+       vtweg FROM mvke INTO TABLE it_mvke
+       FOR ALL ENTRIES IN it_mara WHERE matnr = it_mara-matnr.
+
+SORT: it_mara, it_mvke.
+DATA v_index TYPE sy-tabix.
+
+LOOP AT it_mara INTO wa_mara.
+  READ TABLE it_mvke INTO wa_mvke WITH KEY matnr = wa_mara-matnr BINARY SEARCH.
+  IF sy-subrc = 0.
+    v_index = sy-tabix.
+    LOOP AT it_mvke INTO wa_mvke FROM v_index. "no where condition for loop
+      IF wa_mvke-matnr <> wa_mara-matnr.
+        EXIT.
+      ENDIF.
+      WRITE:/ wa_mara-matnr,
+      wa_mara-mtart,
+      wa_mara-matkl,
+      wa_mvke-vkorg,
+      wa_mvke-vtweg.
+    ENDLOOP.
+  ENDIF.
+  CLEAR: wa_mara, wa_mvke.
+ENDLOOP.

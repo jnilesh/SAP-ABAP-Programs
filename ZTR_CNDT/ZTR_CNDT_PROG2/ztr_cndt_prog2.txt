@@ -1,0 +1,34 @@
+*&---------------------------------------------------------------------*
+*& Report ZTR_CNDT_PROG2
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ZTR_CNDT_PROG2.
+
+INCLUDE Z186821PROG_TOP.
+
+*PARAMETERS P_MATNR TYPE MATNR.
+SELECT-OPTIONS EMPNO1 FOR LV_EMPNO.
+*PARAMETERS ENAME TYPE Z186121_DEEMPNAME.
+PARAMETERS p_MGR TYPE Z186821_DEMGR.
+
+
+SELECT EMPNO
+       ENAME
+       JOB
+       MGR
+
+     FROM Z186821_EMP
+     INTO (LV_EMPNO, LV_ENAME, LV_JOB, LV_MGR)
+   WHERE
+  EMPNO IN EMPNO1 AND
+MGR EQ p_MGR.
+
+
+     WRITE :/ LV_EMPNO,
+              LV_ENAME,
+              LV_JOB,
+              LV_MGR.
+
+
+  ENDSELECT.

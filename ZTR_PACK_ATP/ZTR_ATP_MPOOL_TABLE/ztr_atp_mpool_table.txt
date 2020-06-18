@@ -1,0 +1,25 @@
+*&---------------------------------------------------------------------*
+*& Module Pool       ZTR_ATP_MPOOL_TABLE
+*&
+*&---------------------------------------------------------------------*
+*&
+*&
+*&---------------------------------------------------------------------*
+
+
+INCLUDE ZTR_ATP_MPOOL_TABLE_TOP                 .    " global Data
+
+* INCLUDE ZTR_ATP_MPOOL_TABLE_O01                 .  " PBO-Modules
+* INCLUDE ZTR_ATP_MPOOL_TABLE_I01                 .  " PAI-Modules
+* INCLUDE ZTR_ATP_MPOOL_TABLE_F01                 .  " FORM-Routines
+
+
+INCLUDE ztr_atp_mpool_table_status_o01.
+
+INCLUDE ztr_atp_mpool_table_user_coi01.
+
+INCLUDE ztr_atp_mpool_table_user_coi02.
+
+INCLUDE ztr_atp_mpool_table_status_o02.
+
+INCLUDE ztr_atp_mpool_table_hideo01.

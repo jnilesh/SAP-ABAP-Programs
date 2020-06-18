@@ -1,0 +1,289 @@
+*&---------------------------------------------------------------------*
+*& Report ZTR_ATP_OOABAP_ALV_PRG2
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ZTR_ATP_OOABAP_ALV_PRG2.
+
+INCLUDE ZTR_ATP_OOABAP_ALV_TOP2.
+
+
+SELECTION-SCREEN BEGIN OF BLOCK B1 WITH FRAME TITLE TEXT-001.
+
+SELECT-OPTIONS S_MATNR FOR LV_MATNR.
+
+SELECTION-SCREEN END OF BLOCK B1 .
+
+
+START-OF-SELECTION.
+
+PERFORM GET_DATA.
+
+PERFORM ALV_FCAT.
+
+CALL SCREEN 0100.
+
+
+*&---------------------------------------------------------------------*
+*&      Form  GET_DATA
+*&---------------------------------------------------------------------*
+FORM GET_DATA .
+SELECT M~MATNR
+         M~MBRSH
+         M~MTART
+         M~MEINS
+         M~BRGEW
+         M~NTGEW
+         P~WERKS
+         P~PSTAT
+    INTO TABLE IT_TAB
+    FROM MARA AS M
+    INNER JOIN MARC AS P
+    ON M~MATNR EQ P~MATNR
+    WHERE M~MATNR IN S_MATNR.
+
+ENDFORM.
+*&---------------------------------------------------------------------*
+*&      Form  ALV_FCAT
+*&---------------------------------------------------------------------*
+*       text
+*----------------------------------------------------------------------*
+FORM ALV_FCAT .
+* MATNR
+ CLEAR  WA_FCAT.
+ WA_FCAT-COL_POS = '1'.
+ WA_FCAT-FIELDNAME = 'MATNR'.
+ WA_FCAT-TABNAME = 'IT_TAB'.
+ WA_FCAT-COLTEXT = 'MAT NUMBER'.
+ APPEND WA_FCAT TO IT_FCAT.
+
+* * MBRSH
+ CLEAR  WA_FCAT.
+ WA_FCAT-COL_POS = '2'.
+ WA_FCAT-FIELDNAME = 'MBRSH'.
+ WA_FCAT-TABNAME = 'IT_TAB'.
+ WA_FCAT-COLTEXT = 'MAT IND SECTOR'.
+ APPEND WA_FCAT TO IT_FCAT.
+
+* * MTART
+ CLEAR  WA_FCAT.
+ WA_FCAT-COL_POS = '3'.
+ WA_FCAT-FIELDNAME = 'MTART'.
+ WA_FCAT-TABNAME = 'IT_TAB'.
+ WA_FCAT-COLTEXT = 'MAT TYPE'.
+ APPEND WA_FCAT TO IT_FCAT.
+
+
+* MEINS
+ CLEAR  WA_FCAT.
+ WA_FCAT-COL_POS = '4'.
+ WA_FCAT-FIELDNAME = 'MEINS'.
+ WA_FCAT-TABNAME = 'IT_TAB'.
+ WA_FCAT-COLTEXT = 'MAT BASE UOM'.
+ APPEND WA_FCAT TO IT_FCAT.
+
+* BRGEW
+ CLEAR  WA_FCAT.
+ WA_FCAT-COL_POS = '5'.
+ WA_FCAT-FIELDNAME = 'BRGEW'.
+ WA_FCAT-TABNAME = 'IT_TAB'.
+ WA_FCAT-COLTEXT = 'MAT GROSS WEIGHT'.
+ APPEND WA_FCAT TO IT_FCAT.
+
+* NTGEW
+
+ CLEAR  WA_FCAT.
+ WA_FCAT-COL_POS = '6'.
+ WA_FCAT-FIELDNAME = 'NTGEW'.
+ WA_FCAT-TABNAME = 'IT_TAB'.
+ WA_FCAT-COLTEXT = 'MAT NET WEIGHT'.
+ APPEND WA_FCAT TO IT_FCAT.
+*-----------------,
+*  WERKS
+
+ CLEAR  WA_FCAT.
+ WA_FCAT-COL_POS = '7'.
+ WA_FCAT-FIELDNAME = 'WERKS'.
+ WA_FCAT-TABNAME = 'IT_TAB'.
+ WA_FCAT-COLTEXT = 'MAT PLANT'.
+ APPEND WA_FCAT TO IT_FCAT.
+
+*PSTAT
+ CLEAR  WA_FCAT.
+ WA_FCAT-COL_POS = '8'.
+ WA_FCAT-FIELDNAME = 'PSTAT'.
+ WA_FCAT-TABNAME = 'IT_TAB'.
+ WA_FCAT-COLTEXT = 'MAT STATUS'.
+ APPEND WA_FCAT TO IT_FCAT.
+
+
+ENDFORM.
+*&---------------------------------------------------------------------*
+*&      Module  STATUS_0100  OUTPUT
+*&---------------------------------------------------------------------*
+*       text
+*----------------------------------------------------------------------*
+MODULE STATUS_0100 OUTPUT.
+  SET PF-STATUS 'ZTR_OOABAP'.
+*  SET TITLEBAR 'xxx'.
+ENDMODULE.
+*&---------------------------------------------------------------------*
+*&      Module  USER_COMMAND_0100  INPUT
+*&---------------------------------------------------------------------*
+MODULE USER_COMMAND_0100 INPUT.
+CASE SY-UCOMM.
+  WHEN 'EXIT'.
+  LEAVE TO SCREEN 0.
+ENDCASE.
+
+ENDMODULE.
+*&---------------------------------------------------------------------*
+*&      Module  ALV_DISP  OUTPUT
+*&---------------------------------------------------------------------*
+MODULE ALV_DISP OUTPUT.
+
+  TY_LAYOUT-ZEBRA = 'X'.
+*  TY_LAYOUT-NO_TOOLBAR = 'X'.
+  TY_LAYOUT-GRID_TITLE = 'MAT MASTER INFO USING OOALV'.
+
+CREATE OBJECT I_CONTAINER
+ EXPORTING
+    CONTAINER_NAME              = 'CNT2'  "SECREEN
+.
+
+CREATE OBJECT I_ALV_GRID
+  EXPORTING
+    I_PARENT          = I_CONTAINER
+    .
+
+CALL METHOD I_ALV_GRID->SET_TABLE_FOR_FIRST_DISPLAY
+  EXPORTING
+*    I_BUFFER_ACTIVE               =
+*    I_BYPASSING_BUFFER            =
+*    I_CONSISTENCY_CHECK           =
+    I_STRUCTURE_NAME              = 'TY_TAB'
+*    IS_VARIANT                    =
+*    I_SAVE                        =
+*    I_DEFAULT                     = 'X'
+    IS_LAYOUT                     = TY_LAYOUT
+*    IS_PRINT                      =
+*    IT_SPECIAL_GROUPS             =
+*    IT_TOOLBAR_EXCLUDING          =
+*    IT_HYPERLINK                  =
+*    IT_ALV_GRAPHICS               =
+*    IT_EXCEPT_QINFO               =
+*    IR_SALV_ADAPTER               =
+  CHANGING
+    IT_OUTTAB                     = IT_TAB
+    IT_FIELDCATALOG               = IT_FCAT
+*    IT_SORT                       =
+*    IT_FILTER                     =
+*  EXCEPTIONS
+*    INVALID_PARAMETER_COMBINATION = 1
+*    PROGRAM_ERROR                 = 2
+*    TOO_MANY_LINES                = 3
+*    OTHERS                        = 4
+        .
+IF SY-SUBRC <> 0.
+* Implement suitable error handling here
+ENDIF.
+
+ENDMODULE.
+*&---------------------------------------------------------------------*
+*&      Module  LOGO_DISP  OUTPUT
+*&---------------------------------------------------------------------*
+MODULE LOGO_DISP OUTPUT.
+
+CONSTANTS: CNTL_TRUE10  TYPE I VALUE 1,
+           CNTL_FALSE10 TYPE I VALUE 0.
+DATA:
+   H_PICTURE10      TYPE REF TO CL_GUI_PICTURE,
+   H_PIC_CONTAINER10 TYPE REF TO CL_GUI_CUSTOM_CONTAINER.
+
+DATA: GRAPHIC_URL10(255),
+      GRAPHIC_REFRESH10(1),
+      G_RESULT10 LIKE CNTL_TRUE10.
+
+DATA: BEGIN OF GRAPHIC_TABLE10 OCCURS 0,
+        LINE10(255) TYPE X,
+      END OF GRAPHIC_TABLE10.
+
+DATA: GRAPHIC_SIZE10 TYPE I.
+
+
+DATA: W_LINES TYPE I.
+  TYPES PICT_LINE(256) TYPE C.
+  DATA : CONTAINER TYPE REF TO CL_GUI_CUSTOM_CONTAINER,
+         PICTURE   TYPE REF TO CL_GUI_PICTURE,
+         PICT_TAB  TYPE TABLE OF PICT_LINE,
+         URL(255)  TYPE C.
+  DATA: GRAPHIC_URL(255).
+  DATA: BEGIN OF GRAPHIC_TABLE OCCURS 0,
+          LINE(255) TYPE X,
+        END OF GRAPHIC_TABLE.
+  DATA: L_GRAPHIC_CONV TYPE I.
+  DATA: L_GRAPHIC_OFFS TYPE I.
+  DATA: GRAPHIC_SIZE TYPE I.
+  DATA: L_GRAPHIC_XSTR TYPE XSTRING.
+  CALL METHOD cl_gui_cfw=>flush
+    EXCEPTIONS
+      cntl_system_error = 1
+      cntl_error        = 2
+      others            = 3.
+  IF sy-subrc <> 0.
+*   MESSAGE ID SY-MSGID TYPE SY-MSGTY NUMBER SY-MSGNO
+*       WITH SY-MSGV1 SY-MSGV2 SY-MSGV3 SY-MSGV4.
+  ENDIF.
+
+
+  CREATE OBJECT: CONTAINER
+      EXPORTING CONTAINER_NAME = 'IMG1',  "SCREEN NAME CNT
+                               PICTURE EXPORTING PARENT = CONTAINER.
+  CALL METHOD CL_SSF_XSF_UTILITIES=>GET_BDS_GRAPHIC_AS_BMP
+    EXPORTING
+      P_OBJECT = 'GRAPHICS'
+      P_NAME   = 'SAPCAP'  " SE78 NAME
+      P_ID     = 'BMAP'
+      P_BTYPE  = 'BCOL'
+    RECEIVING
+      P_BMP    = L_GRAPHIC_XSTR
+*  EXCEPTIONS
+*     NOT_FOUND      = 1
+*     INTERNAL_ERROR = 2
+*     others   = 3
+    .
+  IF SY-SUBRC <> 0.
+* MESSAGE ID SY-MSGID TYPE SY-MSGTY NUMBER SY-MSGNO
+*            WITH SY-MSGV1 SY-MSGV2 SY-MSGV3 SY-MSGV4.
+  ENDIF.
+  GRAPHIC_SIZE = XSTRLEN( L_GRAPHIC_XSTR ).
+  L_GRAPHIC_CONV = GRAPHIC_SIZE.
+  L_GRAPHIC_OFFS = 0.
+  WHILE L_GRAPHIC_CONV > 255.
+    GRAPHIC_TABLE-LINE = L_GRAPHIC_XSTR+L_GRAPHIC_OFFS(255).
+    APPEND GRAPHIC_TABLE.
+    L_GRAPHIC_OFFS = L_GRAPHIC_OFFS + 255.
+    L_GRAPHIC_CONV = L_GRAPHIC_CONV - 255.
+  ENDWHILE.
+  GRAPHIC_TABLE-LINE = L_GRAPHIC_XSTR+L_GRAPHIC_OFFS(L_GRAPHIC_CONV).
+  APPEND GRAPHIC_TABLE.
+  CALL FUNCTION 'DP_CREATE_URL'
+    EXPORTING
+      TYPE     = 'IMAGE'
+      SUBTYPE  = 'X-UNKNOWN'
+      SIZE     = GRAPHIC_SIZE
+      LIFETIME = 'T'
+    TABLES
+      DATA     = GRAPHIC_TABLE
+    CHANGING
+      URL      = URL.
+  CALL METHOD PICTURE->LOAD_PICTURE_FROM_URL
+    EXPORTING
+      URL = URL.
+  CALL METHOD PICTURE->SET_DISPLAY_MODE
+    EXPORTING
+      DISPLAY_MODE = PICTURE->DISPLAY_MODE_FIT_CENTER.
+
+
+
+ENDMODULE.

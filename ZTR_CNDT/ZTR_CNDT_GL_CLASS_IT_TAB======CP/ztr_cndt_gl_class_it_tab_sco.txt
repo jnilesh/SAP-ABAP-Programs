@@ -1,0 +1,4 @@
+ZTR_CNDT_GL_CLASS_IT_TAB      GET_MAT                       E_TAB                         100
+ZTR_CNDT_GL_CLASS_IT_TAB      GET_MAT                       I_MATNR1                      100
+ZTR_CNDT_GL_CLASS_IT_TAB      GET_MAT                       I_MATNR2                      100
+ZTR_CNDT_GL_CLASS_IT_TAB      GET_MAT                       MAT_NOT_FOUND                 101

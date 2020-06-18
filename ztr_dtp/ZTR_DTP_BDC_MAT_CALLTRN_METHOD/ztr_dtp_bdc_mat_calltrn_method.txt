@@ -1,0 +1,145 @@
+REPORT ZTR_DTP_BDC_MAT_CALLTRN_METHOD.
+
+INCLUDE ZTR_DTP_BDC_MAT_CALL_TOP.
+
+
+PARAMETERS p_file TYPE rlgrap-filename.
+
+AT SELECTION-SCREEN ON VALUE-REQUEST FOR P_FILE.
+
+CALL FUNCTION 'F4_FILENAME'
+ EXPORTING
+   PROGRAM_NAME        = SYST-CPROG
+   DYNPRO_NUMBER       = SYST-DYNNR
+*   FIELD_NAME          = ' '
+ IMPORTING
+   FILE_NAME           = P_FILE
+          .
+
+
+START-OF-SELECTION.
+data P_FILE_ST TYPE STRING.
+P_FILE_ST = P_FILE.
+
+CALL FUNCTION 'GUI_UPLOAD'
+  EXPORTING
+   FILENAME                      = P_FILE_ST
+   FILETYPE                      = 'ASC'
+   HAS_FIELD_SEPARATOR           = 'X'
+  TABLES
+    DATA_TAB                      = IT_TAB
+          .
+IF SY-SUBRC <> 0.
+* Implement suitable error handling here
+ENDIF.
+
+
+
+LOOP AT IT_TAB INTO WA_TAB.
+
+LV_INDEX = SY-TABIX.
+perform bdc_dynpro      using 'SAPLMGMM' '0060'.
+perform bdc_field       using 'BDC_CURSOR'
+                              'RMMG1-MTART'.
+perform bdc_field       using 'BDC_OKCODE'
+                              '=ENTR'.
+perform bdc_field       using 'RMMG1-MATNR'
+                              WA_TAB-MATNR. " 'MAT_DTP2324'.
+
+perform bdc_field       using 'RMMG1-MBRSH'
+                              WA_TAB-MBRSH.  "  'W'.
+perform bdc_field       using 'RMMG1-MTART'
+                              WA_TAB-MTART. " 'ZMDG'.
+
+perform bdc_dynpro      using 'SAPLMGMM' '0070'.
+perform bdc_field       using 'BDC_CURSOR'
+                              'MSICHTAUSW-DYTXT(01)'.
+perform bdc_field       using 'BDC_OKCODE'
+                              '=ENTR'.
+perform bdc_field       using 'MSICHTAUSW-KZSEL(01)'
+                              'X'.
+
+perform bdc_dynpro      using 'SAPLMGMM' '4004'.
+perform bdc_field       using 'BDC_OKCODE'
+                              '=BU'.
+perform bdc_field       using 'MAKT-MAKTX'
+                             WA_TAB-MAKTX." 'MATDTETETT'.
+perform bdc_field       using 'BDC_CURSOR'
+                              'MARA-MATKL'.
+perform bdc_field       using 'MARA-MEINS'
+                             WA_TAB-MEINS ."  'CCM'.
+perform bdc_field       using 'MARA-MATKL'
+                             WA_TAB-MATKL. "  '01'.
+*+ ADD
+
+*perform bdc_field       using 'MARA-BRGEW'
+*                             WA_TAB-BRGEW. "
+*
+*perform bdc_field       using 'MARA-GEWEI'
+*                             WA_TAB-GEWEI. "
+*
+*perform bdc_field       using 'MARA-NTGEW'
+*                             WA_TAB-NTGEW. "
+
+
+CALL TRANSACTION 'MM01' USING IT_BDCDATA MODE 'N' UPDATE 'S'.
+*MESSAGES INTO IT_BDCMSGCOLL.
+
+IF SY-SUBRC NE 0.
+  CALL FUNCTION 'FORMAT_MESSAGE'
+   EXPORTING
+*     ID              = SY-MSGID
+     LANG            = 'EN'
+*     NO              = SY-MSGNO
+*     V1              = SY-MSGV1
+*     V2              = SY-MSGV2
+*     V3              = SY-MSGV3
+*     V4              = SY-MSGV4
+   IMPORTING
+     MSG             =  LV_TEXT
+*   EXCEPTIONS
+*     NOT_FOUND       = 1
+*     OTHERS          = 2
+           .
+  IF SY-SUBRC <> 0.
+* Implement suitable error handling here
+  ENDIF.
+ CONCATENATE LV_INDEX LV_TEXT INTO LV_TEXT SEPARATED BY '&'.
+WRITE LV_TEXT.
+ENDIF.
+
+
+REFRESH IT_BDCDATA.
+
+ENDLOOP.
+
+
+
+
+*&---------------------------------------------------------------------*
+*&      Form  BDC_DYNPRO
+*&---------------------------------------------------------------------*
+FORM BDC_DYNPRO  USING P_PROGRAM P_DYNPRO .
+
+CLEAR IT_BDCDATA.
+
+IT_BDCDATA-PROGRAM = P_PROGRAM.
+IT_BDCDATA-DYNPRO  = P_DYNPRO.
+IT_BDCDATA-DYNBEGIN = 'X'.
+
+APPEND IT_BDCDATA.
+
+ENDFORM.
+*&---------------------------------------------------------------------*
+*&      Form  BDC_FIELD
+*&---------------------------------------------------------------------*
+FORM BDC_FIELD  USING  P_FNAM P_FVAL .
+
+CLEAR IT_BDCDATA.
+
+IT_BDCDATA-FNAM = P_FNAM.
+IT_BDCDATA-FVAL  = P_FVAL.
+APPEND IT_BDCDATA.
+
+
+ENDFORM.

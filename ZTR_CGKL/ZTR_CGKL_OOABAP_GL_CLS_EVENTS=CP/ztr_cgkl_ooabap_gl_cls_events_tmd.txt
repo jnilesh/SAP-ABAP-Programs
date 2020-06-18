@@ -1,0 +1,2 @@
+ZTR_CGKL_OOABAP_GL_CLS_EVENTS 00000                                                             0
+ZTR_CGKL_OOABAP_GL_CLS_EVENTS 00002GET_MATERIAL                                                 0

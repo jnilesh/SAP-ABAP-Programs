@@ -1,0 +1,50 @@
+*&---------------------------------------------------------------------*
+*& Report ZTR_BNGL_FILE_HANDLING_OUTPUT
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ZTR_BNGL_FILE_HANDLING_OUTPUT.
+
+INCLUDE ZTR_BNGL_FILE_OUTPUT_TOP.
+
+
+PARAMETERS P_FILE TYPE RLGRAP-FILENAME.
+
+AT SELECTION-SCREEN ON VALUE-REQUEST FOR P_FILE.
+CALL FUNCTION 'F4_FILENAME'
+ EXPORTING
+   PROGRAM_NAME        = SYST-CPROG
+   DYNPRO_NUMBER       = SYST-DYNNR
+*   FIELD_NAME          = ' '
+ IMPORTING
+   FILE_NAME           = P_FILE
+          .
+
+  START-OF-SELECTION.
+
+  DATA P_FILE_STR TYPE STRING.
+  P_FILE_STR = P_FILE.
+
+ CALL FUNCTION 'GUI_UPLOAD'
+   EXPORTING
+    FILENAME                      = P_FILE_STR
+    FILETYPE                      = 'ASC'
+    HAS_FIELD_SEPARATOR           = 'X'
+   TABLES
+     DATA_TAB                      = IT_TAB
+           .
+ IF SY-SUBRC <> 0.
+* Implement suitable error handling here
+ ENDIF.
+
+OPEN DATASET 'CAPBNGL' FOR OUTPUT IN TEXT MODE ENCODING DEFAULT.
+
+LOOP AT IT_TAB INTO WA_TAB.
+TRANSFER WA_TAB TO 'CAPBNGL'.
+CLEAR WA_TAB.
+
+ENDLOOP.
+
+CLOSE  DATASET 'CAPBNGL'.
+
+CL_DEMO_OUTPUT=>DISPLAY_DATA( IT_TAB ).

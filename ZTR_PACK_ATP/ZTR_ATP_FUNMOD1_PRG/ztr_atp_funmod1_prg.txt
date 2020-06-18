@@ -1,0 +1,18 @@
+*&---------------------------------------------------------------------*
+*& Report ZTR_ATP_FUNMOD1_PRG
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ZTR_ATP_FUNMOD1_PRG.
+
+PARAMETERS: P1 TYPE I ,
+            P2 TYPE I.
+DATA P3 TYPE I.
+
+CALL FUNCTION 'ZTR_ATP_FUNMOD1'
+ EXPORTING
+   A             = P1
+   B             = P2
+ IMPORTING
+   C             = P3 .
+WRITE P3.

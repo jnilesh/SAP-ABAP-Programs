@@ -1,0 +1,216 @@
+*&---------------------------------------------------------------------*
+*& Report ZTR_CGKL_OOALV_PRG1
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ZTR_CGKL_OOALV_PRG1 MESSAGE-ID 00.
+
+
+INCLUDE ZTR_CGKL_OOALV_PRG1_TOP.
+
+SELECT-OPTIONS S_MATNR FOR LV_MATNR.
+
+AT SELECTION-SCREEN ON S_MATNR.
+
+  DATA LV_MAT TYPE MATNR.
+
+  SELECT SINGLE MATNR
+       FROM MARA
+     INTO (LV_MAT)
+    WHERE MATNR IN S_MATNR.
+*  IF SY-SUBRC EQ 0.
+*       MESSAGE I002(ZTR_CGKL_MSG).
+*    ELSE.
+*     MESSAGE X005(ZTR_CGKL_MSG).
+*    ENDIF.
+  IF SY-SUBRC EQ 0.
+*       MESSAGE E000.
+*    MESSAGE S126.
+    MESSAGE S006 WITH 'MAT FOUND'.
+  ELSE.
+    MESSAGE E001.
+  ENDIF.
+
+START-OF-SELECTION.
+  PERFORM GET_MAT_DATA.
+
+  PERFORM GET_FCAT_ALV.
+
+  CALL SCREEN 100.
+
+
+*&---------------------------------------------------------------------*
+*&      Form  GET_MAT_DATA
+*&---------------------------------------------------------------------*
+FORM GET_MAT_DATA .
+  SELECT MATNR
+         MBRSH
+         MTART
+         MEINS
+         BRGEW
+         NTGEW
+    INTO TABLE IT_TAB
+    FROM MARA
+    WHERE MATNR IN S_MATNR.
+
+  IF SY-SUBRC EQ 0.
+    WRITE:'RECORDS ARE FOUND FROM MARA TABLE:' , SY-DBCNT.
+  ELSE.
+    WRITE:'RECORDS ARE NOT FOUND FROM MARA TABLE:' , SY-DBCNT.
+  ENDIF.
+
+ENDFORM.
+*&---------------------------------------------------------------------*
+*&      Form  GET_FCAT_ALV
+*&---------------------------------------------------------------------*
+FORM get_fcat_alv .
+
+* MATNR.
+WA_FIELDCAT-COL_POS = '1'.
+WA_FIELDCAT-FIELDNAME = 'MATNR'.
+WA_FIELDCAT-TABNAME = 'IT_TAB'.
+WA_FIELDCAT-COLTEXT = 'MAT NUMBER'.
+
+APPEND WA_FIELDCAT TO IT_FIELDCAT.
+CLEAR WA_FIELDCAT.
+
+* MBRSH.
+WA_FIELDCAT-COL_POS = '2'.
+WA_FIELDCAT-FIELDNAME = 'MBRSH'.
+WA_FIELDCAT-TABNAME = 'IT_TAB'.
+WA_FIELDCAT-COLTEXT = 'MAT IND'.
+
+APPEND WA_FIELDCAT TO IT_FIELDCAT.
+CLEAR WA_FIELDCAT.
+
+
+* MTART.
+WA_FIELDCAT-COL_POS = '1'.
+WA_FIELDCAT-FIELDNAME = 'MTART'.
+WA_FIELDCAT-TABNAME = 'IT_TAB'.
+WA_FIELDCAT-COLTEXT = 'MAT TYPE '.
+
+APPEND WA_FIELDCAT TO IT_FIELDCAT.
+CLEAR WA_FIELDCAT.
+
+
+
+* MEINS.
+WA_FIELDCAT-COL_POS = '4'.
+WA_FIELDCAT-FIELDNAME = 'MEINS'.
+WA_FIELDCAT-TABNAME = 'IT_TAB'.
+WA_FIELDCAT-COLTEXT = 'MAT BASE UOM'.
+
+APPEND WA_FIELDCAT TO IT_FIELDCAT.
+CLEAR WA_FIELDCAT.
+
+
+* BRGEW.
+WA_FIELDCAT-COL_POS = '5'.
+WA_FIELDCAT-FIELDNAME = 'BRGEW'.
+WA_FIELDCAT-TABNAME = 'IT_TAB'.
+WA_FIELDCAT-COLTEXT = 'MAT GORSS WEIGHT'.
+
+APPEND WA_FIELDCAT TO IT_FIELDCAT.
+CLEAR WA_FIELDCAT.
+
+* NTGEW.
+WA_FIELDCAT-COL_POS = '6'.
+WA_FIELDCAT-FIELDNAME = 'NTGEW'.
+WA_FIELDCAT-TABNAME = 'IT_TAB'.
+WA_FIELDCAT-COLTEXT = 'MAT NET WEIGHT'.
+
+APPEND WA_FIELDCAT TO IT_FIELDCAT.
+CLEAR WA_FIELDCAT.
+
+
+
+ENDFORM.
+*&---------------------------------------------------------------------*
+*&      Module  STATUS_0100  OUTPUT
+*&---------------------------------------------------------------------*
+*       text
+*----------------------------------------------------------------------*
+MODULE status_0100 OUTPUT.
+  SET PF-STATUS 'ZTR_OOALV_PF'.
+*  SET TITLEBAR 'xxx'.
+ENDMODULE.
+*&---------------------------------------------------------------------*
+*&      Module  USER_COMMAND_0100  INPUT
+*&---------------------------------------------------------------------*
+*       text
+*----------------------------------------------------------------------*
+MODULE user_command_0100 INPUT.
+CASE SY-UCOMM.
+  WHEN 'EXIT'.
+    LEAVE TO SCREEN 0.
+
+ENDCASE.
+ENDMODULE.
+*&---------------------------------------------------------------------*
+*&      Module  OOALV_OUT_DISP  OUTPUT
+*&---------------------------------------------------------------------*
+*       text
+*----------------------------------------------------------------------*
+MODULE ooalv_out_disp OUTPUT.
+
+LS_LAYOUT-ZEBRA = 'X'.
+*LS_LAYOUT-NO_TOOLBAR = 'X'.
+LS_LAYOUT-GRID_TITLE = 'OOALV WITH MAT MASTER'.
+
+
+
+CREATE OBJECT i_container
+  EXPORTING
+    container_name              = 'ALV_CNT1'
+    .
+IF sy-subrc <> 0.
+* MESSAGE ID SY-MSGID TYPE SY-MSGTY NUMBER SY-MSGNO
+*            WITH SY-MSGV1 SY-MSGV2 SY-MSGV3 SY-MSGV4.
+ENDIF.
+
+
+CREATE OBJECT i_alv_grid
+  EXPORTING
+    i_parent          =  i_container
+    .
+IF sy-subrc <> 0.
+* MESSAGE ID SY-MSGID TYPE SY-MSGTY NUMBER SY-MSGNO
+*            WITH SY-MSGV1 SY-MSGV2 SY-MSGV3 SY-MSGV4.
+ENDIF.
+
+i_alv_grid->set_table_for_first_display(
+  EXPORTING
+*    i_buffer_active               =
+*    i_bypassing_buffer            =
+*    i_consistency_check           =
+    i_structure_name              = 'TY_TAB'
+*    is_variant                    =
+*    i_save                        =
+*    i_default                     = 'X'
+    is_layout                     = LS_LAYOUT
+*    is_print                      =
+*    it_special_groups             =
+*    it_toolbar_excluding          =
+*    it_hyperlink                  =
+*    it_alv_graphics               =
+*    it_except_qinfo               =
+*    ir_salv_adapter               =
+  CHANGING
+    it_outtab                     = IT_TAB
+    it_fieldcatalog               = IT_FIELDCAT
+*    it_sort                       =
+*    it_filter                     =
+*  EXCEPTIONS
+*    invalid_parameter_combination = 1
+*    program_error                 = 2
+*    too_many_lines                = 3
+*    others                        = 4
+       ).
+IF sy-subrc <> 0.
+* Implement suitable error handling here
+ENDIF.
+
+
+
+ENDMODULE.

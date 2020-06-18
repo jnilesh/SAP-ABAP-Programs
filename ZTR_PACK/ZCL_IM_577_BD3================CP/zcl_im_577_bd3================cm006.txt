@@ -1,0 +1,2 @@
+  method IF_EX_BADI_MATERIAL_CHECK~CHECK_MASS_MARC_DATA.
+  endmethod.

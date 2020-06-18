@@ -1,0 +1,14 @@
+*&---------------------------------------------------------------------*
+*&  Include           ZTR_BNGL_FILE_APPEND_TOP
+*&---------------------------------------------------------------------*
+
+TYPES: BEGIN OF TY_TAB, " LOCAL STRS
+      MATNR TYPE MATNR, " Material Number1
+      MBRSH TYPE MBRSH, " Industry sector
+      MTART TYPE MTART, " Material type
+      MAKTX TYPE MAKTX, " Material description
+      MEINS TYPE MEINS, " Base Unit of Measure
+      MATKL TYPE MATKL, " Material Group
+     END OF TY_TAB.
+DATA: IT_TAB TYPE STANDARD TABLE OF TY_TAB, " INTERNAL TABLE
+      WA_TAB TYPE TY_TAB. " WORK AREA

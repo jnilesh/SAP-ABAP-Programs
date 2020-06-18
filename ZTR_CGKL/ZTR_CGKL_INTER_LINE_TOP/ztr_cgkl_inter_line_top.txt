@@ -1,0 +1,40 @@
+*&---------------------------------------------------------------------*
+*&  Include           ZTR_CGKL_INTER_LINE_TOP
+*&---------------------------------------------------------------------*
+
+TABLES MARA.
+DATA LV_MATNR TYPE MATNR.
+DATA LV_COUNT TYPE I.
+TYPES: BEGIN OF TY_TAB1, " LOCAL STRS
+      MATNR TYPE MATNR, " Material Number1
+      MBRSH TYPE MBRSH, " Industry sector
+      MTART TYPE MTART, " Material type
+      MEINS TYPE MEINS, " Base Unit of Measure
+      BRGEW TYPE BRGEW, " Gross weight
+      NTGEW TYPE NTGEW, " Net weight
+     END OF TY_TAB1.
+DATA: IT_TAB1 TYPE STANDARD TABLE OF TY_TAB1, " INTERNAL TABLE
+      WA_TAB1 TYPE TY_TAB1. " WORK AREA
+
+
+TYPES: BEGIN OF TY_TAB2, " LOCAL STRS
+      MATNR TYPE MATNR, " Material Number1
+      WERKS TYPE WERKS_D, " PLANT
+      PSTAT TYPE PSTAT_D, " Maintenance status
+      BSTMI TYPE BSTMI,   " Minimum Lot Size
+      BSTMA TYPE BSTMA,   " Maximum Lot Size
+
+     END OF TY_TAB2.
+DATA: IT_TAB2 TYPE STANDARD TABLE OF TY_TAB2, " INTERNAL TABLE
+      WA_TAB2 TYPE TY_TAB2. " WORK AREA
+
+
+TYPES: BEGIN OF TY_TAB3, " LOCAL STRS
+      MATNR TYPE MATNR, " Material Number1
+      MAKTX TYPE MAKTX,
+      SPRAS TYPE SPRAS,
+      MAKTG TYPE MAKTG,
+
+     END OF TY_TAB3.
+DATA: IT_TAB3 TYPE STANDARD TABLE OF TY_TAB3, " INTERNAL TABLE
+      WA_TAB3 TYPE TY_TAB3. " WORK AREA

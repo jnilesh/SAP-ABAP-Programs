@@ -1,0 +1,9 @@
+class ZTR_BADI_IMPL99IMPL99 definition
+  public
+  final
+  create public .
+
+public section.
+
+  interfaces IF_BADI_INTERFACE .
+  interfaces ZIF_EX_ZTR_BADI9 .

@@ -1,0 +1,2 @@
+ZTR_BADI_IMPL99IMPL99         00000                                                             0
+ZTR_BADI_IMPL99IMPL99         00001ZIF_EX_ZTR_BADI9~MAT_METH99                                  0

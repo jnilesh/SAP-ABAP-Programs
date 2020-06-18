@@ -1,0 +1,54 @@
+*&---------------------------------------------------------------------*
+*& Report ZTR_CNDT_ITAB_FINAL
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ZTR_CNDT_LEFTOUTER_JOINS.
+
+INCLUDE ZTR_CNDT_LEFTOUTER_JOINS_TOP.
+*INCLUDE ZTR_CNDT_JOINS_TOP.
+
+SELECT-OPTIONS S_MATNR FOR LV_MATNR.
+
+START-OF-SELECTION.
+
+SELECT M~MATNR
+       M~MBRSH
+       M~MTART
+       M~MEINS
+       M~MATKL
+
+       T~MAKTX
+       T~SPRAS
+       T~MAKTG
+
+    INTO TABLE IT_TAB
+  FROM MARA AS M
+  LEFT OUTER JOIN MAKT AS T
+  ON M~MATNR EQ T~MATNR
+   WHERE M~MATNR IN S_MATNR.
+
+
+*CLEAR IT_TAB[].
+
+IF SY-SUBRC EQ 0.
+
+WRITE: 'GETTING RECORDS FROM MARA TABLE', SY-DBCNT.
+
+  ELSE.
+
+    ENDIF.
+
+
+LOOP AT IT_TAB INTO WA_TAB.
+WRITE : / SY-TABIX,
+        WA_TAB-MATNR,
+        WA_TAB-MBRSH,
+        WA_TAB-MTART,
+        WA_TAB-MEINS,
+        WA_TAB-MATKL,
+        WA_TAB-MAKTX,
+        WA_TAB-SPRAS,
+        WA_TAB-MAKTG.
+
+ENDLOOP.

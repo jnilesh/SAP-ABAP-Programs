@@ -1,0 +1,25 @@
+class-pool .
+*"* class pool for class ZTR_CNDT_EVENTS
+
+*"* local type definitions
+include ZTR_CNDT_EVENTS===============ccdef.
+
+*"* class ZTR_CNDT_EVENTS definition
+*"* public declarations
+  include ZTR_CNDT_EVENTS===============cu.
+*"* protected declarations
+  include ZTR_CNDT_EVENTS===============co.
+*"* private declarations
+  include ZTR_CNDT_EVENTS===============ci.
+endclass. "ZTR_CNDT_EVENTS definition
+
+*"* macro definitions
+include ZTR_CNDT_EVENTS===============ccmac.
+*"* local class implementation
+include ZTR_CNDT_EVENTS===============ccimp.
+
+class ZTR_CNDT_EVENTS implementation.
+*"* method's implementations
+  include methods.
+endclass. "ZTR_CNDT_EVENTS implementation
+

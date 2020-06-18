@@ -1,0 +1,153 @@
+*&---------------------------------------------------------------------*
+*& Report ZTR_CGKL_INTERACTIVE_COMMAND2
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ZTR_CGKL_INTERACTIVE_LINE
+NO STANDARD PAGE HEADING
+LINE-COUNT 20(3)
+LINE-SIZE 500
+MESSAGE-ID ZTR_CGKL_MSG.
+
+
+INCLUDE ZTR_CGKL_INTERACTIVE_COM2.
+
+
+
+SELECT-OPTIONS S_MATNR FOR LV_MATNR.
+
+INITIALIZATION.
+
+  S_MATNR-LOW = 'MAT00010'.
+  S_MATNR-HIGH = 'MAT00020'.
+  APPEND S_MATNR.
+
+
+AT SELECTION-SCREEN ON S_MATNR.
+
+  DATA LV_MAT TYPE MATNR.
+  SELECT SINGLE MATNR
+       FROM MARA
+     INTO (LV_MAT)
+    WHERE MATNR IN S_MATNR.
+*  IF SY-SUBRC EQ 0.
+*       MESSAGE I002(ZTR_CGKL_MSG).
+*    ELSE.
+*     MESSAGE X005(ZTR_CGKL_MSG).
+*    ENDIF.
+  IF SY-SUBRC EQ 0.
+      MESSAGE S000.
+  ELSE.
+    MESSAGE E001.
+  ENDIF.
+
+START-OF-SELECTION.
+SET PF-STATUS 'ZTR_CGKL_GUI' EXCLUDING 'INFO'.
+
+PERFORM GET_MAT_DATA.
+
+END-OF-SELECTION.
+PERFORM GET_MAT_DISPLAY.
+
+LV_COUNT = SY-LINCT - SY-LINNO.
+SKIP LV_COUNT.
+
+TOP-OF-PAGE.
+PERFORM GET_HEADER_DATA.
+
+END-OF-PAGE.
+PERFORM GET_FOOTER_DATA.
+
+AT USER-COMMAND.
+PERFORM GET_DATA_FOR_COMM.
+
+FORM GET_MAT_DATA .
+  SELECT MATNR
+         MBRSH
+         MTART
+         MEINS
+         BRGEW
+         NTGEW
+    INTO TABLE IT_TAB1
+    FROM MARA
+    WHERE MATNR IN S_MATNR.
+
+  IF SY-SUBRC EQ 0.
+    WRITE:/ 'RECORDS ARE FOUND FROM MARA TABLE:' , SY-DBCNT.
+  ELSE.
+    WRITE:'RECORDS ARE NOT FOUND FROM MARA TABLE:' , SY-DBCNT.
+  ENDIF.
+
+ENDFORM.
+*&---------------------------------------------------------------------*
+*&      Form  GET_MAT_DISPLAY
+*&---------------------------------------------------------------------*
+FORM GET_MAT_DISPLAY .
+
+LOOP AT IT_TAB1 INTO WA_TAB1. " B TO W
+  WRITE :/ SY-TABIX,
+
+           WA_TAB1-MATNR,
+           WA_TAB1-MBRSH,
+           WA_TAB1-MTART,
+           WA_TAB1-MEINS,
+           WA_TAB1-BRGEW,
+           WA_TAB1-NTGEW.
+
+  HIDE WA_TAB1-MATNR.
+
+ENDLOOP.
+
+ENDFORM.
+
+
+*&---------------------------------------------------------------------*
+*&      Form  GET_HEAD_DATA
+*&---------------------------------------------------------------------*
+FORM GET_HEADER_DATA .
+WRITE: / 'THE CURRENT LIST INDEX IS:' , SY-LSIND.
+WRITE / 'MATERIAL MASTER INFO FROM MARA TABLE'.
+
+ENDFORM.
+*&---------------------------------------------------------------------*
+*&      Form  GET_FOOTER_DATA
+*&---------------------------------------------------------------------*
+FORM GET_FOOTER_DATA .
+WRITE:  'USER NAME:', SY-UNAME,
+         'PAGE NO:', SY-PAGNO,
+         'DATE:', SY-DATUM,
+         'TIME:' , SY-UZEIT.
+
+ENDFORM.
+*&---------------------------------------------------------------------*
+*&      Form  GET_DATA_FOR_COMM
+*&---------------------------------------------------------------------*
+FORM GET_DATA_FOR_COMM .
+CASE SY-UCOMM.
+  WHEN 'TCOCE'.
+
+  CALL TRANSACTION 'SE11'.
+
+  WHEN 'DISP_REP'.
+  CALL TRANSACTION 'ZTR_CGKL_MATMAST_REP'.
+
+  WHEN 'INFO'.
+    PERFORM HEADER_DISP.
+  WHEN 'MENU1'.
+    WRITE sy-pagno.
+  WHEN 'MENU2'.
+    WRITE 'Calling Second Menu2'.
+ENDCASE.
+
+
+
+ENDFORM.
+*&---------------------------------------------------------------------*
+*&      Form  HEADER_DISP
+*&---------------------------------------------------------------------*
+FORM HEADER_DISP .
+WRITE :'USER NAME:', SY-UNAME,
+        'REP ID:', SY-REPID,
+        'DATE:', SY-DATUM,
+        'TIME:', SY-UZEIT.
+ENDFORM.

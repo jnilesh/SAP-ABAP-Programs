@@ -1,0 +1,30 @@
+*&---------------------------------------------------------------------*
+*& Report ZTR_ATP_FUNMOD_SPELLAMOUNT
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ZTR_ATP_FUNMOD_SPELLAMOUNT.
+
+PARAMETERS P_AMT TYPE I.
+
+DATA LV_SPELL TYPE SPELL.
+
+CALL FUNCTION 'SPELL_AMOUNT'
+ EXPORTING
+   AMOUNT          = P_AMT
+*   CURRENCY        = ' '
+*   FILLER          = ' '
+   LANGUAGE        = SY-LANGU
+ IMPORTING
+   IN_WORDS        = LV_SPELL
+* EXCEPTIONS
+*   NOT_FOUND       = 1
+*   TOO_LARGE       = 2
+*   OTHERS          = 3
+          .
+IF sy-subrc <> 1.
+* Implement suitable error handling here
+*  RAISE EXCEPTION
+ENDIF.
+
+WRITE LV_SPELL-WORD.

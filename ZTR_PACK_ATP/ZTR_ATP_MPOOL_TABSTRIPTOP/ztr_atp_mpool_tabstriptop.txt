@@ -1,0 +1,13 @@
+*&---------------------------------------------------------------------*
+*& Include ZTR_ATP_MPOOL_TABSTRIPTOP                         Module Pool      ZTR_ATP_MPOOL_TABSTRIP
+*&
+*&---------------------------------------------------------------------*
+PROGRAM ZTR_ATP_MPOOL_TABSTRIP.
+
+DATA : NUM1 TYPE I,
+       NUM2 TYPE I,
+       RSLT TYPE I,
+       N1 TYPE I,
+       N2 TYPE I.
+
+CONTROLS TABSTRP TYPE TABSTRIP.

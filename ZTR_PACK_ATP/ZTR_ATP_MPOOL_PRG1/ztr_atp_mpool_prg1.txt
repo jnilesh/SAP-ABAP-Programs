@@ -1,0 +1,67 @@
+*&---------------------------------------------------------------------*
+*& Modulpool  ZTR_ATP_MPOOL_PRG1
+*&
+*&---------------------------------------------------------------------*
+*&
+*&
+*&---------------------------------------------------------------------*
+PROGRAM ZTR_ATP_MPOOL_PRG1.
+
+DATA: LV_MATNR TYPE MATNR,
+      LV_MBRSH TYPE MBRSH,
+      LV_MTART TYPE MTART.
+
+
+
+
+*&---------------------------------------------------------------------*
+*&      Module  STATUS_0100  OUTPUT
+*&---------------------------------------------------------------------*
+*       text
+*----------------------------------------------------------------------*
+MODULE status_0100 OUTPUT.
+  SET PF-STATUS 'ZTR_MPOOL_PFS'. " SE41 NAME
+  SET TITLEBAR 'ZTR_MPOOL_TITLE'.
+
+*  DEFAULT VALUE FOR THE INPUT
+    LV_MATNR = '23'.
+
+ENDMODULE.
+*&---------------------------------------------------------------------*
+*&      Module  USER_COMMAND_0100  INPUT
+*&---------------------------------------------------------------------*
+*       text
+*----------------------------------------------------------------------*
+MODULE user_command_0100 INPUT.
+CASE SY-UCOMM.
+  WHEN 'NEXT'.
+  SELECT MATNR
+         MBRSH
+         MTART
+    FROM MARA
+    INTO (LV_MATNR, LV_MBRSH, LV_MTART)
+    WHERE MATNR EQ LV_MATNR. " LV_MATNR IS 0100 SCREEN INPUT.
+    ENDSELECT.
+    LEAVE TO SCREEN 0200.
+  WHEN 'EXIT'.
+    LEAVE TO SCREEN 0.
+ENDCASE.
+
+ENDMODULE.
+*&---------------------------------------------------------------------*
+*&      Module  USER_COMMAND_0200  INPUT
+*&---------------------------------------------------------------------*
+*       text
+*----------------------------------------------------------------------*
+MODULE user_command_0200 INPUT.
+ CASE  SY-UCOMM.
+ 	WHEN 'BACK'.
+    LEAVE TO SCREEN 0100.
+ 	WHEN 'EXIT'.
+    LEAVE TO SCREEN 0.
+ 	WHEN OTHERS.
+ ENDCASE.
+
+ENDMODULE.
+
+INCLUDE ztr_atp_mpool_prg1_status_0o01.

@@ -1,0 +1,11 @@
+*&---------------------------------------------------------------------*
+*&  Include           ZTR_CNDT_PROG2_TOP3
+*&---------------------------------------------------------------------*
+
+TABLES MARA.
+
+DATA : LV_MATNR TYPE MATNR, " Material Number1
+       LV_MBRSH TYPE MBRSH, " Industry sector
+       LV_MTART TYPE MTART, " Material type
+       LV_MEINS TYPE MEINS, " Base Unit of Measure
+       LV_MATKL TYPE MATKL. " Material Group

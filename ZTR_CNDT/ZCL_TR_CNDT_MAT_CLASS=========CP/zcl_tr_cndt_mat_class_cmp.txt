@@ -1,0 +1,1 @@
+ZCL_TR_CNDT_MAT_CLASS         CL_METH_MAT                   10

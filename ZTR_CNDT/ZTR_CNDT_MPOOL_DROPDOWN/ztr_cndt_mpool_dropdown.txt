@@ -1,0 +1,90 @@
+*&---------------------------------------------------------------------*
+*& Modulpool  ZTR_CNDT_MPOOL_DROPDOWN
+*&
+*&---------------------------------------------------------------------*
+*&
+*&
+*&---------------------------------------------------------------------*
+PROGRAM ZTR_CNDT_MPOOL_DROPDOWN.
+
+
+INCLUDE ZTR_CNDT_DROPDOWN_TOP.
+*&---------------------------------------------------------------------*
+*&      Module  STATUS_0100  OUTPUT
+*&---------------------------------------------------------------------*
+*       text
+*----------------------------------------------------------------------*
+MODULE STATUS_0100 OUTPUT.
+*  SET PF-STATUS 'xxxxxxxx'.
+*  SET TITLEBAR 'xxx'.
+CLEAR ZTR_CNDT_DISTRT-DIST_NAME.
+
+  SELECT STATE_NAME
+    FROM ZTR_CNDT_STATE
+    INTO TABLE IT_STATE.
+
+  LOOP AT IT_STATE INTO WA_STATE.
+    WA_LISTBOX-KEY = WA_STATE-STATE_NAME.
+    WA_LISTBOX-TEXT = WA_STATE-STATE_NAME.
+    APPEND WA_LISTBOX TO IT_LISTBOX.
+  ENDLOOP.
+
+  LD_FIELD = 'ZTR_CNDT_STATE-STATE_NAME'.
+*  STATENAME = LD_FIELD1.
+  CALL FUNCTION 'VRM_SET_VALUES'
+    EXPORTING
+      ID     = LD_FIELD
+      VALUES = IT_LISTBOX.
+
+  CLEAR:LD_FIELD, WA_LISTBOX ,IT_LISTBOX[].
+
+
+ENDMODULE.
+*&---------------------------------------------------------------------*
+*&      Module  USER_COMMAND_0100  INPUT
+*&---------------------------------------------------------------------*
+*       text
+*----------------------------------------------------------------------*
+MODULE USER_COMMAND_0100 INPUT.
+
+PERFORM SELECT_DISTRICT.
+
+  CASE OK_CODE.
+    WHEN 'SUBMIT'.
+      MESSAGE 'YOUR RESPONSE IS SUBMITTED' TYPE 'S'.
+    WHEN 'EXIT'.
+    LEAVE TO SCREEN 0.
+  ENDCASE.
+
+
+
+ENDMODULE.
+*&---------------------------------------------------------------------*
+*&      Form  SELECT_DISTRICT
+*&---------------------------------------------------------------------*
+FORM SELECT_DISTRICT .
+  CLEAR ZTR_CNDT_DISTRT-DIST_NAME.
+SELECT SINGLE STATE_ID
+          FROM ZTR_CNDT_STATE
+          INTO (STATEID)
+  WHERE STATE_NAME = ZTR_CNDT_STATE-STATE_NAME.
+
+  SELECT DIST_NAME FROM ZTR_CNDT_DISTRT
+    INTO TABLE IT_DISTRICT
+     WHERE STATE_ID = STATEID.
+
+  LOOP AT IT_DISTRICT INTO WA_DISTRICT.
+    WA_LISTBOX-KEY = WA_DISTRICT-DIST_NAME.
+    WA_LISTBOX-TEXT = WA_DISTRICT-DIST_NAME.
+    APPEND WA_LISTBOX TO IT_LISTBOX.
+  ENDLOOP.
+
+  LD_FIELD = 'ZTR_CNDT_DISTRT-DIST_NAME'.
+  CALL FUNCTION 'VRM_SET_VALUES'
+    EXPORTING
+      ID     = LD_FIELD
+      VALUES = IT_LISTBOX.
+
+
+
+ENDFORM.

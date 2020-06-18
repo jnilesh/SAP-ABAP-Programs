@@ -1,0 +1,13 @@
+class Z180191_GL3 definition
+  public
+  final
+  create public .
+
+public section.
+
+  methods LIST_MATERIAL
+    importing
+      value(I_MATNR1) type MATNR
+      !I_MATNR2 type MATNR optional
+    exporting
+      !MAT_LIST type TABLE .

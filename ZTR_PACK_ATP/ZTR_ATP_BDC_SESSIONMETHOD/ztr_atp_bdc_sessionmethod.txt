@@ -1,0 +1,169 @@
+*&---------------------------------------------------------------------*
+*& Report ZTR_ATP_BDC_SESSIONMETHOD
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ZTR_ATP_BDC_SESSIONMETHOD.
+
+INCLUDE ZTR_ATP_BDC_SESSION_TOP.
+
+
+
+PARAMETERS P_FILE TYPE RLGRAP-FILENAME.
+
+
+AT SELECTION-SCREEN ON VALUE-REQUEST FOR P_FILE.
+PERFORM FILE_VALID.
+
+
+
+START-OF-SELECTION.
+
+DATA P_FILE1 TYPE STRING.
+P_FILE1 = P_FILE.
+
+CALL FUNCTION 'GUI_UPLOAD'
+  EXPORTING
+   FILENAME                      = P_FILE1
+   FILETYPE                      = 'ASC'
+   HAS_FIELD_SEPARATOR           = 'X'
+  TABLES
+    DATA_TAB                      = IT_TAB
+          .
+IF SY-SUBRC <> 0.
+* Implement suitable error handling here
+ENDIF.
+
+data lv_date1 TYPE sy-datum.
+     lv_date1 = sy-datum - 1.
+
+
+CALL FUNCTION 'BDC_OPEN_GROUP'
+ EXPORTING
+   CLIENT                    = SY-MANDT
+*   DEST                      =
+   GROUP                     = 'TR_ATP'  " SM35 T-CODE A E N
+   HOLDDATE                  = lv_date1
+   KEEP                      = 'X'
+   USER                      = SY-UNAME
+          .
+IF SY-SUBRC <> 0.
+* Implement suitable error handling here
+ENDIF.
+
+
+LOOP AT IT_TAB INTO WA_TAB.
+
+
+
+
+perform bdc_dynpro      using 'SAPLMGMM' '0060'.
+perform bdc_field       using 'BDC_CURSOR'
+                              'RMMG1-MTART'.
+perform bdc_field       using 'BDC_OKCODE'
+                              '=ENTR'.
+perform bdc_field       using 'RMMG1-MATNR'
+                               WA_TAB-MATNR.  "
+perform bdc_field       using 'RMMG1-MBRSH'
+                              WA_TAB-MBRSH. "
+perform bdc_field       using 'RMMG1-MTART'
+                              WA_TAB-MTART. "
+perform bdc_dynpro      using 'SAPLMGMM' '0070'.
+perform bdc_field       using 'BDC_CURSOR'
+                              'MSICHTAUSW-DYTXT(01)'.
+perform bdc_field       using 'BDC_OKCODE'
+                              '=ENTR'.
+perform bdc_field       using 'MSICHTAUSW-KZSEL(01)'
+                              'X'.
+perform bdc_dynpro      using 'SAPLMGMM' '4004'.
+perform bdc_field       using 'BDC_OKCODE'
+                              '=BU'.
+perform bdc_field       using 'MAKT-MAKTX' "
+                             WA_TAB-MAKTX.
+perform bdc_field       using 'BDC_CURSOR'
+                              'MARA-MATKL'.
+
+*IF WA_TAB-MEINS  = 'DZ'.
+*  SY-SUBRC EQ 0.
+  perform bdc_field       using 'MARA-MEINS'   "
+                             WA_TAB-MEINS.
+
+*  ENDIF.
+*perform bdc_field       using 'MARA-SPART' "
+*                             WA_TAB-SPART.
+
+perform bdc_field       using 'MARA-MATKL' "
+                             WA_TAB-MATKL.
+
+
+CALL FUNCTION 'BDC_INSERT'
+ EXPORTING
+   TCODE                  = 'MM01'
+  TABLES
+    DYNPROTAB              = IT_BDCDATA
+          .
+IF SY-SUBRC <> 0.
+* Implement suitable error handling here
+ENDIF.
+
+REFRESH IT_BDCDATA.
+  ENDLOOP.
+
+
+  CALL FUNCTION 'BDC_CLOSE_GROUP' .
+  IF SY-SUBRC <> 0.
+* Implement suitable error handling here
+  ENDIF.
+
+
+
+  WRITE 'GO TO SM35-TOCDE AND PROCESS THE BDC MAT MASTER'.
+
+*&---------------------------------------------------------------------*
+*&      Form  BDC_DYNPRO
+*&---------------------------------------------------------------------*
+
+FORM BDC_DYNPRO  USING  P_PROGRAM P_DYNPRO.
+
+  CLEAR IT_BDCDATA.
+
+  IT_BDCDATA-PROGRAM = P_PROGRAM.
+  IT_BDCDATA-DYNPRO = P_DYNPRO.
+  IT_BDCDATA-DYNBEGIN  = 'X'.
+
+  APPEND IT_BDCDATA.
+
+
+ENDFORM.
+*&---------------------------------------------------------------------*
+*&      Form  BDC_FIELD
+*&---------------------------------------------------------------------*
+
+FORM BDC_FIELD  USING  P_FNAM P_FVAL.
+  CLEAR IT_BDCDATA.
+
+  IT_BDCDATA-FNAM = P_FNAM.
+  IT_BDCDATA-FVAL = P_FVAL.
+
+  APPEND IT_BDCDATA.
+                      .
+
+ENDFORM.
+*&---------------------------------------------------------------------*
+*&      Form  FILE_VALID
+*&---------------------------------------------------------------------*
+FORM FILE_VALID .
+
+
+CALL FUNCTION 'F4_FILENAME'
+ EXPORTING
+   PROGRAM_NAME        = SYST-CPROG " ZTR_ATP_BDC_PROG1
+   DYNPRO_NUMBER       = SYST-DYNNR  " 1000
+*   FIELD_NAME          = ' '
+ IMPORTING
+   FILE_NAME           = P_FILE
+          .
+
+
+
+ENDFORM.

@@ -1,0 +1,73 @@
+*&---------------------------------------------------------------------*
+*& Report ZTR_CNDT_SUBROUTINES
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ZTR_CNDT_SUBROUTINES.
+
+*BY VALUE
+
+*DATA A TYPE I VALUE 30.
+
+*PERFORM SUB1 USING A.
+*
+*WRITE A.
+*
+**&---------------------------------------------------------------------*
+**&      Form  SUB1
+**&---------------------------------------------------------------------*
+*FORM SUB1  USING VALUE(P_A).
+*
+*P_A = 40.
+*
+*ENDFORM.
+
+*BY REF
+
+*DATA A TYPE I VALUE 30.
+*
+*PERFORM SUB1 USING A.
+*
+*WRITE A.
+*
+**&---------------------------------------------------------------------*
+**&      Form  SUB1
+**&---------------------------------------------------------------------*
+*FORM SUB1  USING P_A.
+*
+*P_A = 40.
+*
+*ENDFORM.
+
+
+
+*BY VALUE AND RET
+
+*DATA A TYPE I VALUE 30.
+*
+*PERFORM SUB1 CHANGING A.
+*
+*WRITE A.
+*
+**&---------------------------------------------------------------------*
+**&      Form  SUB1
+**&---------------------------------------------------------------------*
+*FORM SUB1  CHANGING VALUE(P_A).
+*STATICS  b TYPE i VALUE 30.
+*P_A = 40.
+*
+*ENDFORM.
+
+
+
+
+
+*SUB WITH INC
+
+DATA A TYPE I VALUE 30.
+
+PERFORM SUB2 CHANGING A.
+
+WRITE A.
+
+INCLUDE ztr_cndt_subroutines_sub2f01.

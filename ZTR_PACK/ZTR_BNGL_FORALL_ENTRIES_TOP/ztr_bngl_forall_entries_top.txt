@@ -1,0 +1,41 @@
+*&---------------------------------------------------------------------*
+*&  Include           ZTR_BNGL_FORALL_ENTRIES_TOP
+*&---------------------------------------------------------------------*
+
+DATA LV_MATNR TYPE MATNR.
+
+TYPES: BEGIN OF TY_TAB1,
+      MATNR TYPE MATNR, " Material Number
+      MBRSH TYPE MBRSH, " Industry sector
+      MTART TYPE MTART, " Material type
+      MEINS TYPE MEINS, " Base Unit of Measure
+      BRGEW TYPE BRGEW, " Gross weight
+      NTGEW TYPE NTGEW, " Net weight
+      END OF TY_TAB1.
+
+DATA :IT_TAB1 TYPE STANDARD TABLE OF TY_TAB1,
+       WA_TAB1 TYPE TY_TAB1.
+
+
+TYPES: BEGIN OF TY_TAB2,
+      MATNR TYPE MATNR, " Material Number
+      WERKS TYPE WERKS_D, " plant.
+        END OF TY_TAB2.
+
+DATA :IT_TAB2 TYPE STANDARD TABLE OF TY_TAB2,
+       WA_TAB2 TYPE TY_TAB2.
+
+TYPES: BEGIN OF TY_FINAL,
+      MATNR TYPE MATNR, " Material Number
+      MBRSH TYPE MBRSH, " Industry sector
+      MTART TYPE MTART, " Material type
+      MEINS TYPE MEINS, " Base Unit of Measure
+      BRGEW TYPE BRGEW, " Gross weight
+      NTGEW TYPE NTGEW, " Net weight
+
+      WERKS TYPE WERKS_D, " plant.
+
+      END OF TY_FINAL.
+
+DATA :IT_FINAL TYPE STANDARD TABLE OF TY_FINAL,
+       WA_FINAL TYPE TY_FINAL.

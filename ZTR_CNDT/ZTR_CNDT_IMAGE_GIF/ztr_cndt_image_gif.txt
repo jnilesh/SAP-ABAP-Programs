@@ -1,0 +1,86 @@
+*&---------------------------------------------------------------------*
+*& Module Pool       ZTR_CNDT_IMAGE_GIF
+*&
+*&---------------------------------------------------------------------*
+*&
+*&
+*&---------------------------------------------------------------------*
+PROGRAM ztr_cndt_image_gif.
+
+
+*&---------------------------------------------------------------------*
+*&      Module  STATUS_0100  OUTPUT
+*&---------------------------------------------------------------------*
+*       text
+*----------------------------------------------------------------------*
+MODULE status_0100 OUTPUT.
+  SET PF-STATUS SPACE.
+  SET TITLEBAR 'GIF'.
+
+  DATA lv_doc TYPE REF TO cl_dd_document.
+
+  CREATE OBJECT lv_doc
+*  EXPORTING
+*    STYLE  =
+*    BACKGROUND_COLOR = 10
+*    BDS_STYLESHEET =
+*    NO_MARGINS =
+    .
+
+  CALL METHOD lv_doc->add_text
+    EXPORTING
+      text         = 'WELCOME'
+*     TEXT_TABLE   =
+*     FIX_LINES    =
+*     SAP_STYLE    =
+      sap_color    = '3'
+      sap_fontsize = lv_doc->large
+*     SAP_FONTSTYLE =
+*     SAP_EMPHASIS =
+*     STYLE_CLASS  =
+*     A11Y_TOOLTIP =
+*  CHANGING
+*     DOCUMENT     =
+    .
+
+  CALL METHOD lv_doc->add_picture
+    EXPORTING
+      picture_id = 'Z168199_DD_DEMO1' "document name that we created in 'OAER' with gif file
+      width      = '200'
+*     ALTERNATIVE_TEXT =
+*     TABINDEX   =
+    .
+
+
+  CALL METHOD lv_doc->merge_document.
+
+  CALL METHOD lv_doc->display_document
+    EXPORTING
+*     REUSE_CONTROL      =
+*     REUSE_REGISTRATION =
+      container = 'CUST'
+*     PARENT    =
+*  EXCEPTIONS
+*     HTML_DISPLAY_ERROR = 1
+*     OTHERS    = 2
+    .
+  IF sy-subrc <> 0.
+* Implement suitable error handling here
+  ENDIF.
+
+ENDMODULE.
+*&---------------------------------------------------------------------*
+*&      Module  USER_COMMAND_0100  INPUT
+*&---------------------------------------------------------------------*
+*       text
+*----------------------------------------------------------------------*
+MODULE user_command_0100 INPUT.
+
+  CASE sy-ucomm.
+    WHEN 'BACK'.
+      LEAVE TO SCREEN 0.
+    WHEN 'EXIT'.
+      LEAVE PROGRAM.
+  ENDCASE.
+
+ENDMODULE.

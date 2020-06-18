@@ -1,0 +1,153 @@
+*&---------------------------------------------------------------------*
+*& Report ZTR_CNDT_BDC_CALLTRN_METH_CUST
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ZTR_CNDT_BDC_CALLTRN_METH_CUST.
+
+
+INCLUDE ZTR_CNDT_BDC_CALLTRN_TOP.
+
+
+
+PARAMETERS P_FILE TYPE RLGRAP-FILENAME.
+
+AT SELECTION-SCREEN ON VALUE-REQUEST FOR P_FILE.
+
+
+CALL FUNCTION 'F4_FILENAME'
+ EXPORTING
+   PROGRAM_NAME        = SYST-CPROG
+   DYNPRO_NUMBER       = SYST-DYNNR
+*   FIELD_NAME          = ' '
+ IMPORTING
+   FILE_NAME           = P_FILE
+          .
+
+
+START-OF-SELECTION.
+
+DATA P_FILE1 TYPE STRING.
+P_FILE1 = P_FILE.
+
+CALL FUNCTION 'GUI_UPLOAD'
+  EXPORTING
+    filename                      = P_FILE1
+   FILETYPE                      = 'ASC'
+   HAS_FIELD_SEPARATOR           = 'X'
+  tables
+    data_tab                      = IT_TAB
+          .
+IF sy-subrc <> 0.
+* Implement suitable error handling here
+ENDIF.
+
+
+
+LOOP AT IT_TAB INTO WA_TAB.
+LV_INDEX  = SY-TABIX.
+perform bdc_dynpro      using 'SAPMF02D' '0100'.
+
+perform bdc_field       using 'BDC_CURSOR'
+                              'RF02D-KTOKD'.
+perform bdc_field       using 'BDC_OKCODE'
+                              '/00'.
+perform bdc_field       using 'RF02D-KUNNR'  "  555
+                              WA_TAB-KUNNR.
+
+perform bdc_field       using 'RF02D-KTOKD'  "  0001
+                              WA_TAB-KTOKD.
+perform bdc_dynpro      using 'SAPMF02D' '0110'.
+perform bdc_field       using 'BDC_CURSOR'
+                              'KNA1-SPRAS'.
+perform bdc_field       using 'BDC_OKCODE'
+                              '=UPDA'.
+perform bdc_field       using 'KNA1-ANRED'  " COMPANY
+                             WA_TAB-ANRED.
+perform bdc_field       using 'KNA1-NAME1'  " CAPGEM
+                             WA_TAB-NAME1.
+perform bdc_field       using 'KNA1-SORTL'
+                             WA_TAB-SORTL.
+perform bdc_field       using 'KNA1-STRAS'
+                             WA_TAB-STRAS.
+perform bdc_field       using 'KNA1-PFACH'
+                             WA_TAB-PFACH.
+perform bdc_field       using 'KNA1-ORT01'
+                             WA_TAB-ORT01.
+perform bdc_field       using 'KNA1-PSTLZ'
+                             WA_TAB-PSTLZ.
+perform bdc_field       using 'KNA1-ORT02'
+                             WA_TAB-ORT02.
+perform bdc_field       using 'KNA1-LAND1'
+                             WA_TAB-LAND1.
+perform bdc_field       using 'KNA1-SPRAS'
+                             WA_TAB-SPRAS.
+
+CALL TRANSACTION 'XD01' USING IT_BDCDATA MODE 'N' UPDATE 'S'.
+*      MESSAGES INTO IT_BDCMSGCOLL.
+
+IF SY-SUBRC NE 0.
+
+CALL FUNCTION 'FORMAT_MESSAGE'
+ EXPORTING
+*   ID              = SY-MSGID
+   LANG            = 'EN'
+*   NO              = SY-MSGNO
+*   V1              = SY-MSGV1
+*   V2              = SY-MSGV2
+*   V3              = SY-MSGV3
+*   V4              = SY-MSGV4
+ IMPORTING
+   MSG             = LV_TEXT
+* EXCEPTIONS
+*   NOT_FOUND       = 1
+*   OTHERS          = 2
+          .
+IF sy-subrc <> 0.
+* Implement suitable error handling here
+ENDIF.
+
+CONCATENATE LV_INDEX LV_TEXT INTO LV_TEXT SEPARATED BY '*'.
+
+WRITE LV_TEXT.
+
+*LOOP AT IT_BDCMSGCOLL.
+*
+*  WRITE: /
+*
+*  ENDLOOP.
+
+ENDIF.
+
+ REFRESH IT_BDCDATA.
+
+ENDLOOP.
+
+
+
+
+*&---------------------------------------------------------------------*
+*&      Form  BDC_DYNPRO
+*&---------------------------------------------------------------------*
+FORM bdc_dynpro  USING P_PROGRAM  P_DYNPRO.
+
+CLEAR IT_BDCDATA.
+IT_BDCDATA-PROGRAM = P_PROGRAM.
+IT_BDCDATA-DYNPRO = P_DYNPRO.
+IT_BDCDATA-DYNBEGIN = 'X'.
+APPEND IT_BDCDATA.
+
+ENDFORM.
+*&---------------------------------------------------------------------*
+*&      Form  BDC_FIELD
+*&---------------------------------------------------------------------*
+FORM bdc_field  USING  P_FNAM P_FVAL  .
+
+CLEAR IT_BDCDATA.
+IT_BDCDATA-FNAM = P_FNAM.
+IT_BDCDATA-FVAL = P_FVAL.
+
+APPEND IT_BDCDATA.
+
+
+ENDFORM.

@@ -1,0 +1,182 @@
+*&---------------------------------------------------------------------*
+*& Report ZTR_CNDT_BDC_SESSION_METH_CUST
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ZTR_CNDT_BDC_SESSION_METH_CUST.
+
+
+INCLUDE ZTR_CNDT_BDC_CUST_TOP.
+
+
+PARAMETERS P_FILE TYPE RLGRAP-FILENAME.
+
+AT SELECTION-SCREEN ON VALUE-REQUEST FOR P_FILE.
+
+
+CALL FUNCTION 'F4_FILENAME'
+ EXPORTING
+   PROGRAM_NAME        = SYST-CPROG
+   DYNPRO_NUMBER       = SYST-DYNNR
+*   FIELD_NAME          = ' '
+ IMPORTING
+   FILE_NAME           = P_FILE
+          .
+
+
+START-OF-SELECTION.
+
+*DATA P_FILE1 TYPE STRING.
+*P_FILE1 = P_FILE.
+*
+*CALL FUNCTION 'GUI_UPLOAD'
+*  EXPORTING
+*    filename                      = P_FILE1
+*   FILETYPE                      = 'ASC'
+*   HAS_FIELD_SEPARATOR           = 'X'
+*  tables
+*    data_tab                      = IT_TAB
+*          .
+*IF sy-subrc <> 0.
+** Implement suitable error handling here
+*ENDIF.
+
+
+DATA IT_RAW TYPE TRUXS_T_TEXT_DATA.
+
+CALL FUNCTION 'TEXT_CONVERT_XLS_TO_SAP'
+  EXPORTING
+   I_FIELD_SEPERATOR          = 'X'
+   I_LINE_HEADER              = 'X'
+    I_TAB_RAW_DATA             = IT_RAW
+    I_FILENAME                 = P_FILE
+  TABLES
+    I_TAB_CONVERTED_DATA       = IT_TAB
+* EXCEPTIONS
+*   CONVERSION_FAILED          = 1
+*   OTHERS                     = 2
+          .
+IF SY-SUBRC <> 0.
+* Implement suitable error handling here
+ENDIF.
+
+
+
+
+CALL FUNCTION 'BDC_OPEN_GROUP'
+ EXPORTING
+   CLIENT                    = SY-MANDT
+*   DEST                      = FILLER8
+   GROUP                     = 'ZTRCNDT' " SM35 T-CODE.
+*   HOLDDATE                  = FILLER8
+   KEEP                      = 'X'
+   USER                      = SY-UNAME
+          .
+IF sy-subrc <> 0.
+* Implement suitable error handling here
+ENDIF.
+.
+
+LOOP AT IT_TAB INTO WA_TAB.
+perform bdc_dynpro      using 'SAPMF02D' '0100'.
+
+perform bdc_field       using 'BDC_CURSOR'
+                              'RF02D-KTOKD'.
+perform bdc_field       using 'BDC_OKCODE'
+                              '/00'.
+perform bdc_field       using 'RF02D-KUNNR'  "  555
+                              WA_TAB-KUNNR.
+
+perform bdc_field       using 'RF02D-KTOKD'  "  0001
+                              WA_TAB-KTOKD.
+perform bdc_dynpro      using 'SAPMF02D' '0110'.
+perform bdc_field       using 'BDC_CURSOR'
+                              'KNA1-SPRAS'.
+perform bdc_field       using 'BDC_OKCODE'
+                              '=UPDA'.
+perform bdc_field       using 'KNA1-ANRED'  " COMPANY
+                             WA_TAB-ANRED.
+perform bdc_field       using 'KNA1-NAME1'  " CAPGEM
+                             WA_TAB-NAME1.
+perform bdc_field       using 'KNA1-SORTL'
+                             WA_TAB-SORTL.
+perform bdc_field       using 'KNA1-STRAS'
+                             WA_TAB-STRAS.
+perform bdc_field       using 'KNA1-PFACH'
+                             WA_TAB-PFACH.
+perform bdc_field       using 'KNA1-ORT01'
+                             WA_TAB-ORT01.
+perform bdc_field       using 'KNA1-PSTLZ'
+                             WA_TAB-PSTLZ.
+perform bdc_field       using 'KNA1-ORT02'
+                             WA_TAB-ORT02.
+perform bdc_field       using 'KNA1-LAND1'
+                             WA_TAB-LAND1.
+perform bdc_field       using 'KNA1-SPRAS'
+                             WA_TAB-SPRAS.
+
+CALL FUNCTION 'BDC_INSERT'
+ EXPORTING
+   TCODE                  = 'XD01'
+*   POST_LOCAL             = NOVBLOCAL
+*   PRINTING               = NOPRINT
+*   SIMUBATCH              = ' '
+*   CTUPARAMS              = ' '
+  TABLES
+    dynprotab              = IT_BDCDATA
+* EXCEPTIONS
+*   INTERNAL_ERROR         = 1
+*   NOT_OPEN               = 2
+*   QUEUE_ERROR            = 3
+*   TCODE_INVALID          = 4
+*   PRINTING_INVALID       = 5
+*   POSTING_INVALID        = 6
+*   OTHERS                 = 7
+          .
+IF sy-subrc <> 0.
+* Implement suitable error handling here
+ENDIF.
+
+
+ REFRESH IT_BDCDATA.
+
+ENDLOOP.
+
+
+CALL FUNCTION 'BDC_CLOSE_GROUP'
+* EXCEPTIONS
+*   NOT_OPEN          = 1
+*   QUEUE_ERROR       = 2
+*   OTHERS            = 3
+          .
+IF sy-subrc <> 0.
+* Implement suitable error handling here
+ENDIF.
+
+WRITE 'GO TO SM35 AND PROCESS THE CUSTOMER'.
+
+*&---------------------------------------------------------------------*
+*&      Form  BDC_DYNPRO
+*&---------------------------------------------------------------------*
+FORM bdc_dynpro  USING P_PROGRAM  P_DYNPRO.
+
+CLEAR IT_BDCDATA.
+IT_BDCDATA-PROGRAM = P_PROGRAM.
+IT_BDCDATA-DYNPRO = P_DYNPRO.
+IT_BDCDATA-DYNBEGIN = 'X'.
+APPEND IT_BDCDATA.
+
+ENDFORM.
+*&---------------------------------------------------------------------*
+*&      Form  BDC_FIELD
+*&---------------------------------------------------------------------*
+FORM bdc_field  USING  P_FNAM P_FVAL  .
+
+CLEAR IT_BDCDATA.
+IT_BDCDATA-FNAM = P_FNAM.
+IT_BDCDATA-FVAL = P_FVAL.
+
+APPEND IT_BDCDATA.
+
+
+ENDFORM.

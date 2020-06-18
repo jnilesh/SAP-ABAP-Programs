@@ -1,0 +1,215 @@
+*&---------------------------------------------------------------------*
+*& Report ZTR_CGKL_ITAB_ASSIGNMENTS
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ZTR_CGKL_ITAB_ASSIGNMENTS.
+
+
+*REFRESH ITAB.
+
+*       IF ITAB IS INITIAL.
+*         WRITE 'INTERNAL TABLE IS EMPTY'.
+**     FREE ITAB.
+*         REFRESH ITAB.
+*         ENDIF.
+
+
+
+*****INSERT SINGLE LINES****
+*DATA: BEGIN OF LINE_B1,  " FIELD STRING
+*        NAME(20) TYPE C,
+*        AGE      TYPE I,
+*        WEIGHT   TYPE P DECIMALS 2,
+*        LAND(5)  TYPE C,
+*      END OF LINE_B1.
+*
+*DATA IT_TAB LIKE SORTED TABLE OF LINE_B1
+*            WITH NON-UNIQUE KEY NAME AGE WEIGHT LAND.
+*
+*LINE_B1-NAME = 'JOHAN'.
+*LINE_B1-AGE = 35.
+*LINE_B1-WEIGHT = '80.00'.
+*LINE_B1-LAND = 'IND'.
+*
+*INSERT LINE_B1 INTO TABLE IT_TAB.
+*
+*
+*LINE_B1-NAME = 'SMITH'.
+*LINE_B1-AGE = 35.
+*LINE_B1-WEIGHT = '70.00'.
+*LINE_B1-LAND = 'USA'.
+*
+*INSERT LINE_B1 INTO TABLE IT_TAB.
+*
+*LINE_B1-NAME = 'DAVID'.
+*LINE_B1-AGE = 40.
+*LINE_B1-WEIGHT = '80.00'.
+*LINE_B1-LAND = 'UK'.
+*
+*INSERT LINE_B1 INTO TABLE IT_TAB.
+*
+*
+*SORT ITAB BY NAME.
+*
+*LOOP AT IT_TAB INTO LINE_B1.
+*  WRITE: / LINE_B1-NAME,
+*           LINE_B1-AGE,
+*           LINE_B1-WEIGHT,
+*           LINE_B1-LAND.
+*ENDLOOP.
+
+
+*****INSERT MULTIPLE LINES****
+*
+*DATA : BEGIN OF LINE,
+*       COL_1 TYPE I,
+*      COL_2 TYPE I,
+*     END OF LINE.
+*
+*     DATA ITAB LIKE TABLE OF LINE.
+*
+*     DO 4 TIMES.
+*       LINE-COL_1 = SY-INDEX.
+*       LINE-COL_2 = SY-INDEX ** 2.
+*       APPEND LINE TO ITAB.
+*       ENDDO.
+*
+*       LOOP AT ITAB INTO LINE.
+*         LINE-COL_1 = 3 * SY-TABIX.
+*         LINE-COL_2 = 5 * SY-TABIX.
+*         INSERT LINE INTO ITAB.
+*         ENDLOOP.
+*       LOOP AT ITAB INTO LINE.
+*          WRITE : / SY-TABIX, LINE-COL_1, LINE-COL_2.
+*          ENDLOOP.
+
+
+*********MODIFY*************
+
+*DATA : BEGIN OF LINE,
+*        COL1 TYPE I,
+*        COL2 TYPE I,
+*       END OF LINE.
+*
+*DATA ITAB LIKE TABLE OF LINE.
+*
+*        DO 3 TIMES.
+*        LINE-COL1 = SY-INDEX.
+*        LINE-COL2 = SY-INDEX ** 2.
+*        APPEND LINE TO ITAB.
+*        ENDDO.
+*
+*LOOP AT ITAB INTO LINE.
+*    IF SY-TABIX = 2.
+*    LINE-COL1 = SY-TABIX * 10.
+*    LINE-COL2 = ( SY-TABIX * 10 ) ** 2.
+*    MODIFY ITAB FROM LINE.
+*    ENDIF.
+*ENDLOOP.
+*
+*LOOP AT ITAB INTO LINE.
+*  WRITE : / SY-TABIX, LINE-COL1, LINE-COL2.
+*ENDLOOP.
+
+
+**********DELETE**********
+DATA : BEGIN OF LINE,
+       COL1 TYPE I,
+       COL2 TYPE I,
+      END OF LINE.
+
+DATA ITAB LIKE HASHED TABLE OF LINE WITH UNIQUE KEY COL1.
+
+DO 4 TIMES.
+  LINE-COL1 = SY-INDEX.
+  LINE-COL2 = SY-INDEX ** 2.
+  INSERT LINE INTO TABLE ITAB.
+ENDDO.
+
+LINE-COL1 = 0.
+DELETE TABLE ITAB : FROM LINE,
+WITH TABLE KEY COL1 = 4 .
+            COL2 = 3 .
+
+LOOP AT ITAB INTO LINE.
+ WRITE : / LINE-COL1, LINE-COL2.
+ENDLOOP.
+
+
+**********COLLECT**********
+
+*DATA : BEGIN OF LINE,
+*       COL_1(4) TYPE C,
+*       COL_2(3) TYPE N,
+*       COL_3 TYPE I,
+*       END OF LINE.
+*
+*DATA ITAB LIKE SORTED TABLE OF LINE
+*       WITH NON-UNIQUE KEY COL_1 COL_2.
+*
+* LINE-COL_1 = 'CAP19'.
+* LINE-COL_2 = '1239'.
+* LINE-COL_3 = 3.
+* COLLECT LINE INTO ITAB.
+* WRITE / SY-TABIX.
+*
+* LINE-COL_1 = 'TECH'.
+* LINE-COL_2 = '34'.
+* LINE-COL_3 = 5.
+* COLLECT LINE INTO ITAB.
+* WRITE / SY-TABIX.
+*
+* LINE-COL_1 = 'CAP1'.
+* LINE-COL_2 = '123'.
+* LINE-COL_3 = 7.
+* COLLECT LINE INTO ITAB.
+* WRITE / SY-TABIX.
+*
+* LOOP AT ITAB INTO LINE.
+*   WRITE : / LINE-COL_1, LINE-COL_2, LINE-COL_3.
+*   ENDLOOP.
+
+
+******data declaration******
+*
+*TYPES : BEGIN OF TY_STUDENT,
+*        ID(5) TYPE N,
+*        NAME(10) TYPE C,
+*        END OF TY_STUDENT.
+*
+*DATA : WA_STUDENT TYPE TY_STUDENT.
+*DATA : IT TYPE TABLE OF TY_STUDENT.
+*
+*WA_STUDENT-ID = 1.
+*WA_STUDENT-NAME = 'JOHN'.
+*APPEND WA_STUDENT TO IT.
+*
+*WA_STUDENT-ID = 2.
+*WA_STUDENT-NAME = 'JIM'.
+*APPEND WA_STUDENT TO IT.
+*
+*WA_STUDENT-ID = 3.
+*WA_STUDENT-NAME = 'JACK'.
+*APPEND WA_STUDENT TO IT.
+*
+*
+**LOOP AT IT INTO WA_STUDENT.
+**
+**WRITE: / WA_STUDENT-ID,
+**         WA_STUDENT-NAME.
+**
+**ENDLOOP.
+**
+**
+**READ TABLE IT INTO WA_STUDENT INDEX 3.
+**
+**
+*READ TABLE IT INTO WA_STUDENT WITH KEY NAME = 'JIM'.
+**
+*
+*IF SY-SUBRC = 0.
+*  WRITE : WA_STUDENT-ID, WA_STUDENT-NAME.
+*ELSE.
+*  WRITE 'NO RECORD FOUND'.
+*ENDIF.

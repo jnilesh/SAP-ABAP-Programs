@@ -1,0 +1,18 @@
+*&---------------------------------------------------------------------*
+*& Report ZTR_BNGL_TAB_WORKARE
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ZTR_BNGL_TAB_WORKARE.
+
+
+TABLES MARA.
+
+SELECT-OPTIONS S_MATNR FOR MARA-MATNR.
+SELECT * FROM MARA
+    INTO MARA
+  WHERE MATNR IN S_MATNR.
+
+  WRITE : / MARA-MATNR,
+            MARA-MBRSH.
+  ENDSELECT.

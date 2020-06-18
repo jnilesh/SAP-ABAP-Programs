@@ -1,0 +1,25 @@
+*----------------------------------------------------------------------*
+***INCLUDE ZTR_ATP_MPOOL_TABLE_USER_COI01.
+*----------------------------------------------------------------------*
+*&---------------------------------------------------------------------*
+*&      Module  USER_COMMAND_0100  INPUT
+*&---------------------------------------------------------------------*
+*       text
+*----------------------------------------------------------------------*
+MODULE user_command_0100 INPUT.
+CASE SY-UCOMM.
+  WHEN 'NEXT'.
+SELECT MATNR
+       MBRSH
+       MTART
+       MEINS
+       BRGEW
+       NTGEW
+  INTO TABLE IT_TAB
+    FROM MARA
+  WHERE MATNR BETWEEN LV_MATNR1 AND LV_MATNR2.
+LEAVE TO SCREEN 0200.
+  WHEN 'EXIT'.
+  LEAVE TO SCREEN 0.
+ENDCASE.
+ENDMODULE.

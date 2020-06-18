@@ -1,0 +1,56 @@
+*&---------------------------------------------------------------------*
+*&  Include           ZMM_MARC_F009
+*&---------------------------------------------------------------------*
+FORM f009_get_marc USING p_command LIKE sy-ucomm
+                     p_selfield TYPE slis_selfield.
+
+  READ TABLE it_mara INTO wa_mara INDEX  p_selfield-tabindex.
+
+  CASE p_command.
+    WHEN '&IC1'.
+      SELECT
+            matnr
+            werks
+            kzkri
+            ekgrp
+            dispr
+            dismm
+            dispo
+  FROM z187511_marc INTO TABLE it_marc
+    WHERE matnr EQ wa_mara-matnr
+        AND werks BETWEEN s_werks-low AND s_werks-high.
+
+      IF sy-subrc <> 0.
+        MESSAGE e011.
+      ENDIF.
+
+
+      IF NOT it_marc IS INITIAL.
+
+
+
+        CALL FUNCTION 'REUSE_ALV_GRID_DISPLAY'
+          EXPORTING
+            i_callback_program      = sy-repid
+            i_callback_user_command = 'F010_GET_MAKT'
+            i_callback_top_of_page  = 'TOPPAGE'
+            i_structure_name        = 'Z187511_MARC'
+            is_layout               = it_layout
+            it_sort                 = it_sort
+          TABLES
+            t_outtab                = it_marc
+          EXCEPTIONS
+            program_error           = 1
+            OTHERS                  = 2.
+
+        IF sy-subrc <> 0.
+* IMPLEMENT SUITABLE ERROR HANDLING HERE
+          MESSAGE e004.
+        ENDIF.
+
+      ELSE.
+        MESSAGE i008 DISPLAY LIKE 'E'.
+
+      ENDIF.
+  ENDCASE.
+ENDFORM.

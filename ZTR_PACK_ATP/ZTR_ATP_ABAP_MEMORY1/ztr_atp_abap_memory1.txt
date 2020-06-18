@@ -1,0 +1,15 @@
+*&---------------------------------------------------------------------*
+*& Report ZTR_ATP_ABAP_MEMORY1
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ZTR_ATP_ABAP_MEMORY1.
+
+
+
+PARAMETERS P_matnr  TYPE MARA-matnr.
+
+EXPORT P_MATNR TO MEMORY ID 'CAPMEM'.
+
+
+SUBMIT ZTR_ATP_ABAP_MEMORY2 AND RETURN.

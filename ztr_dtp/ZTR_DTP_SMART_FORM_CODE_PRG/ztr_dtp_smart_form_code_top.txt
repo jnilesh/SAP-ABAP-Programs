@@ -1,0 +1,9 @@
+*&---------------------------------------------------------------------*
+*&  Include           ZTR_DTP_SMART_FORM_CODE_TOP
+*&---------------------------------------------------------------------*
+
+DATA FM_NAME TYPE RS38L_FNAM.
+
+DATA LV_MATNR TYPE MATNR.
+
+DATA IT_TAB1 TYPE STANDARD TABLE OF ZTR_DTP_SMSTRS.

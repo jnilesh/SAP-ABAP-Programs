@@ -1,0 +1,97 @@
+*&---------------------------------------------------------------------*
+*& Report ZTR_CGKL_OOALV_PRG2
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ZTR_CGKL_OOALV_PRG2.
+
+
+TABLES MARA.
+
+DATA I_CONTAINER TYPE REF TO CL_GUI_CUSTOM_CONTAINER.
+
+DATA I_ALV_GRID TYPE REF TO CL_GUI_ALV_GRID.
+
+DATA IT_TAB  TYPE TABLE OF MARA.
+DATA WA_TAB TYPE MARA.
+
+SELECT-OPTIONS S_MATNR FOR MARA-MATNR.
+
+START-OF-SELECTION.
+
+SELECT * FROM MARA
+  INTO TABLE IT_TAB
+  WHERE MATNR IN S_MATNR.
+
+CALL SCREEN 0100.
+*&---------------------------------------------------------------------*
+*&      Module  STATUS_0100  OUTPUT
+*&---------------------------------------------------------------------*
+*       text
+*----------------------------------------------------------------------*
+MODULE STATUS_0100 OUTPUT.
+  SET PF-STATUS 'ZTR_OOALV_PF'.
+*  SET TITLEBAR 'xxx'.
+ENDMODULE.
+*&---------------------------------------------------------------------*
+*&      Module  OOALV_DISP  OUTPUT
+*&---------------------------------------------------------------------*
+*       text
+*----------------------------------------------------------------------*
+MODULE OOALV_DISP OUTPUT.
+
+ CREATE OBJECT I_CONTAINER
+   EXPORTING
+     CONTAINER_NAME              = 'ALV_CNT1'
+     .
+ IF SY-SUBRC <> 0.
+*  MESSAGE ID SY-MSGID TYPE SY-MSGTY NUMBER SY-MSGNO
+*             WITH SY-MSGV1 SY-MSGV2 SY-MSGV3 SY-MSGV4.
+ ENDIF.
+
+
+CREATE OBJECT I_ALV_GRID
+  EXPORTING
+    I_PARENT          = I_CONTAINER
+    .
+IF SY-SUBRC <> 0.
+* MESSAGE ID SY-MSGID TYPE SY-MSGTY NUMBER SY-MSGNO
+*            WITH SY-MSGV1 SY-MSGV2 SY-MSGV3 SY-MSGV4.
+ENDIF.
+
+CALL METHOD I_ALV_GRID->SET_TABLE_FOR_FIRST_DISPLAY
+  EXPORTING
+*    I_BUFFER_ACTIVE               =
+*    I_BYPASSING_BUFFER            =
+*    I_CONSISTENCY_CHECK           =
+    I_STRUCTURE_NAME              = 'MARA'
+*    IS_VARIANT                    =
+*    I_SAVE                        =
+*    I_DEFAULT                     = 'X'
+*    IS_LAYOUT                     =
+*    IS_PRINT                      =
+*    IT_SPECIAL_GROUPS             =
+*    IT_TOOLBAR_EXCLUDING          =
+*    IT_HYPERLINK                  =
+*    IT_ALV_GRAPHICS               =
+*    IT_EXCEPT_QINFO               =
+*    IR_SALV_ADAPTER               =
+  CHANGING
+    IT_OUTTAB                     = IT_TAB
+*    IT_FIELDCATALOG               =
+*    IT_SORT                       =
+*    IT_FILTER                     =
+*  EXCEPTIONS
+*    INVALID_PARAMETER_COMBINATION = 1
+*    PROGRAM_ERROR                 = 2
+*    TOO_MANY_LINES                = 3
+*    OTHERS                        = 4
+        .
+IF SY-SUBRC <> 0.
+* Implement suitable error handling here
+ENDIF.
+
+
+
+
+ENDMODULE.

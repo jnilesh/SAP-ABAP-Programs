@@ -1,0 +1,20 @@
+*&---------------------------------------------------------------------*
+*&  Include           ZTR_BNGL_ADOBE2_FM2_TOP
+*&---------------------------------------------------------------------*
+
+
+DATA : LV_VBELN TYPE VBELN_VA,
+       LV_POSNR TYPE POSNR_VA,
+       LV_MATNR TYPE MATNR,
+       LV_MATKL TYPE MATKL,
+       LV_ARKTX TYPE ARKTX.
+
+
+TYPES: TY_DOCPARAMS TYPE SFPDOCPARAMS,
+       TY_OUTPUTPARA TYPE SFPOUTPUTPARAMS.
+
+
+DATA WA_DOCPARAMS TYPE SFPDOCPARAMS.
+DATA WA_OUTPUTPARA TYPE SFPOUTPUTPARAMS.
+
+DATA FM_NAME TYPE RS38L_FNAM.

@@ -1,0 +1,25 @@
+class-pool .
+*"* class pool for class ZCL_CGKL_GL_ATTR
+
+*"* local type definitions
+include ZCL_CGKL_GL_ATTR==============ccdef.
+
+*"* class ZCL_CGKL_GL_ATTR definition
+*"* public declarations
+  include ZCL_CGKL_GL_ATTR==============cu.
+*"* protected declarations
+  include ZCL_CGKL_GL_ATTR==============co.
+*"* private declarations
+  include ZCL_CGKL_GL_ATTR==============ci.
+endclass. "ZCL_CGKL_GL_ATTR definition
+
+*"* macro definitions
+include ZCL_CGKL_GL_ATTR==============ccmac.
+*"* local class implementation
+include ZCL_CGKL_GL_ATTR==============ccimp.
+
+class ZCL_CGKL_GL_ATTR implementation.
+*"* method's implementations
+  include methods.
+endclass. "ZCL_CGKL_GL_ATTR implementation
+

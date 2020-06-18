@@ -1,0 +1,63 @@
+REPORT ZTR_DTP_SMART_FORM_CODE_PRG.
+
+INCLUDE ZTR_DTP_SMART_FORM_CODE_TOP.
+
+SELECT-OPTIONS S_MATNR FOR LV_MATNR.
+
+START-OF-SELECTION.
+
+SELECT MATNR
+       MBRSH
+       MTART
+       MEINS
+       BRGEW
+       NTGEW
+  FROM MARA
+  INTO TABLE IT_TAB1
+  WHERE MATNR IN S_MATNR.
+
+
+CALL FUNCTION 'SSF_FUNCTION_MODULE_NAME'
+  EXPORTING
+    formname                 = 'ZTR_DTP_SMART_FORM_PROGCODE'
+*   VARIANT                  = ' '
+*   DIRECT_CALL              = ' '
+ IMPORTING
+   FM_NAME                  = FM_NAME
+* EXCEPTIONS
+*   NO_FORM                  = 1
+*   NO_FUNCTION_MODULE       = 2
+*   OTHERS                   = 3
+          .
+IF sy-subrc <> 0.
+* Implement suitable error handling here
+ENDIF.
+
+
+CALL FUNCTION FM_NAME
+* EXPORTING
+*   ARCHIVE_INDEX              =
+*   ARCHIVE_INDEX_TAB          =
+*   ARCHIVE_PARAMETERS         =
+*   CONTROL_PARAMETERS         =
+*   MAIL_APPL_OBJ              =
+*   MAIL_RECIPIENT             =
+*   MAIL_SENDER                =
+*   OUTPUT_OPTIONS             =
+*   USER_SETTINGS              = 'X'
+* IMPORTING
+*   DOCUMENT_OUTPUT_INFO       =
+*   JOB_OUTPUT_INFO            =
+*   JOB_OUTPUT_OPTIONS         =
+  TABLES
+    IT_TAB                     = IT_TAB1
+* EXCEPTIONS
+*   FORMATTING_ERROR           = 1
+*   INTERNAL_ERROR             = 2
+*   SEND_ERROR                 = 3
+*   USER_CANCELED              = 4
+*   OTHERS                     = 5
+          .
+IF SY-SUBRC <> 0.
+* Implement suitable error handling here
+ENDIF.

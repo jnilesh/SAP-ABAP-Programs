@@ -1,0 +1,62 @@
+*&---------------------------------------------------------------------*
+*& Modulpool  ZTR_CNDT_MPOOL1
+*&
+*&---------------------------------------------------------------------*
+*&
+*&
+*&---------------------------------------------------------------------*
+PROGRAM ZTR_CNDT_MPOOL1.
+
+
+DATA: LV_MATNR TYPE MATNR,
+      LV_MBRSH TYPE MBRSH,
+      LV_MTART TYPE MTART.
+*&---------------------------------------------------------------------*
+*&      Module  STATUS_0100  OUTPUT
+*&---------------------------------------------------------------------*
+*       text
+*----------------------------------------------------------------------*
+MODULE status_0100 OUTPUT.
+  SET PF-STATUS 'ZTR_CNDT_MPAINT'.  " SE41 NAME
+*  SET TITLEBAR 'xxx'.
+  LV_MATNR = '000000000000000025'.
+ENDMODULE.
+*&---------------------------------------------------------------------*
+*&      Module  USER_COMMAND_0100  INPUT
+*&---------------------------------------------------------------------*
+*       text
+*----------------------------------------------------------------------*
+MODULE user_command_0100 INPUT.
+
+CASE SY-UCOMM.
+  WHEN 'NEXT'.
+
+  SELECT SINGLE MATNR
+                MBRSH
+                MTART
+      FROM MARA
+     INTO (LV_MATNR, LV_MBRSH, LV_MTART)
+    WHERE MATNR EQ LV_MATNR.
+  LEAVE TO SCREEN 0200.
+
+    WHEN 'EXIT'.
+
+  LEAVE TO SCREEN 0.
+
+  ENDCASE.
+ENDMODULE.
+*&---------------------------------------------------------------------*
+*&      Module  USER_COMMAND_0200  INPUT
+*&---------------------------------------------------------------------*
+*       text
+*----------------------------------------------------------------------*
+MODULE user_command_0200 INPUT.
+CASE SY-UCOMM.
+  WHEN 'BACK'.
+  LEAVE TO SCREEN 0100.
+  WHEN 'EXIT'.
+  LEAVE TO SCREEN 0.
+ENDCASE.
+
+
+ENDMODULE.

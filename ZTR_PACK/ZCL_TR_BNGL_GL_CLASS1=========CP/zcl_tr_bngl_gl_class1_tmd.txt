@@ -1,0 +1,3 @@
+ZCL_TR_BNGL_GL_CLASS1         00000                                                             0
+ZCL_TR_BNGL_GL_CLASS1         00001LION                                                         0
+ZCL_TR_BNGL_GL_CLASS1         00002TIGER                                                        0

@@ -1,0 +1,198 @@
+*&---------------------------------------------------------------------*
+*& Report Z161382_ITAB_ASSIGNMENT
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ZTR_ATP_ITAB_ASSIGNMENT.
+
+*#1. REFRESH AND FREE----------------------------------------------------------------------------------------------------------------
+
+*DATA :BEGIN OF LINE,
+*  COL_1(10) TYPE C,
+*  COL_2(10) TYPE C,
+*END OF LINE.
+*
+*DATA ITAB LIKE TABLE OF LINE.
+*LINE-COL_1 = 'CAPGEMINI'.
+*LINE-COL_2 = 'TECHNOLOGIES'.
+*
+*APPEND LINE TO ITAB.
+*REFRESH ITAB.
+*IF ITAB IS INITIAL.
+*  WRITE' INTERNAL TABLE IS EMPTY'.
+*  FREE ITAB.
+*  ENDIF.
+
+*#2.INSERT SINGLE LINE-------------------------------------------------------------------------------------------------------------------
+
+*DATA :BEGIN OF LINE,
+*      NAME(20) TYPE C,
+*      AGE TYPE I,
+*      WEIGHT TYPE P DECIMALS 2,
+*      LAND(5) TYPE C,
+*  END OF LINE.
+*
+*  DATA ITAB LIKE SORTED TABLE OF LINE WITH UNIQUE KEY NAME AGE WEIGHT LAND.
+*  LINE-NAME = 'AARAV'.
+*  LINE-AGE = 35.
+*  LINE-WEIGHT =  '70.00'.
+*  LINE-LAND = 'INDIA'.
+*
+*  INSERT LINE INTO TABLE ITAB.
+*
+*  LINE-NAME = 'MITHUN'.
+*  LINE-AGE = 25.
+*  LINE-WEIGHT =  '75.00'.
+*  LINE-LAND = 'CHINA'.
+*
+*  INSERT LINE INTO TABLE ITAB.
+*
+*    LINE-NAME = 'CHIRAG'.
+*  LINE-AGE = 20.
+*  LINE-WEIGHT =  '50.00'.
+*  LINE-LAND = 'INDIA'.
+*
+*  INSERT LINE INTO TABLE ITAB.
+**sort line by .
+*  LOOP AT ITAB INTO LINE.
+*    WRITE : / LINE-NAME,LINE-AGE,LINE-WEIGHT,LINE-LAND.
+*  ENDLOOP.
+
+*#3.INSERETIN OF MULTIPLE VALUES-------------------------------------------------------------------------------------------------------
+
+*DATA :BEGIN OF LINE,
+*  COL_1(10) TYPE I,
+*  COL_2(10) TYPE I,
+*END OF LINE.
+*
+*DATA ITAB LIKE TABLE OF LINE.
+*
+* DO 2 TIMES.
+*   LINE-COL_1 = SY-INDEX.
+*   LINE-COL_2 = SY-INDEX ** 2.
+*
+*   APPEND LINE TO ITAB.
+*   ENDDO.
+*
+* LOOP AT ITAB INTO LINE.
+*   LINE-COL_1 = 3 * SY-TABIX.
+*   LINE-COL_2 = 5 * SY-TABIX.
+*   INSERT LINE INTO ITAB.
+* ENDLOOP.
+*
+* LOOP AT ITAB INTO LINE.
+*WRITE : / SY-TABIX,LINE-COL_1,LINE-COL_2.
+* ENDLOOP.
+*
+
+*#3.MODIFY------------------------------------------------------------------------------------------------------------------------------
+*
+*  DATA :BEGIN OF LINE,
+*  COL1(10) TYPE I,
+*  COL2(10) TYPE I,
+*END OF LINE.
+*
+*  DATA ITAB LIKE TABLE OF LINE.
+*
+* DO 3 TIMES.
+*   LINE-COL1 = SY-INDEX.
+*   LINE-COL2 = SY-INDEX ** 2.
+*    APPEND LINE TO ITAB.
+*  ENDDO.
+*
+*  LOOP AT ITAB INTO LINE.
+*      IF SY-TABIX = 2.
+*        LINE-COL1 = SY-TABIX * 2.
+*        LINE-COL2 = ( SY-TABIX * 10 ) ** 2.
+*        MODIFY ITAB FROM LINE.
+*      ENDIF.
+* ENDLOOP.
+*
+* LOOP AT ITAB INTO LINE.
+*WRITE : / SY-TABIX,LINE-COL1,LINE-COL2.
+* ENDLOOP.
+
+
+*#4.DELETE--------------------------------------------------------------------------------------------------------------------------------
+*  DATA :BEGIN OF LINE,
+*  COL1 TYPE I,
+*  COL2 TYPE I,
+*END OF LINE.
+*
+*DATA ITAB LIKE HASHED TABLE OF LINE WITH UNIQUE KEY COL1.
+*
+* DO 5 TIMES.
+*   LINE-COL1 = SY-INDEX.
+*   LINE-COL2 = SY-INDEX ** 2.
+*    INSERT LINE INTO TABLE ITAB.
+*  ENDDO.
+*
+* LINE-COL1 = 0.
+*  DELETE TABLE ITAB : FROM LINE,
+*  WITH TABLE KEY COL1 = 3.
+*  LOOP AT ITAB INTO LINE.
+*    WRITE: / LINE-COL1,LINE-COL2.
+*  ENDLOOP.
+
+*#5.COLLECT----------------------------------------------------------------------------------------------------------------------------
+*data :begin of line,
+*  col_1(10) type c,
+*  col_2(2) type n,
+*  col_3 type i,
+*end of line.
+*
+*data itab like table of line with non-unique key col_1 col_2.
+* line-col_1 = 'CAP'.
+* line-col_2 = '12'.
+* line-col_3 = 7.
+*collect line into itab.
+*write / sy-tabix.
+*
+* line-col_1 = 'TECH'.
+* line-col_2 = '34'.
+* line-col_3 = 5.
+*
+*collect line into itab.
+*write / sy-tabix.
+*
+*line-col_1 = 'CAP'.
+* line-col_2 = '12'.
+* line-col_3 = 3.
+*collect line into itab.
+*write / sy-tabix.
+*
+*loop at itab into line.
+*  write : / line-col_1, line-col_2, line-col_3.
+*endloop.
+
+*6.DATA TYPE*---------------------------------------------------------------------------------------------------------------------------------
+*
+***7.DECLARATION------------------------------------------------------------------------------------------------------------------------------
+
+TYPES : BEGIN OF TY_STUDENT,
+        ID(5) TYPE N,
+        NAME(10) TYPE C,
+        END OF TY_STUDENT.
+
+DATA : GWA_STUDENT TYPE TY_STUDENT.
+DATA : IT TYPE TABLE OF TY_STUDENT.
+
+GWA_STUDENT-ID = 1.
+GWA_STUDENT-NAME = 'ASHU'.
+APPEND GWA_STUDENT TO IT.
+
+GWA_STUDENT-ID = 2.
+GWA_STUDENT-NAME = 'AISHU'.
+APPEND GWA_STUDENT TO IT.
+
+GWA_STUDENT-ID = 3.
+GWA_STUDENT-NAME = 'SONAM'.
+APPEND GWA_STUDENT TO IT.
+
+*READ TABLE IT INTO GWA_STUDENT INDEX 3.
+READ TABLE IT INTO GWA_STUDENT WITH KEY NAME = 'ASHU'.
+IF SY-SUBRC = 0.
+  WRITE : GWA_STUDENT-ID, GWA_STUDENT-NAME.
+ ELSE .
+   WRITE : 'NO RECORD FOUND'.
+  ENDIF.

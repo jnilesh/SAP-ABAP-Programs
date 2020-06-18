@@ -1,0 +1,4 @@
+ZTR_CNDT_GL_CLASS_IT_TAB      GET_MAT                       E_TAB                         E
+ZTR_CNDT_GL_CLASS_IT_TAB      GET_MAT                       I_MATNR1                      EMAT1
+ZTR_CNDT_GL_CLASS_IT_TAB      GET_MAT                       I_MATNR2                      EMAT2
+ZTR_CNDT_GL_CLASS_IT_TAB      GET_MAT                       MAT_NOT_FOUND                 EMAT NOT FOUND TO BE RAISED

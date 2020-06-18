@@ -1,0 +1,62 @@
+*&---------------------------------------------------------------------*
+*& Report ZTR_CNDT_ITAB_FINAL
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ZTR_CNDT_INNER_JOINS LINE-SIZE 500.
+
+INCLUDE ZTR_CNDT_JOINS_TOP.
+
+SELECT-OPTIONS S_MATNR FOR LV_MATNR.
+
+START-OF-SELECTION.
+
+  SELECT M~MATNR
+         M~MBRSH
+         M~MTART
+         M~MEINS
+         M~MATKL
+         P~WERKS
+         P~PSTAT
+
+         T~MAKTX
+         T~SPRAS
+         T~MAKTG
+
+      INTO TABLE IT_TAB
+     FROM MARA AS M
+
+    INNER JOIN MARC AS P
+    ON M~MATNR EQ P~MATNR
+
+    INNER JOIN MAKT AS T
+    ON M~MATNR EQ T~MATNR
+
+     WHERE M~MATNR IN S_MATNR.
+
+
+*CLEAR IT_TAB[].
+
+  IF SY-SUBRC EQ 0.
+
+    WRITE: 'GETTING RECORDS FROM MARA TABLE', SY-DBCNT.
+
+  ELSE.
+
+  ENDIF.
+
+
+  LOOP AT IT_TAB INTO WA_TAB.
+    WRITE : / SY-TABIX,
+            WA_TAB-MATNR,
+            WA_TAB-MBRSH,
+            WA_TAB-MTART,
+            WA_TAB-MEINS,
+            WA_TAB-MATKL,
+            WA_TAB-WERKS,
+            WA_TAB-PSTAT,
+            WA_TAB-MAKTX,
+            WA_TAB-SPRAS,
+            WA_TAB-MAKTG.
+
+  ENDLOOP.

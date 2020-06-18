@@ -1,0 +1,15 @@
+*&---------------------------------------------------------------------*
+*& Report ZTR_CNDT_ABAP_MEMORY_P1
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ZTR_CNDT_ABAP_MEMORY_P1.
+
+
+INCLUDE ZTR_CNDT_ABAP_MEMORY_P1_TOP.
+
+PARAMETERS P_MATNR TYPE MARA-MATNR.
+
+EXPORT P_MATNR TO MEMORY ID 'CAPCNDT'.
+
+SUBMIT ZTR_CNDT_ABAP_MEMORY_P2. "AND RETURN.

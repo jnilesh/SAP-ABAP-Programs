@@ -1,0 +1,40 @@
+REPORT ZTR_DTP_GL_MAT_PRG.
+
+INCLUDE ZTR_DTP_GL_MAT_TOP.
+
+
+SELECT-OPTIONS S_MATNR FOR LV_MATNR.
+
+START-OF-SELECTION.
+
+
+DATA I_OBJ1 TYPE REF TO ZTR_DTP_GL_MAT.
+
+CREATE OBJECT i_obj1.
+
+
+CALL METHOD i_obj1->meth_mat
+  EXPORTING
+    i_matnr1      = S_MATNR-LOW
+    i_matnr2      = S_MATNR-HIGH
+  IMPORTING
+    e_mattab      = IT_TAB
+*  EXCEPTIONS
+*    mat_not_found = 1
+*    others        = 2
+        .
+IF sy-subrc <> 0.
+* Implement suitable error handling here
+ENDIF.
+
+
+
+*
+*LOOP AT IT_TAB INTO WA_TAB.
+*
+*  WRITE : / WA_TAB-MATNR.
+*
+*  ENDLOOP.
+
+
+CL_DEMO_OUTPUT=>DISPLAY_DATA( IT_TAB ).

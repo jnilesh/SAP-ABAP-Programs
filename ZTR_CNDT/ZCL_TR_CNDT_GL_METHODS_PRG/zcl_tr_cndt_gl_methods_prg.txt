@@ -1,0 +1,19 @@
+*&---------------------------------------------------------------------*
+*& Report ZCL_TR_CNDT_GL_METHODS_PRG
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ZCL_TR_CNDT_GL_METHODS_PRG.
+
+START-OF-SELECTION.
+
+DATA OBJ1 TYPE REF TO ZCL_TR_CNDT_GL_CLASS_METHODS.
+
+CREATE OBJECT obj1.
+
+
+CALL METHOD OBJ1->I_METH1.
+
+SKIP 3 .
+
+CALL METHOD ZCL_TR_CNDT_GL_CLASS_METHODS=>S_METH2.

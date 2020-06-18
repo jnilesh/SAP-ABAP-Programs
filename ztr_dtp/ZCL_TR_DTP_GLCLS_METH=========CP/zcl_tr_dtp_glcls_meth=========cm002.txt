@@ -1,0 +1,8 @@
+  method S_METH2.
+
+
+    WRITE 'Calling global class s_meth2'.
+
+
+
+  endmethod.

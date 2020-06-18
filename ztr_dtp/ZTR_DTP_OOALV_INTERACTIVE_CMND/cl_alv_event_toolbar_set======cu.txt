@@ -1,0 +1,14 @@
+
+class CL_ALV_EVENT_TOOLBAR_SET definition
+  public
+  create public .
+
+*" public components of class CL_ALV_EVENT_TOOLBAR_SET
+*" do not include other source files here!!!
+public section.
+
+
+*" instance attributes
+data:
+  MT_TOOLBAR type TTB_BUTTON ,
+  MT_BTNMNU type TTB_BTNMNU .

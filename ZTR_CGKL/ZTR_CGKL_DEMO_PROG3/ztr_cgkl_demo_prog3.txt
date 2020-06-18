@@ -1,0 +1,14 @@
+*&---------------------------------------------------------------------*
+*& Report ZTR_CGKL_DEMO_PROG9
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ZTR_CGKL_DEMO_PROG3.
+
+WRITE : 'MY FIRST DEMO PROGRAM CGKL # 1',
+
+'MY FIRST DEMO PROGRAM CGKL # 2',
+
+ / 'MY FIRST DEMO PROGRAM CGKL # 3',
+
+ 'MY FIRST DEMO PROGRAM CGKL # 4'.

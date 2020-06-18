@@ -1,0 +1,77 @@
+REPORT ztr_dtp_alv_fieldcat_merge.
+
+INCLUDE ZTR_DTP_ALV_FIELDCAT_MERGE_TOP.
+
+
+SELECT-OPTIONS: s_matnr FOR lv_matnr.
+
+
+START-OF-SELECTION.
+
+  PERFORM get_mat_data.
+
+  PERFORM fieldcat_prep.
+
+  PERFORM GET_ALV_DISP.
+*&---------------------------------------------------------------------*
+*&      Form  GET_MAT_DATA
+*&---------------------------------------------------------------------*
+FORM get_mat_data .
+
+  SELECT *
+            INTO TABLE it_tab
+       FROM mara
+       WHERE matnr IN s_matnr.
+
+
+ENDFORM.
+*&---------------------------------------------------------------------*
+*&      Form  FIELDCAT_PREP
+*&---------------------------------------------------------------------*
+FORM fieldcat_prep .
+CALL FUNCTION 'REUSE_ALV_FIELDCATALOG_MERGE'
+ EXPORTING
+   I_PROGRAM_NAME               = 'ZTR_DTP_ALV_FIELDCAT_MERGE'
+   I_INTERNAL_TABNAME           = 'IT_TAB'
+   I_STRUCTURE_NAME             = 'MARA'
+*   I_CLIENT_NEVER_DISPLAY       = 'X'
+*   I_INCLNAME                   =
+*   I_BYPASSING_BUFFER           =
+*   I_BUFFER_ACTIVE              =
+  CHANGING
+    ct_fieldcat                  = IT_FIELDCAT[]
+* EXCEPTIONS
+*   INCONSISTENT_INTERFACE       = 1
+*   PROGRAM_ERROR                = 2
+*   OTHERS                       = 3
+          .
+IF sy-subrc <> 0.
+* Implement suitable error handling here
+ENDIF.
+
+
+
+ENDFORM.
+*&---------------------------------------------------------------------*
+*&      Form  GET_ALV_DISP
+*&---------------------------------------------------------------------*
+FORM get_alv_disp .
+
+CALL FUNCTION 'REUSE_ALV_GRID_DISPLAY'
+ EXPORTING
+   I_CALLBACK_PROGRAM                = SY-REPID
+   IT_FIELDCAT                       = IT_FIELDCAT[]
+  TABLES
+    t_outtab                          = IT_TAB
+* EXCEPTIONS
+*   PROGRAM_ERROR                     = 1
+*   OTHERS                            = 2
+          .
+IF sy-subrc <> 0.
+* Implement suitable error handling here
+ENDIF.
+
+
+
+
+ENDFORM.

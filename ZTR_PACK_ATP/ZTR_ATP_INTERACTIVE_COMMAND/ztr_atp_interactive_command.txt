@@ -1,0 +1,176 @@
+*&---------------------------------------------------------------------*
+*& Report ZTR_ATP_INTERACTIVE_COMMAND
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ZTR_ATP_CLASSICAL_REPORT NO STANDARD PAGE HEADING LINE-SIZE 500
+MESSAGE-ID ZTR_ATP_MSG.
+
+INCLUDE ZTR_ATP_INTERACTIVE_CMD_TOP.
+
+
+SELECTION-SCREEN: BEGIN OF BLOCK B1 WITH FRAME TITLE TEXT-001.
+
+SELECT-OPTIONS S_MATNR FOR LV_MATNR OBLIGATORY NO-EXTENSION.
+
+SELECTION-SCREEN: END OF BLOCK B1.
+
+*LOAD-of-PROGRAM.
+
+
+INITIALIZATION.
+S_MATNR-low = '1'.
+S_MATNR-high = '100'.
+append S_MATNR.  " special itab.
+
+
+at SELECTION-SCREEN on s_matnr.
+  PERFORM GET_VALIDATE.
+
+
+START-OF-SELECTION.
+SET PF-STATUS 'ZTR_ATP_MENU1'. "EXCLUDING 'INFO'. " SE41 NAME
+
+PERFORM GET_DATA.
+
+TOP-OF-PAGE.
+PERFORM HEADER_DISP.
+
+END-OF-SELECTION.
+PERFORM GET_DISPLAY.
+
+LV_COUNT = SY-LINCT - SY-LINNO.
+SKIP  LV_COUNT.
+
+END-OF-PAGE.
+PERFORM PAGE_END.
+
+
+AT USER-COMMAND.
+PERFORM GET_CMND.
+
+
+
+
+*&---------------------------------------------------------------------*
+*&      Form  GET_DATA
+*&---------------------------------------------------------------------*
+FORM GET_DATA .
+
+SELECT MATNR
+       MBRSH
+       MTART
+       MEINS
+       BRGEW
+       NTGEW
+  INTO TABLE IT_TAB1 " IT_TAB BODY
+    FROM MARA
+  WHERE MATNR IN S_MATNR.
+
+IF SY-SUBRC EQ 0.
+  WRITE:'Records are found in mara table', 'Total no of Recrds: ' ,sy-dbcnt,
+         / 'sy-subrc:', sy-subrc.
+SKIP .
+*ULINE.
+ else.
+   WRITE:'Records are not found in mara table', 'Total no of Recrds: ' ,sy-dbcnt,
+        / 'sy-subrc:', sy-subrc.
+     ENDIF.
+ENDFORM.
+*&---------------------------------------------------------------------*
+*&      Form  GET_DISPLAY
+*&---------------------------------------------------------------------*
+
+FORM GET_DISPLAY .
+  LOOP AT IT_TAB1 INTO WA_TAB1. " B TO WA
+    WRITE :/ SY-TABIX,  " SY-TFILL
+            20 WA_TAB1-MATNR,  " FROM WORK AREA
+            30 WA_TAB1-MBRSH ,
+            45 WA_TAB1-MTART ,
+            60 WA_TAB1-MEINS,
+            84 WA_TAB1-BRGEW,
+            100 WA_TAB1-NTGEW.
+
+    HIDE WA_TAB1-MATNR.
+    ENDLOOP.
+
+ENDFORM.
+
+
+*&---------------------------------------------------------------------*
+*&      Form  HEADER_DISP
+*&---------------------------------------------------------------------*
+*       text
+*----------------------------------------------------------------------*
+FORM HEADER_DISP .
+  WRITE: 'MAT MASTER INFO FROM MARA TABLE',  'SYS LIST IND:', SY-LSIND .
+  ULINE.
+WRITE : 'TAB INDEX',
+        10 'MATERIAL NO',
+        20 'IND SECTOR',
+        25 'MAT TYPE',
+        30 'BASE UOM',
+        44 'MAT GROSS WEIGHT',
+        56 'MAT NET WEIGHT'.
+ULINE.
+
+
+ENDFORM.
+*&---------------------------------------------------------------------*
+*&      Form  PAGE_END
+*&---------------------------------------------------------------------*
+
+FORM PAGE_END .
+WRITE : 'PAGE NO:', SY-PAGNO, 'DATE:', SY-DATUM, 'TIME:', SY-UZEIT.
+ENDFORM.
+*&---------------------------------------------------------------------*
+*&      Form  GET_VALIDATE
+*&---------------------------------------------------------------------*
+
+FORM GET_VALIDATE .
+
+DATA LV_MATNR TYPE MATNR.
+
+SELECT SINGLE MATNR
+        INTO LV_MATNR
+  FROM MARA
+   WHERE MATNR IN S_MATNR.
+  IF SY-SUBRC EQ 0.
+
+    MESSAGE I000.
+
+    ELSE.
+      MESSAGE X005.
+
+      ENDIF.
+
+ENDFORM.
+*&---------------------------------------------------------------------*
+*&      Form  GET_CMND
+*&---------------------------------------------------------------------*
+*       text
+*----------------------------------------------------------------------*
+*  -->  p1        text
+*  <--  p2        text
+*----------------------------------------------------------------------*
+FORM GET_CMND .
+CASE SY-UCOMM.
+  WHEN 'DISP'.
+
+  WRITE 'INTERACTIVE REPORT AT USER COMMAND'.
+
+  WHEN 'TCODE'.
+    CALL TRANSACTION 'ZTR_ATP_INTLINE'.
+
+  WHEN 'INFO'.
+
+  WRITE: 'DATE:', SY-DATUM, 'TIME:', SY-UZEIT.
+
+  WHEN 'MN1'.
+   WRITE 'CALLING FIRST MENU OPTION'.
+
+  WHEN 'MN2'.
+  WRITE 'CALLING SECOND MENU OPTION'.
+ENDCASE.
+
+ENDFORM.

@@ -1,0 +1,34 @@
+*&---------------------------------------------------------------------*
+*& Report ZTR_CGKL_FMODULE_RFC_PRG
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ZTR_CGKL_FMODULE_RFC_PRG.
+TABLES MARA.
+
+DATA IT_TAB2 TYPE MARA OCCURS 0 WITH HEADER LINE.
+
+SELECT-OPTIONS S_MATNR FOR MARA-MATNR.
+
+CALL FUNCTION 'ZTR_CGKL_FMODULE_RFC'  DESTINATION 'LNDCLNT200_test'
+ EXPORTING
+   I_MATNR1       = S_MATNR-LOW
+   I_MATNR2       = S_MATNR-HIGH
+  TABLES
+    IT_TAB         = IT_TAB2
+          .
+
+
+
+LOOP AT IT_TAB2.
+
+  WRITE: /
+          IT_TAB2-MANDT,
+          IT_TAB2-MATNR,
+          IT_TAB2-MEINS,
+          IT_TAB2-MBRSH,
+          IT_TAB2-MTART,
+          IT_TAB2-BRGEW,
+          IT_TAB2-NTGEW.
+
+  ENDLOOP.

@@ -1,0 +1,11 @@
+*&---------------------------------------------------------------------*
+*&  Include           ZMMN_ALV_TOPPAGE_F011
+*&---------------------------------------------------------------------*
+
+##CALLED
+FORM TOPPAGE.
+  CALL FUNCTION 'REUSE_ALV_COMMENTARY_WRITE'    " header for alv grid
+    EXPORTING
+      IT_LIST_COMMENTARY = IT_LISTHEADER
+      I_LOGO             = 'CAPG_LOGO' .        " logo of company
+ENDFORM.

@@ -1,0 +1,16 @@
+*&---------------------------------------------------------------------*
+*& Report ZCL_TR_ATP_GL_CLS_METH_PRG
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ZCL_TR_ATP_GL_CLS_METH_PRG.
+
+
+START-OF-SELECTION.
+
+data obj2  TYPE REF TO ZCL_TR_ATP_GL_CLS_METH.
+CREATE OBJECT obj2.
+
+call METHOD obj2->I_meth1.
+skip.
+call METHOD ZCL_TR_ATP_GL_CLS_METH=>s_meth2.

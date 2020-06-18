@@ -1,0 +1,6 @@
+ZCL_TR_BNGL_MATMASTER_CONST   CONSTRUCTOR                   E1                            Eexce
+ZCL_TR_BNGL_MATMASTER_CONST   CONSTRUCTOR                   I_MAT123                      EMaterial Number
+ZCL_TR_BNGL_MATMASTER_CONST   METH_MAT                      E_TAB                         E
+ZCL_TR_BNGL_MATMASTER_CONST   METH_MAT                      I_MATNR1                      EMaterial Number
+ZCL_TR_BNGL_MATMASTER_CONST   METH_MAT                      I_MATNR2                      EMaterial Number
+ZCL_TR_BNGL_MATMASTER_CONST   METH_MAT                      MAT_NOT_FOUND                 ETO BE RAISED WHEN NO MAT

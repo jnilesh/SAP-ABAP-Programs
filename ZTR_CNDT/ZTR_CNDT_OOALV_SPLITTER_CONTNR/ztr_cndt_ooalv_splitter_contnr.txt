@@ -1,0 +1,275 @@
+*&------------------------------- --------------------------------------*
+*& Report ZTR_CNDT_OOALV_SPLITTER_CONTNR
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ZTR_CNDT_OOALV_SPLITTER_CONTNR.
+
+INCLUDE ZTR_CNDT_OOALV_SPLIT_CONT_TOP.
+
+SELECT-OPTIONS S_MATNR FOR MARA-MATNR.
+
+START-OF-SELECTION.
+
+PERFORM GET_MAT_DATA.
+
+CALL SCREEN 0100.
+*&---------------------------------------------------------------------*
+*&      Module  STATUS_0100  OUTPUT
+*&---------------------------------------------------------------------*
+*       text
+*----------------------------------------------------------------------*
+MODULE  STATUS_0100 OUTPUT.
+  SET PF-STATUS SPACE.
+
+  CREATE OBJECT CUSTOM
+    EXPORTING
+      CONTAINER_NAME              = 'ALV_CNT1'
+      .
+  IF SY-SUBRC <> 0.
+*   MESSAGE ID SY-MSGID TYPE SY-MSGTY NUMBER SY-MSGNO
+*              WITH SY-MSGV1 SY-MSGV2 SY-MSGV3 SY-MSGV4.
+  ENDIF.
+
+  CREATE OBJECT SPLIT1
+    EXPORTING
+*      LINK_DYNNR        =
+*      LINK_REPID        =
+*      METRIC            = cntl_metric_dynpro
+      PARENT            = CUSTOM
+      ORIENTATION       = CL_GUI_EASY_SPLITTER_CONTAINER=>ORIENTATION_VERTICAL
+*      SASH_POSITION     = 50
+*      WITH_BORDER       = 1
+*      NAME              =
+*    EXCEPTIONS
+*      CNTL_ERROR        = 1
+*      CNTL_SYSTEM_ERROR = 2
+*      others            = 3
+      .
+  IF SY-SUBRC <> 0.
+*   MESSAGE ID SY-MSGID TYPE SY-MSGTY NUMBER SY-MSGNO
+*              WITH SY-MSGV1 SY-MSGV2 SY-MSGV3 SY-MSGV4.
+  ENDIF.
+
+  CREATE OBJECT SPLIT2
+    EXPORTING
+*      LINK_DYNNR        =
+*      LINK_REPID        =
+*      METRIC            = cntl_metric_dynpro
+      PARENT            = SPLIT1->BOTTOM_RIGHT_CONTAINER
+      ORIENTATION       = CL_GUI_EASY_SPLITTER_CONTAINER=>ORIENTATION_HORIZONTAL
+*      SASH_POSITION     = 50
+*      WITH_BORDER       = 1
+*      NAME              =
+*    EXCEPTIONS
+*      CNTL_ERROR        = 1
+*      CNTL_SYSTEM_ERROR = 2
+*      others            = 3
+      .
+  IF SY-SUBRC <> 0.
+*   MESSAGE ID SY-MSGID TYPE SY-MSGTY NUMBER SY-MSGNO
+*              WITH SY-MSGV1 SY-MSGV2 SY-MSGV3 SY-MSGV4.
+  ENDIF.
+
+
+*NOW WE HAVE TOTAL 3 CONTAINER AVAILABLE WITH US
+*OB_SPLIT1->TOP_LEFT_CONTAINER
+*OB_SPLIT2->TOP_LEFT_CONTAINER
+*OB_SPLIT2->BOTTOM_RIGHT_CONTAINER
+*NOTE THAT SPLIT1->BOTTOM_RIGHT_CONTAINER
+*IS NOT AVAILABLE BECAUSE WE DIVIDE THAT INTO TWO.
+*NOW PUT A GRID IN EACH CONTAINER.
+
+CREATE OBJECT GRID1
+  EXPORTING
+*    I_SHELLSTYLE      = 0
+*    I_LIFETIME        =
+    I_PARENT          = SPLIT1->TOP_LEFT_CONTAINER
+    I_APPL_EVENTS     = SPACE
+*    I_PARENTDBG       =
+*    I_APPLOGPARENT    =
+*    I_GRAPHICSPARENT  =
+*    I_NAME            =
+*    I_FCAT_COMPLETE   = SPACE
+*  EXCEPTIONS
+*    ERROR_CNTL_CREATE = 1
+*    ERROR_CNTL_INIT   = 2
+*    ERROR_CNTL_LINK   = 3
+*    ERROR_DP_CREATE   = 4
+*    others            = 5
+*
+  .
+IF SY-SUBRC <> 0.
+* MESSAGE ID SY-MSGID TYPE SY-MSGTY NUMBER SY-MSGNO
+*            WITH SY-MSGV1 SY-MSGV2 SY-MSGV3 SY-MSGV4.
+ENDIF.
+
+CREATE OBJECT GRID2
+  EXPORTING
+*    I_SHELLSTYLE      = 0
+*    I_LIFETIME        =
+    I_PARENT          = SPLIT2->TOP_LEFT_CONTAINER
+*    I_APPL_EVENTS     = space
+*    I_PARENTDBG       =
+*    I_APPLOGPARENT    =
+*    I_GRAPHICSPARENT  =
+*    I_NAME            =
+*    I_FCAT_COMPLETE   = SPACE
+*  EXCEPTIONS
+*    ERROR_CNTL_CREATE = 1
+*    ERROR_CNTL_INIT   = 2
+*    ERROR_CNTL_LINK   = 3
+*    ERROR_DP_CREATE   = 4
+*    others            = 5
+    .
+IF SY-SUBRC <> 0.
+* MESSAGE ID SY-MSGID TYPE SY-MSGTY NUMBER SY-MSGNO
+*            WITH SY-MSGV1 SY-MSGV2 SY-MSGV3 SY-MSGV4.
+ENDIF.
+
+CREATE OBJECT GRID3
+  EXPORTING
+*    I_SHELLSTYLE      = 0
+*    I_LIFETIME        =
+    I_PARENT          = SPLIT2->BOTTOM_RIGHT_CONTAINER
+*    I_APPL_EVENTS     = space
+*    I_PARENTDBG       =
+*    I_APPLOGPARENT    =
+*    I_GRAPHICSPARENT  =
+*    I_NAME            =
+*    I_FCAT_COMPLETE   = SPACE
+*  EXCEPTIONS
+*    ERROR_CNTL_CREATE = 1
+*    ERROR_CNTL_INIT   = 2
+*    ERROR_CNTL_LINK   = 3
+*    ERROR_DP_CREATE   = 4
+*    others            = 5
+    .
+IF SY-SUBRC <> 0.
+* MESSAGE ID SY-MSGID TYPE SY-MSGTY NUMBER SY-MSGNO
+*            WITH SY-MSGV1 SY-MSGV2 SY-MSGV3 SY-MSGV4.
+ENDIF.
+
+CALL METHOD GRID1->SET_TABLE_FOR_FIRST_DISPLAY
+  EXPORTING
+*    I_BUFFER_ACTIVE               =
+*    I_BYPASSING_BUFFER            =
+*    I_CONSISTENCY_CHECK           =
+    I_STRUCTURE_NAME              = 'MARA'
+*    IS_VARIANT                    =
+*    I_SAVE                        =
+*    I_DEFAULT                     = 'X'
+*    IS_LAYOUT                     =
+*    IS_PRINT                      =
+*    IT_SPECIAL_GROUPS             =
+*    IT_TOOLBAR_EXCLUDING          =
+*    IT_HYPERLINK                  =
+*    IT_ALV_GRAPHICS               =
+*    IT_EXCEPT_QINFO               =
+*    IR_SALV_ADAPTER               =
+  CHANGING
+    IT_OUTTAB                     = IT_MARA
+*    IT_FIELDCATALOG               =
+*    IT_SORT                       =
+*    IT_FILTER                     =
+*  EXCEPTIONS
+*    INVALID_PARAMETER_COMBINATION = 1
+*    PROGRAM_ERROR                 = 2
+*    TOO_MANY_LINES                = 3
+*    others                        = 4
+        .
+IF SY-SUBRC <> 0.
+* Implement suitable error handling here
+ENDIF.
+
+
+CALL METHOD GRID2->SET_TABLE_FOR_FIRST_DISPLAY
+  EXPORTING
+*    I_BUFFER_ACTIVE               =
+*    I_BYPASSING_BUFFER            =
+*    I_CONSISTENCY_CHECK           =
+    I_STRUCTURE_NAME              = 'MARA'
+*    IS_VARIANT                    =
+*    I_SAVE                        =
+*    I_DEFAULT                     = 'X'
+*    IS_LAYOUT                     =
+*    IS_PRINT                      =
+*    IT_SPECIAL_GROUPS             =
+*    IT_TOOLBAR_EXCLUDING          =
+*    IT_HYPERLINK                  =
+*    IT_ALV_GRAPHICS               =
+*    IT_EXCEPT_QINFO               =
+*    IR_SALV_ADAPTER               =
+  CHANGING
+    IT_OUTTAB                     = IT_MARA
+*    IT_FIELDCATALOG               =
+*    IT_SORT                       =
+*    IT_FILTER                     =
+*  EXCEPTIONS
+*    INVALID_PARAMETER_COMBINATION = 1
+*    PROGRAM_ERROR                 = 2
+*    TOO_MANY_LINES                = 3
+*    others                        = 4
+        .
+IF SY-SUBRC <> 0.
+* Implement suitable error handling here
+ENDIF.
+
+CALL METHOD GRID3->SET_TABLE_FOR_FIRST_DISPLAY
+  EXPORTING
+*    I_BUFFER_ACTIVE               =
+*    I_BYPASSING_BUFFER            =
+*    I_CONSISTENCY_CHECK           =
+    I_STRUCTURE_NAME              = 'MARC'
+*    IS_VARIANT                    =
+*    I_SAVE                        =
+*    I_DEFAULT                     = 'X'
+*    IS_LAYOUT                     =
+*    IS_PRINT                      =
+*    IT_SPECIAL_GROUPS             =
+*    IT_TOOLBAR_EXCLUDING          =
+*    IT_HYPERLINK                  =
+*    IT_ALV_GRAPHICS               =
+*    IT_EXCEPT_QINFO               =
+*    IR_SALV_ADAPTER               =
+  CHANGING
+    IT_OUTTAB                     = IT_MARC
+*    IT_FIELDCATALOG               =
+*    IT_SORT                       =
+*    IT_FILTER                     =
+*  EXCEPTIONS
+*    INVALID_PARAMETER_COMBINATION = 1
+*    PROGRAM_ERROR                 = 2
+*    TOO_MANY_LINES                = 3
+*    others                        = 4
+        .
+IF SY-SUBRC <> 0.
+* Implement suitable error handling here
+ENDIF.
+
+ENDMODULE.
+*&---------------------------------------------------------------------*
+*&      Module  USER_COMMAND_0100  INPUT
+*&---------------------------------------------------------------------*
+*       text
+*----------------------------------------------------------------------*
+MODULE USER_COMMAND_0100 INPUT.
+
+CASE SY-UCOMM.
+  WHEN 'EXIT'.
+
+ LEAVE TO SCREEN 0.
+
+ENDCASE.
+
+ENDMODULE.
+*&---------------------------------------------------------------------*
+*&      Form  GET_MAT_DATA
+*&---------------------------------------------------------------------*
+FORM GET_MAT_DATA .
+SELECT * INTO TABLE IT_MARA FROM MARA
+         WHERE MATNR IN S_MATNR.
+SELECT * INTO TABLE IT_MARC FROM MARC
+         WHERE MATNR IN S_MATNR.
+
+ENDFORM.

@@ -1,0 +1,1 @@
+ZCL_IM_TR_ATP_BADI_IMPL       IF_EX_BADI_MATERIAL_CHECK     11TRAINEE02   20190430            000000001                              2  0

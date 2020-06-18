@@ -1,0 +1,1 @@
+ZCL_IM_TRCNDT_BADIMPL         EImp. class for BAdI imp. ZTRCNDT_BADIMPL

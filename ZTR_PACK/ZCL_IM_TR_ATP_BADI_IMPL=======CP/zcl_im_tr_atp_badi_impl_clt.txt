@@ -1,0 +1,1 @@
+ZCL_IM_TR_ATP_BADI_IMPL       EImp. class for BAdI imp. ZTR_ATP_BADI_IMPL

@@ -1,0 +1,22 @@
+*----------------------------------------------------------------------*
+***INCLUDE ZMMN_PLP_DATA_INTER_F005.
+*----------------------------------------------------------------------*
+
+FORM f005_data_inter.
+  SELECT matnr
+  mtart
+  mbrsh
+  matkl
+  bismt
+  meins
+     FROM z187511_mara INTO TABLE it_mara WHERE matnr IN s_matnr.
+
+  IF sy-subrc <> 0.
+    MESSAGE i011 DISPLAY LIKE 'E'.
+    EXIT.
+  ENDIF.
+
+  SORT it_mara by matnr.
+
+
+ENDFORM.

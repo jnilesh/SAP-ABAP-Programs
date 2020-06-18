@@ -1,0 +1,14 @@
+%_CABAP
+CL_ABAP_DATADESCR=============CT
+CL_ABAP_TYPEDESCR=============CT
+CL_DEMO_OUTPUT================CU
+CL_MESSAGE_HELPER=============CU
+CX_DYNAMIC_CHECK==============CU
+CX_ROOT=======================CU
+CX_SY_MESSAGE_ILLEGAL_TEXT====CU
+IF_DEMO_OUTPUT================IU
+IF_DEMO_OUTPUT_FORMATS========IU
+IF_MESSAGE====================IT
+IF_T100_MESSAGE===============IT
+ZTR_DTP_OOABAP_GL_CL_EVENTS===CU
+ZTR_DTP_OOABAP_GL_EVENTS_TOP

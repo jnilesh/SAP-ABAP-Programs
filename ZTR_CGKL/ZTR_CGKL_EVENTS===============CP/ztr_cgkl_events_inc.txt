@@ -1,0 +1,8 @@
+ZTR_CGKL_EVENTS===============CCAU
+ZTR_CGKL_EVENTS===============CCDEF
+ZTR_CGKL_EVENTS===============CCIMP
+ZTR_CGKL_EVENTS===============CCMAC
+ZTR_CGKL_EVENTS===============CI
+ZTR_CGKL_EVENTS===============CM001
+ZTR_CGKL_EVENTS===============CO
+ZTR_CGKL_EVENTS===============CU

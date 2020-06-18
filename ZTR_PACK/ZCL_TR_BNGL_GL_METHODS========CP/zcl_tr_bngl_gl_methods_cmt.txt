@@ -1,0 +1,2 @@
+ZCL_TR_BNGL_GL_METHODS        I_METH1                       EI_METH1
+ZCL_TR_BNGL_GL_METHODS        S_METH2                       ES_METH2

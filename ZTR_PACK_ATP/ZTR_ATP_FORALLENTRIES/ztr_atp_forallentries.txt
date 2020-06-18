@@ -1,0 +1,62 @@
+*&---------------------------------------------------------------------*
+*& Report ZTR_ATP_FORALLENTRIES
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ZTR_ATP_FORALLENTRIES.
+
+INCLUDE ZTR_ATP_FORALLENTRIES_TOP.
+
+SELECT-OPTIONS: S_MATNR FOR LV_MATNR.
+
+START-OF-SELECTION.
+
+SELECT MATNR
+       MBRSH
+       MTART
+       MEINS
+       BRGEW
+       NTGEW
+   INTO TABLE IT_TAB1
+     FROM MARA
+     WHERE MATNR IN S_MATNR.
+
+  IF NOT IT_TAB1[] IS INITIAL.
+    SELECT MATNR
+           WERKS
+         INTO TABLE IT_TAB2
+         FROM MARC
+         FOR ALL ENTRIES IN IT_TAB1
+         WHERE MATNR EQ IT_TAB1-MATNR.
+
+  SORT IT_TAB2 BY MATNR.
+
+  LOOP AT IT_TAB1 INTO WA_TAB1.
+   READ TABLE IT_TAB2 INTO WA_TAB2 WITH KEY MATNR =  WA_TAB1-MATNR BINARY SEARCH.
+   IF  SY-SUBRC EQ 0.
+         MOVE: WA_TAB1-MATNR TO WA_FINAL-MATNR,  " MARA
+               WA_TAB1-MBRSH TO WA_FINAL-MBRSH,
+               WA_TAB1-MTART TO WA_FINAL-MTART,
+               WA_TAB1-MEINS TO WA_FINAL-MEINS,
+               WA_TAB1-BRGEW TO WA_FINAL-BRGEW,
+               WA_TAB1-NTGEW TO WA_FINAL-NTGEW,
+
+               WA_TAB2-WERKS TO WA_FINAL-WERKS. " MARC
+   APPEND WA_FINAL TO IT_FINAL.
+* CLEAR WA_FINAL.
+ELSE.
+ CONTINUE.
+ENDIF.
+    ENDLOOP.
+LOOP AT IT_FINAL INTO WA_FINAL.
+  WRITE : / WA_FINAL-MATNR,
+            WA_FINAL-MBRSH,
+            WA_FINAL-MTART,
+            WA_FINAL-MEINS,
+            WA_FINAL-BRGEW,
+            WA_FINAL-NTGEW,
+            WA_FINAL-WERKS.
+  ENDLOOP.
+    ELSE.
+      WRITE   'NO RECORDS ARE FOUND IN MARA TABLES'.
+ENDIF.

@@ -1,0 +1,16 @@
+*&---------------------------------------------------------------------*
+*&  INCLUDE           ZMMN_ALV_SELECTION_01
+*&---------------------------------------------------------------------*
+SELECTION-SCREEN : BEGIN OF BLOCK blk1 WITH FRAME TITLE TEXT-001.  " BLOCK FOR RADIO BUTTON
+SELECTION-SCREEN BEGIN OF LINE.
+PARAMETERS  RBT_BLK RADIOBUTTON GROUP grp1.                        " Radio button for block ALV
+SELECTION-SCREEN COMMENT (30) FOR FIELD RBT_BLK.
+PARAMETERS  RBT_INTR RADIOBUTTON GROUP grp1.                       " Radio button for interactive ALV
+SELECTION-SCREEN COMMENT (30) FOR FIELD RBT_INTR.
+SELECTION-SCREEN END OF LINE.
+SELECTION-SCREEN : END OF BLOCK blk1.
+
+SELECTION-SCREEN : BEGIN OF BLOCK blk2 WITH FRAME TITLE TEXT-002.  " BLOCK FOR SELECTION RANGE
+SELECT-OPTIONS: s_matnr FOR wa_mara-matnr OBLIGATORY NO-EXTENSION, " Material number range
+                s_werks FOR wa_marc-werks OBLIGATORY NO-EXTENSION. " Plant range
+SELECTION-SCREEN : END OF BLOCK blk2.

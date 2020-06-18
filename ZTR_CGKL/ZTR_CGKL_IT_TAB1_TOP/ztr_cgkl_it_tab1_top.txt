@@ -1,0 +1,17 @@
+*&---------------------------------------------------------------------*
+*&  Include           ZTR_CGKL_IT_TAB1_TOP
+*&---------------------------------------------------------------------*
+
+TABLES MARA.
+
+DATA LV_MATNR TYPE MATNR.
+
+DATA: BEGIN OF IT_TAB OCCURS 0,  " H AND B SAME NAME
+      MATNR TYPE MATNR, " Material Number1
+      MBRSH TYPE MBRSH, " Industry sector
+      MTART TYPE MTART, " Material type
+      MEINS TYPE MEINS, " Base Unit of Measure
+      BRGEW TYPE BRGEW, " Gross weight
+      NTGEW TYPE NTGEW, " Net weight
+
+     END OF IT_tAB.

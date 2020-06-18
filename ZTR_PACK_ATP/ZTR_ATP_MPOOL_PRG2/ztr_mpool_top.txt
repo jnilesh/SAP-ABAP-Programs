@@ -1,0 +1,9 @@
+*&---------------------------------------------------------------------*
+*& Include ZTR_MPOOL_TOP                                     Module Pool      ZTR_ATP_MPOOL_PRG2
+*&
+*&---------------------------------------------------------------------*
+PROGRAM ZTR_ATP_MPOOL_PRG2.
+
+DATA: LV_MATNR TYPE MATNR,
+      LV_MBRSH TYPE MBRSH,
+      LV_MTART TYPE MTART.

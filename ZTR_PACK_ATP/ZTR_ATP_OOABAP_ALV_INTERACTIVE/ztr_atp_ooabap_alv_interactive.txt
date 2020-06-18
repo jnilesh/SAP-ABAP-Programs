@@ -1,0 +1,252 @@
+*&---------------------------------------------------------------------*
+*& Report ZTR_ATP_OOABAP_ALV_INTERACTIVE
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ZTR_ATP_OOABAP_ALV_INTERACTIVE.
+
+INCLUDE ZTR_ATP_OOABAP_ALVINT_TOP.
+
+SELECT-OPTIONS S_MATNR FOR LV_MATNR.
+
+CLASS LC_CLS_METH DEFINITION.
+  PUBLIC SECTION.
+    METHODS MAT_METH FOR EVENT DOUBLE_CLICK OF CL_GUI_ALV_GRID
+      IMPORTING E_ROW
+                E_COLUMN.
+
+ENDCLASS.
+
+CLASS LC_CLS_METH IMPLEMENTATION.
+  METHOD MAT_METH.
+    IF E_COLUMN-FIELDNAME = 'MATNR'.
+      PERFORM DISP_MAT_PLNT.
+    ELSEIF E_COLUMN-FIELDNAME = 'MTART'.
+      CALL TRANSACTION 'MM02'.
+    ENDIF.
+  ENDMETHOD.
+ENDCLASS.
+
+START-OF-SELECTION.
+  SELECT MATNR
+         MBRSH
+         MTART
+         MEINS
+         BRGEW
+         NTGEW
+     INTO TABLE IT_TAB1
+       FROM MARA
+       WHERE MATNR IN S_MATNR.
+
+  CALL SCREEN 0100.
+*&---------------------------------------------------------------------*
+*&      Module  ALV_LIST  OUTPUT
+*&---------------------------------------------------------------------*
+
+MODULE ALV_LIST OUTPUT.
+
+  TY_LAYOUT-ZEBRA = 'X'.
+*  TY_LAYOUT-NO_TOOLBAR = 'X'.
+  TY_LAYOUT-GRID_TITLE = 'MAT MASTER BASIC LIST'.
+
+  CREATE OBJECT I_CONTAINER1
+    EXPORTING
+      CONTAINER_NAME = 'CNT1'.
+
+  CREATE OBJECT I_GRID1
+    EXPORTING
+      I_PARENT = I_CONTAINER1.
+
+  DATA OBJ1 TYPE REF TO LC_CLS_METH.
+  CREATE OBJECT OBJ1.
+  SET HANDLER OBJ1->MAT_METH FOR I_GRID1.
+
+  PERFORM CREATE_FCAT_MARA.
+
+  CALL METHOD I_GRID1->SET_TABLE_FOR_FIRST_DISPLAY
+  EXPORTING
+    IS_LAYOUT                     = TY_LAYOUT
+    CHANGING
+      IT_FIELDCATALOG = IT_FCAT1
+      IT_OUTTAB       = IT_TAB1.
+
+ENDMODULE.
+*&---------------------------------------------------------------------*
+*&      Form  CREATE_FCAT_MARA
+*&---------------------------------------------------------------------*
+
+FORM CREATE_FCAT_MARA .
+
+* MATNR
+  WA_FCAT1-COL_POS = '1' .
+  WA_FCAT1-FIELDNAME = 'MATNR' .
+  WA_FCAT1-REF_TABLE = 'MARA' .
+  WA_FCAT1-SELTEXT = 'MAT NUMBER' .
+  APPEND WA_FCAT1 TO IT_FCAT1 .
+  CLEAR WA_FCAT1 .
+
+* MBRSH
+  WA_FCAT1-COL_POS = '2' .
+  WA_FCAT1-FIELDNAME = 'MBRSH' .
+  WA_FCAT1-REF_TABLE = 'MARA' .
+  WA_FCAT1-SELTEXT = 'MAT IND SECTOR' .
+  APPEND WA_FCAT1 TO IT_FCAT1 .
+  CLEAR WA_FCAT1 .
+
+*MTART
+  WA_FCAT1-COL_POS = '3' .
+  WA_FCAT1-FIELDNAME = 'MTART' .
+  WA_FCAT1-REF_TABLE = 'MARA' .
+  WA_FCAT1-SELTEXT = 'MAT TYPE' .
+  APPEND WA_FCAT1 TO IT_FCAT1 .
+  CLEAR WA_FCAT1 .
+
+*MEINS
+  WA_FCAT1-COL_POS = '4' .
+  WA_FCAT1-FIELDNAME = 'MEINS' .
+  WA_FCAT1-REF_TABLE = 'MARA' .
+  WA_FCAT1-SELTEXT = 'MAT BASE UOM' .
+  APPEND WA_FCAT1 TO IT_FCAT1 .
+  CLEAR WA_FCAT1 .
+
+*BRGEW
+  WA_FCAT1-COL_POS = '5' .
+  WA_FCAT1-FIELDNAME = 'BRGEW' .
+  WA_FCAT1-REF_TABLE = 'MARA' .
+  WA_FCAT1-SELTEXT = 'MAT GROSS WEIGHT' .
+  APPEND WA_FCAT1 TO IT_FCAT1 .
+  CLEAR WA_FCAT1 .
+
+*NTGEW
+  WA_FCAT1-COL_POS = '6' .
+  WA_FCAT1-FIELDNAME = 'NTGEW' .
+  WA_FCAT1-REF_TABLE = 'MARA' .
+  WA_FCAT1-SELTEXT = 'MAT NET WEIGHT' .
+  APPEND WA_FCAT1 TO IT_FCAT1 .
+  CLEAR WA_FCAT1 .
+
+ENDFORM.
+*&---------------------------------------------------------------------*
+*&      Form  DISP_MAT_PLNT
+*&---------------------------------------------------------------------*
+FORM DISP_MAT_PLNT .
+  PERFORM GET_PLANT_DATA.
+  PERFORM CREATE_FCAT_PLANT.
+  PERFORM DISP_ALV_PLANT.
+ENDFORM.
+*&---------------------------------------------------------------------*
+*&      Form  GET_PLANT_DATA_
+*&---------------------------------------------------------------------*
+FORM GET_PLANT_DATA.
+
+
+  SELECT MATNR
+         WERKS
+         PSTAT
+         EKGRP
+           INTO TABLE IT_TAB2
+           FROM MARC.
+* WHERE MATNR EQ IT_TAB1-MATNR.
+ENDFORM.
+*&---------------------------------------------------------------------*
+*&      Form  CREATE_FCAT_PLANT
+*&---------------------------------------------------------------------*
+FORM CREATE_FCAT_PLANT .
+*MATNR
+  WA_FCAT2-COL_POS = '1' .
+  WA_FCAT2-SELTEXT = 'MAT NUMBER' .
+  WA_FCAT2-FIELDNAME = 'MATNR' .
+  WA_FCAT2-REF_TABLE = 'MARC' .
+
+  APPEND WA_FCAT2 TO IT_FCAT2.
+  CLEAR WA_FCAT2 .
+
+*WERKS
+  WA_FCAT2-COL_POS = '2' .
+  WA_FCAT2-SELTEXT = 'MAT PLANT' .
+  WA_FCAT2-FIELDNAME = 'WERKS' .
+  WA_FCAT2-REF_TABLE = 'MARC' .
+
+  APPEND WA_FCAT2 TO IT_FCAT2.
+  CLEAR WA_FCAT2 .
+
+*PSTAT
+  WA_FCAT2-COL_POS = '3' .
+  WA_FCAT2-SELTEXT = 'MAT PLANT STATUS' .
+  WA_FCAT2-FIELDNAME = 'PSTAT' .
+  WA_FCAT2-REF_TABLE = 'MARC' .
+
+  APPEND WA_FCAT2 TO IT_FCAT2.
+  CLEAR WA_FCAT2 .
+
+* ERGRP
+  WA_FCAT2-COL_POS = '4' .
+  WA_FCAT2-SELTEXT = 'MAT PLANT GROUP' .
+  WA_FCAT2-FIELDNAME = 'EKGRP' .
+  WA_FCAT2-REF_TABLE = 'MARC' .
+
+  APPEND WA_FCAT2 TO IT_FCAT2.
+  CLEAR WA_FCAT2 .
+
+
+
+ENDFORM.
+*&---------------------------------------------------------------------*
+*&      Form  DISP_ALV_PLANT
+*&---------------------------------------------------------------------*
+FORM DISP_ALV_PLANT .
+
+CALL SCREEN 0200.
+
+ENDFORM.
+*&---------------------------------------------------------------------*
+*&      Module  STATUS_0200  OUTPUT
+*&---------------------------------------------------------------------*
+MODULE STATUS_0200 OUTPUT.
+  SET PF-STATUS 'SPACE'.
+*  SET TITLEBAR 'xxx'.
+
+ENDMODULE.
+*&---------------------------------------------------------------------*
+*&      Module  ALV_LIST2  OUTPUT
+*&---------------------------------------------------------------------*
+MODULE ALV_LIST2 OUTPUT.
+  TY_LAYOUT-ZEBRA = 'X'.
+*  TY_LAYOUT-NO_TOOLBAR = 'X'.
+  TY_LAYOUT-GRID_TITLE = 'MAT MASTER PLANT DETAILS'.
+
+
+  CREATE OBJECT I_CONTAINER2
+    EXPORTING
+      CONTAINER_NAME = 'CNT2'.
+
+  CREATE OBJECT I_GRID2
+    EXPORTING
+      I_PARENT = I_CONTAINER2.
+
+  CALL METHOD I_GRID2->SET_TABLE_FOR_FIRST_DISPLAY
+  EXPORTING
+    IS_LAYOUT                     = TY_LAYOUT
+
+    CHANGING
+      IT_FIELDCATALOG = IT_FCAT2
+      IT_OUTTAB       = IT_TAB2.
+ENDMODULE.
+*&---------------------------------------------------------------------*
+*&      Module  USER_COMMAND_0200  INPUT
+*&---------------------------------------------------------------------*
+MODULE USER_COMMAND_0200 INPUT.
+  CASE SY-UCOMM.
+    WHEN 'EXIT'.
+      LEAVE TO SCREEN 0.
+  ENDCASE.
+ENDMODULE.
+*&---------------------------------------------------------------------*
+*&      Module  USER_COMMAND_0100  INPUT
+*&---------------------------------------------------------------------*
+MODULE USER_COMMAND_0100 INPUT.
+  CASE SY-UCOMM.
+    WHEN 'BACK'.
+      LEAVE TO SCREEN 0.
+  ENDCASE.
+ENDMODULE.

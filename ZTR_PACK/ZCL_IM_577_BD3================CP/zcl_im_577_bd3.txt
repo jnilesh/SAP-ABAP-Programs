@@ -1,0 +1,25 @@
+class-pool .
+*"* class pool for class ZCL_IM_577_BD3
+
+*"* local type definitions
+include ZCL_IM_577_BD3================ccdef.
+
+*"* class ZCL_IM_577_BD3 definition
+*"* public declarations
+  include ZCL_IM_577_BD3================cu.
+*"* protected declarations
+  include ZCL_IM_577_BD3================co.
+*"* private declarations
+  include ZCL_IM_577_BD3================ci.
+endclass. "ZCL_IM_577_BD3 definition
+
+*"* macro definitions
+include ZCL_IM_577_BD3================ccmac.
+*"* local class implementation
+include ZCL_IM_577_BD3================ccimp.
+
+class ZCL_IM_577_BD3 implementation.
+*"* method's implementations
+  include methods.
+endclass. "ZCL_IM_577_BD3 implementation
+

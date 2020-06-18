@@ -1,0 +1,72 @@
+*----------------------------------------------------------------------*
+***INCLUDE Z_160680_ALV_INTER_ALV_FIELF02.
+*----------------------------------------------------------------------*
+*&---------------------------------------------------------------------*
+*&      Form  ALV_FIELDS_SEC
+*&---------------------------------------------------------------------*
+*       text
+*----------------------------------------------------------------------*
+*  -->  p1        text
+*  <--  p2        text
+*----------------------------------------------------------------------*
+FORM ALV_FIELDS_SEC .
+
+  WA_IT_FCAT2-COL_POS = '1'.
+  WA_IT_FCAT2-SELTEXT_L = 'EMP No.'.
+  WA_IT_FCAT2-FIELDNAME = 'EMPNO'.
+  WA_IT_FCAT2-EMPHASIZE = 'C100'.
+  APPEND WA_IT_FCAT2 TO IT_FCAT2.
+  CLEAR WA_IT_FCAT2.
+
+  "ENAME
+  WA_IT_FCAT2-COL_POS = '2'.
+  WA_IT_FCAT2-SELTEXT_L = 'EMP NAME.'.
+  WA_IT_FCAT2-FIELDNAME = 'ENAME'.
+  WA_IT_FCAT2-EMPHASIZE = 'C300'.
+  APPEND WA_IT_FCAT2 TO IT_FCAT2.
+  CLEAR WA_IT_FCAT2.
+
+  "JOB
+  WA_IT_FCAT2-COL_POS = '3'.
+  WA_IT_FCAT2-SELTEXT_L = 'JOB'.
+  WA_IT_FCAT2-FIELDNAME = 'JOB'.
+  WA_IT_FCAT2-EMPHASIZE = 'C400'.
+  APPEND WA_IT_FCAT2 TO IT_FCAT2.
+  CLEAR WA_IT_FCAT2.
+
+
+  "MGR
+  WA_IT_FCAT2-COL_POS = '4'.
+  WA_IT_FCAT2-SELTEXT_L = 'MANAGER'.
+  WA_IT_FCAT2-FIELDNAME = 'MGR'.
+  WA_IT_FCAT2-EMPHASIZE = 'C500'.
+  APPEND WA_IT_FCAT2 TO IT_FCAT2.
+  CLEAR WA_IT_FCAT2.
+
+
+  "HIREDATE
+  WA_IT_FCAT2-COL_POS = '5'.
+  WA_IT_FCAT2-SELTEXT_L = 'HIREDATE'.
+  WA_IT_FCAT2-FIELDNAME = 'HIREDATE'.
+  WA_IT_FCAT2-EMPHASIZE = 'C600'.
+  APPEND WA_IT_FCAT2 TO IT_FCAT2.
+  CLEAR WA_IT_FCAT2.
+
+
+
+  "SAL
+  WA_IT_FCAT2-COL_POS = '6'.
+  WA_IT_FCAT2-SELTEXT_L = 'SALARY'.
+  WA_IT_FCAT2-FIELDNAME = 'SAL'.
+  WA_IT_FCAT2-EMPHASIZE = 'C700'.
+  APPEND WA_IT_FCAT2 TO IT_FCAT2.
+  CLEAR WA_IT_FCAT2.
+
+  "DEPTNO
+  WA_IT_FCAT2-COL_POS = '7'.
+  WA_IT_FCAT2-SELTEXT_L = 'DEP No.'.
+  WA_IT_FCAT2-FIELDNAME = 'DEPTNO'.
+  WA_IT_FCAT2-EMPHASIZE = 'C200'.
+  APPEND WA_IT_FCAT2 TO IT_FCAT2.
+  CLEAR WA_IT_FCAT2.
+ENDFORM.

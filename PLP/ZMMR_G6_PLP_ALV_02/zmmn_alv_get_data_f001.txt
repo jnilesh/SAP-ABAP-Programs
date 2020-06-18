@@ -1,0 +1,31 @@
+*----------------------------------------------------------------------*
+***INCLUDE ZMMN_ALV_GET_DATA_F001
+*----------------------------------------------------------------------*
+
+FORM f001_get_data .
+*inner join for 3 tables z187511_mara, z187511_marc,z187511_makt
+
+  SELECT ra~matnr
+         ra~mtart
+         ra~mbrsh
+         ra~matkl
+         ra~bismt
+         kt~maktx
+         rc~werks
+         rc~kzkri
+         rc~ekgrp
+         rc~dispr
+         rc~dismm
+         rc~dispo
+    FROM z187511_mara AS ra INNER JOIN z187511_makt AS kt ON
+    ra~matnr = kt~matnr INNER JOIN z187511_marc AS rc ON
+    ra~matnr = rc~matnr INTO TABLE it_join
+    WHERE rc~werks BETWEEN s_werks-low AND s_werks-high
+    AND ra~matnr BETWEEN s_matnr-low AND s_matnr-high.
+
+
+  IF sy-subrc <> 0.
+    MESSAGE i011 DISPLAY LIKE 'E'.
+  ENDIF.
+
+ENDFORM.

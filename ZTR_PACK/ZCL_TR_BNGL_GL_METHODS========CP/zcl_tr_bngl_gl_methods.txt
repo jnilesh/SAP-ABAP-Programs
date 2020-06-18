@@ -1,0 +1,25 @@
+class-pool .
+*"* class pool for class ZCL_TR_BNGL_GL_METHODS
+
+*"* local type definitions
+include ZCL_TR_BNGL_GL_METHODS========ccdef.
+
+*"* class ZCL_TR_BNGL_GL_METHODS definition
+*"* public declarations
+  include ZCL_TR_BNGL_GL_METHODS========cu.
+*"* protected declarations
+  include ZCL_TR_BNGL_GL_METHODS========co.
+*"* private declarations
+  include ZCL_TR_BNGL_GL_METHODS========ci.
+endclass. "ZCL_TR_BNGL_GL_METHODS definition
+
+*"* macro definitions
+include ZCL_TR_BNGL_GL_METHODS========ccmac.
+*"* local class implementation
+include ZCL_TR_BNGL_GL_METHODS========ccimp.
+
+class ZCL_TR_BNGL_GL_METHODS implementation.
+*"* method's implementations
+  include methods.
+endclass. "ZCL_TR_BNGL_GL_METHODS implementation
+
